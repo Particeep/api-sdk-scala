@@ -1,8 +1,9 @@
-package com.particeep.api
+package com.particeep.api.core
+
+import play.api.libs.ws._
+import play.api.libs.ws.ning._
 
 import scala.concurrent.ExecutionContext
-import play.api.libs.ws.ning._
-import play.api.libs.ws._
 
 case class ApiCredential(apiKey: String, apiSecret: String)
 
@@ -42,17 +43,18 @@ class ApiClient(val baseUrl: String, val apiCredential: ApiCredential, val versi
   }
 }
 
-/**
- * usage
- * val ws = new ApiClient(
- *   "https://api.particeep.com",
- *   creds,
- *   "1"
- * ) with InfoClient
- *
- * val result:Future[Either[JsError, Info]] = ws.info()
- */
 object ApiClient {
+
+  /**
+   * usage
+   * val ws = new ApiClient(
+   *   "https://api.particeep.com",
+   *   creds,
+   *   "1"
+   * ) with InfoClient
+   *
+   * val result:Future[Either[JsError, Info]] = ws.info()
+   */
   def apply(baseUrl: String, apiCredential: ApiCredential, version: String): ApiClient = {
     ApiClient(baseUrl, apiCredential, version)
   }

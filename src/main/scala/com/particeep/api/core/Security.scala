@@ -1,4 +1,4 @@
-package com.particeep.api
+package com.particeep.api.core
 
 import java.time.format.DateTimeFormatter
 import java.time.{ZoneOffset, ZonedDateTime}

@@ -1,4 +1,4 @@
-package com.particeep.api
+package com.particeep.api.core
 
 import java.util.Base64
 import javax.crypto.Mac

@@ -1,5 +1,6 @@
 package com.particeep.api
 
+import com.particeep.api.core.WSClient
 import play.api.libs.json._
 import play.api.libs.ws.WSResponse
 

@@ -1,6 +1,6 @@
 package com.particeep.test
 
-import com.particeep.api.ApiCredential
+import com.particeep.api.core.ApiCredential
 
 object ConfigTest {
 
