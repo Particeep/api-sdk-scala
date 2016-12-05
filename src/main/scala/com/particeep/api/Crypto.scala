@@ -7,6 +7,8 @@ import javax.crypto.spec.SecretKeySpec
 object Crypto {
 
   private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
+  private final val UTF_8 = "UTF-8"
+  private final val HMAC_SHA1 = "HmacSHA1"
 
   def encodeToHex(toEncode: Array[Byte]): Array[Char] = {
     val len = toEncode.length
@@ -28,12 +30,13 @@ object Crypto {
 
   def encodeBase64(s: String): String = {
     val e = Base64.getEncoder()
-    e.encode(s.getBytes("UTF-8")).toString
+    val b_array = e.encode(s.getBytes(UTF_8))
+    new String(b_array, UTF_8)
   }
 
   def sign(toSign: Array[Byte], secret: Array[Byte]): Array[Byte] = {
-    val mac: Mac = Mac.getInstance("HmacSHA1")
-    val signingKey = new SecretKeySpec(secret, "HmacSHA1")
+    val mac: Mac = Mac.getInstance(HMAC_SHA1)
+    val signingKey = new SecretKeySpec(secret, HMAC_SHA1)
     mac.init(signingKey)
     mac.doFinal(toSign)
   }

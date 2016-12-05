@@ -20,17 +20,17 @@ trait WithSecurtiy {
   }
 
   private def buildDateHeader(): String = {
-    val date = ZonedDateTime.now(ZoneOffset.UTC)
-    val format = DateTimeFormatter.ISO_DATE_TIME
+    val date = ZonedDateTime.now(ZoneOffset.UTC).withNano(0)
+    val format = DateTimeFormatter.ISO_INSTANT
     format.format(date)
   }
 
   private def buildAuthorizationHeader(toSign: String, apiCredential: ApiCredential): String = {
-    buildAuthorizationHeader(toSign, apiCredential.apiKey, apiCredential.apiSecret)
+    buildAuthorizationHeader(apiCredential.apiKey, apiCredential.apiSecret, toSign)
   }
 
-  private def buildAuthorizationHeader(apiKey: String, apiSecret: String, dateTime: String): String = {
-    val toSign: String = apiSecret + apiKey + dateTime
+  private def buildAuthorizationHeader(apiKey: String, apiSecret: String, dataToSign: String): String = {
+    val toSign: String = apiSecret + apiKey + dataToSign
 
     val messageBytes = toSign.getBytes("UTF-8")
     val secretBytes = apiSecret.getBytes("UTF-8")
@@ -44,5 +44,4 @@ trait WithSecurtiy {
 
     s"PTP:$apiKey:$signature"
   }
-
 }

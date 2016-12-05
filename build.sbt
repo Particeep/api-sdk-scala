@@ -24,8 +24,7 @@ scalacOptions ++= Seq(
 	"-Xlint",
 	"-Ywarn-dead-code",
 	"-Ywarn-unused",
-	"-Ywarn-unused-import",
-	"-Ywarn-value-discard" //when non-Unit expression results are unused
+	"-Ywarn-unused-import"
 )
 
 // ~~~~~~~~~~~~~~~~~

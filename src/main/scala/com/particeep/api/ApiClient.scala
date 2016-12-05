@@ -21,6 +21,7 @@ trait WSClient {
 trait BaseClient {
   self: WSClient =>
 
+  // TODO: allow better config of WS
   // For more fine grain on config see https://www.playframework.com/documentation/2.4.x/ScalaWS
   //    val config = new NingAsyncHttpClientConfigBuilder(DefaultWSClientConfig()).build
   //    val builder = new AsyncHttpClientConfig.Builder(config)
@@ -37,8 +38,7 @@ class ApiClient(val baseUrl: String, val apiCredential: ApiCredential, val versi
 
   def url(path: String, timeOut: Long = -1)(implicit exec: ExecutionContext): WSRequest = {
     val req = WS.clientUrl(s"$baseUrl/v$version$path")
-    val secured_req = secure(req, apiCredential, timeOut)
-    secured_req
+    secure(req, apiCredential, timeOut)
   }
 }
 
@@ -50,7 +50,7 @@ class ApiClient(val baseUrl: String, val apiCredential: ApiCredential, val versi
  *   "1"
  * ) with InfoClient
  *
- * ws.info()
+ * val result:Future[Either[JsError, Info]] = ws.info()
  */
 object ApiClient {
   def apply(baseUrl: String, apiCredential: ApiCredential, version: String): ApiClient = {
