@@ -16,13 +16,26 @@ Add this dependency to your project's POM:
 libraryDependencies += "com.particeep" %% "api-scala-client" % "1.0.0"
 ```
 
+Or add the project as a dependency
+
+```scala
+lazy val root = Project("root", file("."))
+                    .dependsOn(apiParticeepClient)
+
+lazy val apiParticeepClient = RootProject(uri("https://github.com/Particeep/api-sdk-scala.git"))
+
+```
+
 ### Others
 
-You'll need to manually install the following JARs:
+You'll need to manually install the following JARs and dependencies :
 
 * Download the JAR from https://github.com/particeep/api-scala-client/releases/latest
-* [Google Gson](http://code.google.com/p/google-gson/) from <http://google-gson.googlecode.com/files/google-gson-2.2.4-release.zip>.
+* "com.typesafe.play" %% "play-ws"    % "2.4.8"
+* "com.github.driox"  %% "sorus"      % "1.0.0"
+* "org.slf4j"         %  "slf4j-api"  % "1.7.21"
 
+NB : You also need transitive dependencies of play-ws
 
 ## Documentation
 
