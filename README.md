@@ -33,19 +33,21 @@ Please see the [Particeep API docs](https://www.particeep.com/en/docs) for the m
 ParticeepExample.scala
 
 ```scala
-import java.util.HashMap;
-import java.util.Map;
+import com.particeep.api.core._
+import com.particeep.api._
 
-public class ParticeepExample {
+object ParticeepExample {
 
-    public static void main(String[] args) {
-        // todo
-        try {
-            // todo
-            System.out.println(charge);
-        } catch (ParticeepException e) {
-            e.printStackTrace();
-        }
+    def test() {
+        val creds = ApiCredential(apiKey, apiSecret)
+
+        val ws = new ApiClient(
+            "https://api.particeep.com",
+            creds,
+            "1"
+        ) with InfoClient
+
+        val result:Future[Either[JsError, Info]] = ws.info()
     }
 }
 ```
@@ -61,4 +63,4 @@ You must have Sbt installed. To run the tests:
 You can run particular tests by using `testOnly pkg.ClassName -- -z update`. Make sure you use the fully qualified class name to differentiate between
 unit and functional tests. For example:
 
-    sbt "testOnly kpi.KpiTest -- -z update"
+    sbt "testOnly com.particeep.test.ParticeepTest -- -z update"
