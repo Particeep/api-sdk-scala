@@ -10,17 +10,18 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ParticeepTest extends FlatSpec with Matchers {
+class UserTest extends FlatSpec with Matchers {
 
-  "the api client" should "load info" in {
+  "the api client" should "load user by id" in {
 
-    val ws = new ApiClient(ConfigTest.baseUrl, ConfigTest.credential, ConfigTest.version) with InfoClient
-    val rez_f: Future[Either[ErrorResult, Info]] = ws.info()
+    val user_id = "bf5788e8-9756-4d18-8b0f-100d7fba17a2"
+    val ws = new ApiClient(ConfigTest.baseUrl, ConfigTest.credential, ConfigTest.version) with UserClient
+    val rez_f: Future[Either[ErrorResult, User]] = ws.byId(user_id)
 
     val rez = Await.result(rez_f, 10 seconds)
     rez.isRight shouldBe true
 
-    val info = rez.right.get
-    info.version shouldBe "1"
+    val user = rez.right.get
+    user.id shouldBe user_id
   }
 }

@@ -1,29 +1,21 @@
 package com.particeep.api
 
-import com.particeep.api.core.WSClient
+import com.particeep.api.core.{ResponseParser, WSClient}
+import com.particeep.api.models._
 import play.api.libs.json._
-import play.api.libs.ws.WSResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
 case class Info(version: String, debugEnable: Boolean, metaEnable: Boolean)
 
-trait InfoClient {
+trait InfoClient extends ResponseParser[Info] {
   self: WSClient =>
 
   private val endPoint: String = "/info"
+  implicit val format = Info.format
 
-  def info(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[JsError, Info]] = {
-    url(endPoint, timeout).get().map(parseResponse)
-  }
-
-  private def parseResponse(response: WSResponse): Either[JsError, Info] = {
-    implicit val format = Info.format
-
-    response.json.validate[Info] match {
-      case result: JsSuccess[Info] => Right(result.get)
-      case err: JsError            => Left(err)
-    }
+  def info(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Info]] = {
+    url(endPoint, timeout).get().map(parse)
   }
 }
 
