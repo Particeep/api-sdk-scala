@@ -24,6 +24,6 @@ class InfoClient(ws: WSClient) extends ResponseParser {
   implicit val format = Info.format
 
   def info(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Info]] = {
-    ws.url(endPoint, timeout).get().map(parse)
+    ws.url(endPoint, timeout).get().map(parse[Info])
   }
 }
