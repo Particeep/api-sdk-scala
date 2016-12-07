@@ -51,9 +51,9 @@ object ApiClient {
    *   "https://api.particeep.com",
    *   creds,
    *   "1"
-   * ) with InfoClient
+   * ) with UserCapability
    *
-   * val result:Future[Either[JsError, Info]] = ws.info()
+   * val result:Future[Either[JsError, Info]] = ws.user.byId("some_id")
    */
   def apply(baseUrl: String, apiCredential: ApiCredential, version: String): ApiClient = {
     ApiClient(baseUrl, apiCredential, version)

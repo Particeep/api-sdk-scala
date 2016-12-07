@@ -51,21 +51,35 @@ import com.particeep.api._
 
 object ParticeepExample {
 
-    def test() {
+    def basicUsage() {
+        val ws = ParticeepApi.test(apiKey, apiSecret)
+        val result:Future[Either[JsError, User]] = ws.user.byId("some_user_id")
+
+        // to switch to prod env just do
+        val ws_prod = ParticeepApi.prod(apiKey, apiSecret)
+    }
+
+    // if you need only a subset of the endpoints of the api and don't want to be
+    // bothered with the other you can create a custom client
+    def customUsage() {
         val creds = ApiCredential(apiKey, apiSecret)
 
+        // here you have access only to User and Info endpoints
         val ws = new ApiClient(
-            "https://api.particeep.com",
-            creds,
-            "1"
-        ) with InfoClient
+            baseUrl = "https://api.particeep.com", // prod url
+            apiCredential = creds,
+            version = "1"
+        ) with InfoCapability with UserCapability
 
-        val result:Future[Either[JsError, Info]] = ws.info()
+        val result:Future[Either[JsError, User]] = ws.user.byId("some_user_id")
     }
 }
 ```
 
-See [ParticeepTest.scala](https://github.com/particeep/api-scala-client/blob/master/src/test/scala/com/particeep/ParticeepTest.java) for more examples.
+See the [tests](https://github.com/particeep/api-scala-client/blob/master/src/test/scala/com/particeep/test) for more examples.
+
+If you need to customize the http client, take a look at [ApiClient.scala](https://github.com/particeep/api-scala-client/blob/master/src/main/scala/com/particeep/core/ApiClient.scala)
+
 
 ## Testing
 

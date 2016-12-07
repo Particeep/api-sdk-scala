@@ -15,8 +15,8 @@ class UserTest extends FlatSpec with Matchers {
   "the api client" should "load user by id" in {
 
     val user_id = "bf5788e8-9756-4d18-8b0f-100d7fba17a2"
-    val ws = new ApiClient(ConfigTest.baseUrl, ConfigTest.credential, ConfigTest.version) with UserClient
-    val rez_f: Future[Either[ErrorResult, User]] = ws.byId(user_id)
+    val ws = new ApiClient(ConfigTest.baseUrl, ConfigTest.credential, ConfigTest.version) with UserCapability
+    val rez_f: Future[Either[ErrorResult, User]] = ws.user.byId(user_id)
 
     val rez = Await.result(rez_f, 10 seconds)
     rez.isRight shouldBe true

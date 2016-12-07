@@ -8,17 +8,22 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class Info(version: String, debugEnable: Boolean, metaEnable: Boolean)
 
-trait InfoClient extends ResponseParser[Info] {
+object Info {
+  implicit val format = Json.format[Info]
+}
+
+trait InfoCapability {
   self: WSClient =>
+
+  val info: InfoClient = new InfoClient(this)
+}
+
+class InfoClient(ws: WSClient) extends ResponseParser {
 
   private val endPoint: String = "/info"
   implicit val format = Info.format
 
   def info(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Info]] = {
-    url(endPoint, timeout).get().map(parse)
+    ws.url(endPoint, timeout).get().map(parse)
   }
-}
-
-object Info {
-  implicit val format = Json.format[Info]
 }

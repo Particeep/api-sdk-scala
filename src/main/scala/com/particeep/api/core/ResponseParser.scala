@@ -8,19 +8,19 @@ import scala.compat.Platform
 import scala.util.control.NonFatal
 import com.particeep.api.models._
 
-trait ResponseParser[A] {
+trait ResponseParser {
 
   import com.particeep.api.models.Errors._
 
   private final val log = LoggerFactory.getLogger(this.getClass)
 
-  protected def parse(response: WSResponse)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
+  def parse[A](response: WSResponse)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
     try {
       val json = response.json
       val result: Either[ErrorResult, A] = validateStandardError(json)
         .orElse(validateParsingError(json))
         .map(err => Left(err))
-        .getOrElse(parseResult(json))
+        .getOrElse(parseResult(json)(json_reads))
       result
     } catch {
       case NonFatal(ex) => {
@@ -34,15 +34,15 @@ trait ResponseParser[A] {
     }
   }
 
-  private def parse(json: JsValue)(implicit json_reads: Reads[A]): Either[JsError, A] = {
+  private def parse[A](json: JsValue)(implicit json_reads: Reads[A]): Either[JsError, A] = {
     json.validate[A] match {
       case result: JsSuccess[A] => Right(result.get)
       case err: JsError         => Left(err)
     }
   }
 
-  private def parseResult(json: JsValue)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
-    parse(json) match {
+  private def parseResult[A](json: JsValue)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
+    parse(json)(json_reads) match {
       case Right(success) => Right(success)
       case Left(json_err) => {
         val err = Error(
