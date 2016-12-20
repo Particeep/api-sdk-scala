@@ -5,10 +5,12 @@ import com.particeep.api.models._
 import play.api.libs.json._
 
 import scala.concurrent.{ExecutionContext, Future}
+import com.particeep.api.core.Formatter
 
 case class Info(version: String, debugEnable: Boolean, metaEnable: Boolean)
 
 object Info {
+  implicit val date_format = Formatter.ZonedDateTimeWrites
   implicit val format = Json.format[Info]
 }
 

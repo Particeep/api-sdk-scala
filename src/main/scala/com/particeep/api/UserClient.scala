@@ -9,6 +9,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import com.particeep.api.models._
 import com.particeep.api.models.enums.Gender.Gender
 import com.particeep.api.utils.LangUtils
+import com.particeep.api.core.Formatter
 
 case class User(
   id:                       String                = "",
@@ -46,6 +47,7 @@ case class UserSearchCriteria(
 )
 
 object User {
+  implicit val date_format = Formatter.ZonedDateTimeWrites
   implicit val format = Json.format[User]
 }
 
