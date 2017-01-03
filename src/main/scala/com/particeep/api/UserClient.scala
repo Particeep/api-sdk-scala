@@ -81,11 +81,11 @@ class UserClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/name/$name", timeout).get.map(parse[List[User]])
   }
 
-  def search(criteria: UserSearchCriteria, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginateSequence[User]]] = {
+  def search(criteria: UserSearchCriteria, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[User]]] = {
     ws.url(s"$endPoint/search", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
       .get
-      .map(parse[PaginateSequence[User]])
+      .map(parse[PaginatedSequence[User]])
   }
 
   def create(user: User, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
