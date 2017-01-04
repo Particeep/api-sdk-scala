@@ -12,10 +12,10 @@ object ParticeepApi {
   private val last_version = "1"
 
   def test(key: String, secret: String): ApiClient = {
-    new ApiClient("https://test-api.particeep.com", ApiCredential(key, secret), last_version) with InfoCapability with UserCapability
+    new ApiClient("https://test-api.particeep.com", ApiCredential(key, secret), last_version) with InfoCapability with UserCapability with WalletCapability
   }
 
   def prod(key: String, secret: String): ApiClient = {
-    new ApiClient("https://test-api.particeep.com", ApiCredential(key, secret), last_version) with InfoCapability with UserCapability
+    new ApiClient("https://test-api.particeep.com", ApiCredential(key, secret), last_version) with InfoCapability with UserCapability with WalletCapability
   }
 }
