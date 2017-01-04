@@ -26,5 +26,5 @@ case class UserEdition(
 
 object UserEdition {
   implicit val date_format = Formatter.ZonedDateTimeWrites
-  implicit val format = Json.format[UserEdition]
+  val format = Json.format[UserEdition]
 }
