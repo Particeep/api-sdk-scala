@@ -19,5 +19,5 @@ case class Document(
 )
 
 object Document {
-  implicit val format = Json.format[Document]
+  val format = Json.format[Document]
 }

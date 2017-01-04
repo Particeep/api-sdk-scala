@@ -20,5 +20,5 @@ case class DocumentSearch(
 )
 
 object DocumentSearch {
-  implicit val format = Json.format[DocumentSearch]
+  val format = Json.format[DocumentSearch]
 }
