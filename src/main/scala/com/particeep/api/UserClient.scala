@@ -7,6 +7,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import com.particeep.api.models._
 import com.particeep.api.utils.LangUtils
 import com.particeep.api.models.user.{User, UserCreation, UserEdition, UserSearch}
+import play.api.mvc.Results
 
 trait UserCapability {
   self: WSClient =>
@@ -60,5 +61,25 @@ class UserClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/authenticate", timeout)
       .post(authenticateJson)
       .map(parse[User])
+  }
+
+  def getOrCreate(user_creation: UserCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+    ws.url(s"$endPoint/getOrCreate", timeout).post(Json.toJson(user_creation)).map(parse[User])
+  }
+
+  private case class ChangePassword(old_password: Option[String], new_password: String)
+
+  private implicit val change_password_format = Json.format[ChangePassword]
+
+  def changePassword(id: String, old_password: Option[String], new_password: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+    ws.url(s"$endPoint/$id/changePassword", timeout).post(Json.toJson(ChangePassword(old_password, new_password))).map(parse[User])
+  }
+
+  def verifyAccount(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+    ws.url(s"$endPoint/verify/$id", timeout).post(Results.EmptyContent()).map(parse[User])
+  }
+
+  def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+    ws.url(s"$endPoint/$id", timeout).delete().map(parse[User])
   }
 }
