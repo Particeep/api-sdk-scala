@@ -3,6 +3,7 @@ package com.particeep.api.core
 import java.time.format.DateTimeFormatter
 import java.time.{ZoneOffset, ZonedDateTime}
 
+import com.ning.http.client.AsyncHttpClient
 import play.api.libs.ws._
 
 import scala.concurrent.ExecutionContext
@@ -17,6 +18,13 @@ trait WithSecurtiy {
         ("DateTime", today),
         ("Authorization", buildAuthorizationHeader(today, apiCredential))
       )
+  }
+
+  protected def secure(req: AsyncHttpClient#BoundRequestBuilder, apiCredential: ApiCredential)(implicit exec: ExecutionContext) = {
+    val today = buildDateHeader()
+    req
+      .addHeader("DateTime", today)
+      .addHeader("Authorization", buildAuthorizationHeader(today, apiCredential))
   }
 
   private def buildDateHeader(): String = {
