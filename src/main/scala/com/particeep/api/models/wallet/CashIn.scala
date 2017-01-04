@@ -15,5 +15,5 @@ case class CashIn(
 )
 
 object CashIn {
-  val format = Json.format[TransactionWallet]
+  val format = Json.format[CashIn]
 }
