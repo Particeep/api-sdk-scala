@@ -1,5 +1,6 @@
 package com.particeep.api.core
 
+import com.ning.http.client.Response
 import org.slf4j.LoggerFactory
 import play.api.libs.json._
 import play.api.libs.ws.WSResponse
@@ -15,8 +16,16 @@ trait ResponseParser {
   private final val log = LoggerFactory.getLogger(this.getClass)
 
   def parse[A](response: WSResponse)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
+    parse(response.json, response.status)(json_reads)
+  }
+
+  def parse[A](response: Response)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
+    val json: JsValue = Json.parse(response.getResponseBody)
+    parse(json, response.getStatusCode)(json_reads)
+  }
+
+  private def parse[A](json: JsValue, status: Int)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
     try {
-      val json = response.json
       val result: Either[ErrorResult, A] = validateStandardError(json)
         .orElse(validateParsingError(json))
         .map(err => Left(err))
@@ -25,8 +34,8 @@ trait ResponseParser {
     } catch {
       case NonFatal(ex) => {
         val msg = s"""Error while parsing the response :
-             |status = ${response.status}
-             |body = ${response.body}
+                      |status = ${status}
+                      |body = ${json}
            """.stripMargin
         log.error(msg, ex)
         Left(ex2error(ex))
