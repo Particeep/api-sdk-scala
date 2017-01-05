@@ -18,7 +18,7 @@ trait WSClient {
    * @return
    */
   def url(path: String, timeOut: Long = -1)(implicit exec: ExecutionContext): WSRequest
-  def url(path: String, client: AsyncHttpClient)(implicit exec: ExecutionContext): AsyncHttpClient#BoundRequestBuilder
+  def urlFileUpload(path: String, client: AsyncHttpClient, timeOut: Long = -1)(implicit exec: ExecutionContext): AsyncHttpClient#BoundRequestBuilder
 }
 
 trait BaseClient {
@@ -44,9 +44,9 @@ class ApiClient(val baseUrl: String, val apiCredential: ApiCredential, val versi
     secure(req, apiCredential, timeOut)
   }
 
-  def url(path: String, client: AsyncHttpClient)(implicit exec: ExecutionContext): AsyncHttpClient#BoundRequestBuilder = {
+  def urlFileUpload(path: String, client: AsyncHttpClient, timeOut: Long = -1)(implicit exec: ExecutionContext): AsyncHttpClient#BoundRequestBuilder = {
     val postBuilder = client.preparePost(s"$baseUrl/v$version$path")
-    secure(postBuilder, apiCredential)
+    secure(postBuilder, apiCredential, timeOut)
   }
 }
 

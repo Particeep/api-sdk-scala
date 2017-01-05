@@ -20,9 +20,10 @@ trait WithSecurtiy {
       )
   }
 
-  protected def secure(req: AsyncHttpClient#BoundRequestBuilder, apiCredential: ApiCredential)(implicit exec: ExecutionContext) = {
+  protected def secure(req: AsyncHttpClient#BoundRequestBuilder, apiCredential: ApiCredential, timeOut: Long)(implicit exec: ExecutionContext) = {
     val today = buildDateHeader()
     req
+      .setRequestTimeout(timeOut.toInt)
       .addHeader("DateTime", today)
       .addHeader("Authorization", buildAuthorizationHeader(today, apiCredential))
   }

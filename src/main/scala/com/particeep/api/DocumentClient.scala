@@ -38,7 +38,7 @@ class DocumentClient(ws: WSClient) extends ResponseParser {
   private def prepareRequest(url: String, file: MultipartFormData[TemporaryFile], document: DocumentCreation)(implicit exec: ExecutionContext): ListenableFuture[Response] = {
     val documentFilePart = file.files.head
     val client = WS.client.underlying[AsyncHttpClient]
-    val postBuilder = ws.url(url, client)
+    val postBuilder = ws.urlFileUpload(url, client)
     val builder = postBuilder.addBodyPart(
       new FilePart("document", documentFilePart.ref.file, documentFilePart.contentType.getOrElse("application/octet-stream"))
     )
