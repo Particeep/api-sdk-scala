@@ -6,13 +6,13 @@ import play.api.libs.json.Json
  * Created by Noe on 04/01/2017.
  */
 case class DocumentCreation(
-  target_id:              String,
-  target_type:            String,
-  description:            Option[String],
-  name:                   Option[String],
-  path:                   Option[String],
-  locked:                 Option[Boolean],
-  override_existing_file: Option[Boolean]
+  target_id:              Option[String]  = None,
+  target_type:            Option[String]  = None,
+  description:            Option[String]  = None,
+  name:                   Option[String]  = None,
+  path:                   Option[String]  = None,
+  locked:                 Option[Boolean] = None,
+  override_existing_file: Option[Boolean] = None
 )
 
 object DocumentCreation {
