@@ -5,13 +5,13 @@ import play.api.libs.json.Json
 
 case class CashIn(
   amount:      Int,
-  fees:        Option[Int],
-  tag:         Option[String],
+  fees:        Option[Int]    = None,
+  tag:         Option[String] = None,
   accept_url:  String,
   decline_url: String,
   pending_url: String,
   owner_ip:    String,
-  locale:      Option[Locale]
+  locale:      Option[Locale] = None
 )
 
 object CashIn {
