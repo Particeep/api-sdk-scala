@@ -6,16 +6,16 @@ import play.api.libs.json.Json
  * Created by Noe on 04/01/2017.
  */
 case class DocumentSearch(
-  owner_id:     Option[String],
-  target_id:    Option[String],
-  target_type:  Option[String],
-  name:         Option[String],
-  description:  Option[String],
-  content_type: Option[String],
-  external_id:  Option[String],
-  limit:        Option[Int],
-  offset:       Option[Int],
-  sort_by:      Option[String],
+  owner_id:     Option[String] = None,
+  target_id:    Option[String] = None,
+  target_type:  Option[String] = None,
+  name:         Option[String] = None,
+  description:  Option[String] = None,
+  content_type: Option[String] = None,
+  external_id:  Option[String] = None,
+  limit:        Option[Int]    = None,
+  offset:       Option[Int]    = None,
+  sort_by:      Option[String] = None,
   order_by:     Option[String] = Some("asc")
 )
 

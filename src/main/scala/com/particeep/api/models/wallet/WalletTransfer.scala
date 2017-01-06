@@ -6,8 +6,8 @@ case class WalletTransfer(
   debited_wallet_id:  String,
   credited_wallet_id: String,
   amount:             Int,
-  fees:               Option[Int],
-  tag:                Option[String]
+  fees:               Option[Int]    = None,
+  tag:                Option[String] = None
 )
 
 object WalletTransfer {
