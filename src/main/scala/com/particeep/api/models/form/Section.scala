@@ -12,7 +12,10 @@ case class Section(
   name:        Option[String]        = None,
   description: Option[String]        = None,
   index:       Option[Int]           = None,
-  questions:   Seq[Question]         = Seq()
+  questions:   Seq[Question]         = Seq(),
+
+  //Only when getting a Form for a User
+  done: Option[Boolean] = None
 )
 
 object Section {

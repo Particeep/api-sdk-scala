@@ -14,7 +14,10 @@ case class Question(
   question_type: Option[QuestionType]  = None,
   required:      Boolean               = false,
   index:         Option[Int]           = None,
-  possibilities: Seq[Possibility]      = Seq()
+  possibilities: Seq[Possibility]      = Seq(),
+
+  //Only when getting a Form for a User
+  answer: Option[String] = None
 )
 
 object Question {

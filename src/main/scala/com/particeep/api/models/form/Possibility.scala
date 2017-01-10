@@ -11,7 +11,10 @@ case class Possibility(
   question_id: String                = "",
   label:       Option[String]        = None,
   index:       Option[Int]           = None,
-  weight:      Option[Int]           = None
+  weight:      Option[Int]           = None,
+
+  //Only when getting a Form for a User
+  checked: Option[Boolean] = None
 )
 
 object Possibility {
