@@ -43,6 +43,10 @@ class FormClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/$id").post(Json.toJson(form_edition)).map(parse[Form])
   }
 
+  def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, SimpleForm]] = {
+    ws.url(s"$endPoint/$id").delete().map(parse[SimpleForm])
+  }
+
   def answer(user_id: String, answer_creations: Seq[AnswerCreation], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[Answer]]] = {
     ws.url(s"$endPoint/answer/$user_id").put(Json.toJson(answer_creations)).map(parse[Seq[Answer]])
   }

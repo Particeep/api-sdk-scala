@@ -10,6 +10,7 @@ object QuestionType {
   case object RADIO extends QuestionType { val name: String = "RADIO" }
   case object SELECT extends QuestionType { val name: String = "SELECT" }
   case object CHECKBOX extends QuestionType { val name: String = "CHECKBOX" }
+  case object LABEL extends QuestionType { val name: String = "LABEL" }
 
   object QuestionType extends EnumHelper[QuestionType] {
     def values: Set[QuestionType] = Set(TEXT, LONGTEXT, RADIO, SELECT, CHECKBOX)

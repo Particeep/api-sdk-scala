@@ -17,7 +17,7 @@ case class Question(
   possibilities: Seq[Possibility]      = Seq(),
 
   //Only when getting a Form for a User
-  answer: Option[String] = None
+  answers: Option[Seq[String]] = None
 )
 
 object Question {
