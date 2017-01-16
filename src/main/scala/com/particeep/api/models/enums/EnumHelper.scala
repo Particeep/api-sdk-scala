@@ -22,6 +22,7 @@ trait EnumHelper[E <: Enum] {
   implicit def ordering: Ordering[E] = Ordering.by(_.name)
   implicit def enum2string(status: E): String = toString(status)
   implicit def string2enum(value: String): Option[E] = get(value)
+  implicit def optString2enum(value: Option[String]): Option[E] = get(value.getOrElse(""))
 
   implicit def enumReads: Reads[E] = new Reads[E] {
     def reads(json: JsValue): JsResult[E] = json match {

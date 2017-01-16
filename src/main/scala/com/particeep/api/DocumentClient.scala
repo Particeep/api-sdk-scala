@@ -47,8 +47,8 @@ class DocumentClient(ws: WSClient) extends ResponseParser {
   }
 
   private def addDocumentApiToBody(builder: AsyncHttpClient#BoundRequestBuilder, document: DocumentCreation) {
-    builder.addBodyPart(new StringPart("target_id", document.target_id))
-      .addBodyPart(new StringPart("target_type", document.target_type))
+    builder.addBodyPart(new StringPart("target_id", document.target_id.getOrElse("")))
+      .addBodyPart(new StringPart("target_type", document.target_type.getOrElse("")))
       .addBodyPart(new StringPart("description", document.description.getOrElse("")))
       .addBodyPart(new StringPart("name", document.name.getOrElse("")))
       .addBodyPart(new StringPart("path", document.path.getOrElse("")))
