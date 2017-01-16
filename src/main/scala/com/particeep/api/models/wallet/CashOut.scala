@@ -3,10 +3,10 @@ package com.particeep.api.models.wallet
 import play.api.libs.json.Json
 
 case class CashOut(
-  bank_account_id: Option[String],
-  amount:          Int,
-  fees:            Option[Int],
-  tag:             Option[String]
+  bank_account_id: Option[String] = None,
+  amount:          Int            = 0,
+  fees:            Option[Int]    = None,
+  tag:             Option[String] = None
 )
 
 object CashOut {
