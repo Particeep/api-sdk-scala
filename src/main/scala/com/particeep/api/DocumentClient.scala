@@ -52,7 +52,7 @@ class DocumentClient(ws: WSClient) extends ResponseParser {
       .addBodyPart(new StringPart("description", document.description.getOrElse("")))
       .addBodyPart(new StringPart("name", document.name.getOrElse("")))
       .addBodyPart(new StringPart("path", document.path.getOrElse("")))
-      .addBodyPart(new StringPart("locked", document.locked.toString))
+      .addBodyPart(new StringPart("locked", document.locked.getOrElse(false).toString))
       .addBodyPart(new StringPart("override_existing_file", document.override_existing_file.getOrElse(false).toString))
   }
 
