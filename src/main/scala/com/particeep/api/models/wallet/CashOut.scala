@@ -4,7 +4,7 @@ import play.api.libs.json.Json
 
 case class CashOut(
   bank_account_id: Option[String] = None,
-  amount:          Int,
+  amount:          Int            = 0,
   fees:            Option[Int]    = None,
   tag:             Option[String] = None
 )
