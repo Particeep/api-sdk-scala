@@ -15,7 +15,8 @@ case class Document(
   content_type: Option[String] = None,
   path:         String         = "",
   doc_type:     String         = "",
-  locked:       Boolean        = false
+  locked:       Boolean        = false,
+  permalink:    Option[String] = None
 )
 
 object Document {
