@@ -2,7 +2,7 @@ package com.particeep.api
 
 import com.particeep.api.core.{ResponseParser, WSClient}
 import com.particeep.api.models.ErrorResult
-import com.particeep.api.models.enterpise.{Enterprise, EnterpriseCreation, EnterpriseEdition, NbProjectsByActivity}
+import com.particeep.api.models.enterpise.{Enterprise, EnterpriseCreation, EnterpriseEdition}
 import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -19,7 +19,6 @@ class EnterpriseClient(ws: WSClient) extends ResponseParser {
   implicit val format = Enterprise.format
   implicit val creation_format = EnterpriseCreation.format
   implicit val edition_format = EnterpriseEdition.format
-  implicit val nb_projects_by_activity_format = NbProjectsByActivity.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enterprise]] = {
     ws.url(s"$endPoint/$id", timeout).get().map(parse[Enterprise])
@@ -38,12 +37,5 @@ class EnterpriseClient(ws: WSClient) extends ResponseParser {
 
   def update(id: String, enterprise_edition: EnterpriseEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enterprise]] = {
     ws.url(s"$endPoint/$id", timeout).post(Json.toJson(enterprise_edition)).map(parse[Enterprise])
-  }
-
-  def nbProjectsByActivityDomain(activity_domains: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[NbProjectsByActivity]]] = {
-    ws.url(s"$endPoint/info/activity/domain", timeout)
-      .withQueryString("activity_domains" -> activity_domains.mkString(","))
-      .get()
-      .map(parse[Seq[NbProjectsByActivity]])
   }
 }
