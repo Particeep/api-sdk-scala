@@ -84,4 +84,8 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
                                       timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
     ws.url(s"$endPoint/fundraise/$id/schedule/custom", timeout).post(Json.toJson(repayment_info_vector)).map(parse[List[ScheduledPayment]])
   }
+
+  def cancelRemainingPayments(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
+    ws.url(s"$endPoint/fundraise/$id/schedule/cancel-all", timeout).post(Results.EmptyContent()).map(parse[List[ScheduledPayment]])
+  }
 }
