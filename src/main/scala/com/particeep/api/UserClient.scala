@@ -27,7 +27,7 @@ class UserClient(ws: WSClient) extends ResponseParser {
   }
 
   def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[User]]] = {
-    ws.url(s"$endPoint/$ids", timeout)
+    ws.url(s"$endPoint", timeout)
       .withQueryString("ids" -> ids.mkString(","))
       .get()
       .map(parse[List[User]])
