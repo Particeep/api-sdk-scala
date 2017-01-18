@@ -24,11 +24,11 @@ class EnterpriseClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/$id", timeout).get().map(parse[Enterprise])
   }
 
-  def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[Enterprise]]] = {
+  def byIds(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Enterprise]]] = {
     ws.url(s"$endPoint", timeout)
       .withQueryString("ids" -> ids.mkString(","))
       .get()
-      .map(parse[Seq[Enterprise]])
+      .map(parse[List[Enterprise]])
   }
 
   def create(enterprise_creation: EnterpriseCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enterprise]] = {
