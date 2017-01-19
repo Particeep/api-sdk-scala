@@ -28,7 +28,6 @@ class RoleClient(ws: WSClient) extends ResponseParser {
   }
 
   def add(user_id: String, role: String, role_creation: RoleCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
-    play.api.Logger.info(Json.toJson(role_creation).toString)
     ws.url(s"$endPoint/$user_id/add/${role.toLowerCase}", timeout).put(Json.toJson(role_creation)).map(parse[Roles])
   }
 
