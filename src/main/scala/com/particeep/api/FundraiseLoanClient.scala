@@ -28,6 +28,7 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
   implicit val scheduled_payment_format = ScheduledPayment.format
   implicit val lend_format = Lend.format
   implicit val transaction_format = Transaction.format
+  implicit val lend_creation_format = LendCreation.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.url(s"$endPoint/fundraise/$id", timeout).get().map(parse[FundraiseLoan])
@@ -112,5 +113,9 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[Transaction]])
+  }
+
+  def lend(id: String, lend_creation: LendCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
+    ws.url(s"$endPoint/fundraise/$id/lend", timeout).post(Json.toJson(lend_creation)).map(parse[Transaction])
   }
 }
