@@ -1,8 +1,10 @@
 package com.particeep.api
 
 import com.particeep.api.core.{ResponseParser, WSClient}
-import com.particeep.api.models.ErrorResult
+import com.particeep.api.models.{ErrorResult, PaginatedSequence}
 import com.particeep.api.models.fundraise.loan._
+import com.particeep.api.models.transaction.{Transaction, TransactionSearch}
+import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 import play.api.mvc.Results
 
@@ -24,6 +26,9 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
   implicit val repayment_with_date_format = RepaymentWithDate.format
   implicit val repayment_info_vector_format = RepaymentInfoVector.format
   implicit val scheduled_payment_format = ScheduledPayment.format
+  implicit val lend_format = Lend.format
+  implicit val transaction_format = Transaction.format
+  implicit val lend_creation_format = LendCreation.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.url(s"$endPoint/fundraise/$id", timeout).get().map(parse[FundraiseLoan])
@@ -87,5 +92,30 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
 
   def cancelRemainingPayments(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
     ws.url(s"$endPoint/fundraise/$id/schedule/cancel-all", timeout).post(Results.EmptyContent()).map(parse[List[ScheduledPayment]])
+  }
+
+  def searchScheduledPayments(id: String, criteria: ScheduledPaymentSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[ScheduledPayment]]] = {
+    ws.url(s"$endPoint/fundraise/$id/schedule/search", timeout)
+      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .get
+      .map(parse[PaginatedSequence[ScheduledPayment]])
+  }
+
+  def allLendsOnFundraise(id: String, criteria: TransactionSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Lend]]] = {
+    ws.url(s"$endPoint/fundraise/$id/lends", timeout)
+      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .get
+      .map(parse[PaginatedSequence[Lend]])
+  }
+
+  def allLendsByUser(user_id: String, criteria: TransactionSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
+    ws.url(s"$endPoint/fundraise/lends/user/$user_id", timeout)
+      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .get
+      .map(parse[PaginatedSequence[Transaction]])
+  }
+
+  def lend(id: String, lend_creation: LendCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
+    ws.url(s"$endPoint/fundraise/$id/lend", timeout).post(Json.toJson(lend_creation)).map(parse[Transaction])
   }
 }
