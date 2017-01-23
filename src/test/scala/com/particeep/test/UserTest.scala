@@ -1,9 +1,10 @@
 package com.particeep.test
 
 import scala.language.postfixOps
-import com.particeep.api._
+import com.particeep.api.models.user.User
 import com.particeep.api.core.ApiClient
 import com.particeep.api.models.ErrorResult
+import com.particeep.api.UserCapability
 import org.scalatest._
 
 import scala.concurrent.{Await, Future}
