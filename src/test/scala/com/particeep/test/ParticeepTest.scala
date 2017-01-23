@@ -3,9 +3,11 @@ package com.particeep.test
 import java.time.{ZoneOffset, ZonedDateTime}
 
 import scala.language.postfixOps
-import com.particeep.api._
 import com.particeep.api.core.ApiClient
 import com.particeep.api.models.ErrorResult
+import com.particeep.api.models.user.User
+import com.particeep.api.Info
+import com.particeep.api.InfoCapability
 import org.scalatest._
 import play.api.libs.json.Json
 
@@ -29,6 +31,8 @@ class ParticeepTest extends FlatSpec with Matchers {
   }
 
   "the api client" should "format date in ISO 8601" in {
+
+    implicit val user_format = User.format
 
     val date = ZonedDateTime.now(ZoneOffset.UTC)
       .withYear(1980)
