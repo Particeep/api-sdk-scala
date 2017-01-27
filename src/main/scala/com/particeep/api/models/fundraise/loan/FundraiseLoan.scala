@@ -20,7 +20,7 @@ case class FundraiseLoan(
   currency:       Currency              = EUR,
   status:         FundraiseStatus       = INIT,
   tags:           Option[String]        = None,
-  duration:       Int                   = 0,
+  term:           Int                   = 0,
   rate:           Double                = 0,
   tax_rate:       Double                = 0,
   amount_min:     Int                   = 0
