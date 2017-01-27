@@ -15,7 +15,7 @@ case class FundraiseLoanCreation(
   start_at:             Option[ZonedDateTime]  = None,
   end_at:               Option[ZonedDateTime]  = None,
   amount_target:        Int,
-  duration:             Int,
+  term:                 Int,
   rate:                 Double,
   tax_rate:             Double,
   amount_min:           Int,
