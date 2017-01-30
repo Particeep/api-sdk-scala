@@ -36,6 +36,6 @@ class RoleClient(ws: WSClient) extends ResponseParser {
   }
 
   def hasRole(user_id: String, role: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Boolean]] = {
-    allByUser(user_id).map(result => result.right.map(roles => roles.roles.contains(role)))
+    allByUser(user_id).map(result => result.right.map(roles => roles.roles.map(_.role_name).contains(role)))
   }
 }
