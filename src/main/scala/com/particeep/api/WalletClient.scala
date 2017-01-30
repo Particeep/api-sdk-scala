@@ -64,4 +64,9 @@ class WalletClient(ws: WSClient) extends ResponseParser {
   def addBankAccount(id: String, bank_account_creation: BankAccountCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, BankAccount]] = {
     ws.url(s"$endPoint/$id/bankaccount", timeout).put(Json.toJson(bank_account_creation)).map(parse[BankAccount])
   }
+
+  def getBankAccountByWalletId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, BankAccount]] = {
+    ws.url(s"$endPoint/$id/bankaccount", timeout).get.map(parse[BankAccount])
+  }
+
 }
