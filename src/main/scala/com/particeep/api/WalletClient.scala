@@ -25,6 +25,8 @@ class WalletClient(ws: WSClient) extends ResponseParser {
   implicit val transfer_format = WalletTransfer.format
   implicit val bank_account_format = BankAccount.format
   implicit val bank_account_creation_format = BankAccountCreation.format
+  implicit val cashin_bank_account_format = CashInBankAccount.format
+  implicit val cashin_bank_account_creation_format = CashInBankAccountCreation.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Wallet]] = {
     ws.url(s"$endPoint/$id", timeout).get().map(parse[Wallet])
@@ -69,4 +71,7 @@ class WalletClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/$id/bankaccount", timeout).get.map(parse[BankAccount])
   }
 
+  def cashinBankAccount(id: String, cash_in_bank_account_creation: CashInBankAccountCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, CashInBankAccount]] = {
+    ws.url(s"$endPoint/$id/cashin/bankAccount", timeout).post(Json.toJson(cash_in_bank_account_creation)).map(parse[CashInBankAccount])
+  }
 }

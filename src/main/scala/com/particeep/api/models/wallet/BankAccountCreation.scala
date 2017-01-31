@@ -1,6 +1,5 @@
 package com.particeep.api.models.wallet
 
-import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class BankAccountCreation(
@@ -19,6 +18,5 @@ case class BankAccountCreation(
 )
 
 object BankAccountCreation {
-  implicit val date_format = Formatter.ZonedDateTimeWrites
   val format = Json.format[BankAccountCreation]
 }
