@@ -18,9 +18,9 @@ case class WalletCreation(
   last_name:          String         = "",
   gender:             String         = "",
   birthday:           ZonedDateTime  = ZonedDateTime.now,
-  nationality:        Option[String],
-  countryOfResidence: Option[String],
-  businessName:       Option[String]
+  nationality:        Option[String] = None,
+  countryOfResidence: Option[String] = None,
+  businessName:       Option[String] = None
 )
 
 object WalletCreation {
