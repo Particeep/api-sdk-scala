@@ -23,6 +23,10 @@ class WalletClient(ws: WSClient) extends ResponseParser {
   implicit val cash_out_format = CashOut.format
   implicit val transaction_format = TransactionWallet.format
   implicit val transfer_format = WalletTransfer.format
+  implicit val bank_account_format = BankAccount.format
+  implicit val bank_account_creation_format = BankAccountCreation.format
+  implicit val cashin_bank_account_format = CashInBankAccount.format
+  implicit val cashin_bank_account_creation_format = CashInBankAccountCreation.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Wallet]] = {
     ws.url(s"$endPoint/$id", timeout).get().map(parse[Wallet])
@@ -57,5 +61,17 @@ class WalletClient(ws: WSClient) extends ResponseParser {
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[TransactionWallet]])
+  }
+
+  def addBankAccount(id: String, bank_account_creation: BankAccountCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, BankAccount]] = {
+    ws.url(s"$endPoint/$id/bankaccount", timeout).put(Json.toJson(bank_account_creation)).map(parse[BankAccount])
+  }
+
+  def getBankAccountByWalletId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, BankAccount]] = {
+    ws.url(s"$endPoint/$id/bankaccount", timeout).get.map(parse[BankAccount])
+  }
+
+  def cashinBankAccount(id: String, cash_in_bank_account_creation: CashInBankAccountCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, CashInBankAccount]] = {
+    ws.url(s"$endPoint/$id/cashin/bankAccount", timeout).post(Json.toJson(cash_in_bank_account_creation)).map(parse[CashInBankAccount])
   }
 }
