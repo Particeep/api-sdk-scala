@@ -14,7 +14,7 @@ import scala.concurrent.{ExecutionContext, Future}
 trait PaymentCapability {
   self: WSClient =>
 
-  val form: PaymentClient = new PaymentClient(this)
+  val payment: PaymentClient = new PaymentClient(this)
 }
 
 class PaymentClient(ws: WSClient) extends ResponseParser {
