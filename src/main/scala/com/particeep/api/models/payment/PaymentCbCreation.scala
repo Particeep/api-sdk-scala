@@ -8,7 +8,7 @@ case class PaymentCbCreation(
   decline_url: String,
   pending_url: String,
   owner_ip:    String,
-  locale:      Option[Locale]
+  locale:      Option[Locale] = None
 )
 
 object PaymentCbCreation {
