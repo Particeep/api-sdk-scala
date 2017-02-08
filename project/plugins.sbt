@@ -8,7 +8,7 @@ resolvers += Classpaths.sbtPluginReleases
 
 // code plugins
 
-addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.7.0" excludeAll(
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0" excludeAll(
   ExclusionRule(organization = "com.danieltrinh")))
 
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.3.5")
@@ -18,4 +18,4 @@ addSbtPlugin("org.brianmckenna" % "sbt-wartremover" % "0.13")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0")
 
-libraryDependencies += "org.scalariform" %% "scalariform" % "0.1.7"
+libraryDependencies += "org.scalariform" %% "scalariform" % "0.1.8"
