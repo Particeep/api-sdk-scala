@@ -15,7 +15,7 @@ trait SignatureCapability {
 
 class SignatureClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/signature"
+  private[this] val endPoint: String = "/signature"
   implicit val format = Signature.format
   implicit val creation_format = SignatureCreation.format
 

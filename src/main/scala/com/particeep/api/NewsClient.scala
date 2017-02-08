@@ -16,7 +16,7 @@ trait NewsCapability {
 
 class NewsClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/newsfeed"
+  private[this] val endPoint: String = "/newsfeed"
 
   implicit val format = News.format
   implicit val prev_and_next_format = NewsPrevAndNext.format

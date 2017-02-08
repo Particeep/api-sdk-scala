@@ -16,7 +16,7 @@ trait KycCapability {
 
 class KycClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/kycs"
+  private[this] val endPoint: String = "/kycs"
   implicit val group_format = KycGroup.format
   implicit val creation_format = KycCreation.format
   implicit val edition_format = KycsEdition.format

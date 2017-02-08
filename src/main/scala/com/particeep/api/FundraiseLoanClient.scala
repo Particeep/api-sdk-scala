@@ -18,7 +18,7 @@ trait FundraiseLoanCapability {
 
 class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/loan"
+  private[this] val endPoint: String = "/loan"
   implicit val format = FundraiseLoan.format
   implicit val creation_format = FundraiseLoanCreation.format
   implicit val edition_format = FundraiseLoanEdition.format

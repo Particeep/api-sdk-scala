@@ -16,7 +16,7 @@ trait DocumentGenerationCapability {
 
 class DocumentGenerationClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/document-generation"
+  private[this] val endPoint: String = "/document-generation"
   implicit val format_generation = DocumentGeneration.format
   implicit val format_document = Document.format
 

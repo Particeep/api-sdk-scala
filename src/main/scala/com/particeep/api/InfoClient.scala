@@ -22,7 +22,7 @@ trait InfoCapability {
 
 class InfoClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/info"
+  private[this] val endPoint: String = "/info"
   implicit val format = Info.format
 
   def info(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Info]] = {

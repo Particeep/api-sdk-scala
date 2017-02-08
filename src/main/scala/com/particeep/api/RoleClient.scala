@@ -15,7 +15,7 @@ trait RoleCapability {
 
 class RoleClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/role"
+  private[this] val endPoint: String = "/role"
   implicit val format = Roles.format
   implicit val creation_format = RoleCreation.format
 

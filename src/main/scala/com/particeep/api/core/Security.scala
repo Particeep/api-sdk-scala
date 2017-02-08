@@ -28,17 +28,17 @@ trait WithSecurtiy {
       .addHeader("Authorization", buildAuthorizationHeader(today, apiCredential))
   }
 
-  private def buildDateHeader(): String = {
+  private[this] def buildDateHeader(): String = {
     val date = ZonedDateTime.now(ZoneOffset.UTC).withNano(0)
     val format = DateTimeFormatter.ISO_INSTANT
     format.format(date)
   }
 
-  private def buildAuthorizationHeader(toSign: String, apiCredential: ApiCredential): String = {
+  private[this] def buildAuthorizationHeader(toSign: String, apiCredential: ApiCredential): String = {
     buildAuthorizationHeader(apiCredential.apiKey, apiCredential.apiSecret, toSign)
   }
 
-  private def buildAuthorizationHeader(apiKey: String, apiSecret: String, dataToSign: String): String = {
+  private[this] def buildAuthorizationHeader(apiKey: String, apiSecret: String, dataToSign: String): String = {
     val toSign: String = apiSecret + apiKey + dataToSign
 
     val messageBytes = toSign.getBytes("UTF-8")

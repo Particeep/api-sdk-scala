@@ -20,7 +20,7 @@ trait FundraiseRewardCapability {
  */
 class FundraiseRewardClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/reward"
+  private[this] val endPoint: String = "/reward"
   implicit val format = FundraiseReward.format
   implicit val creation_format = FundraiseRewardCreation.format
   implicit val edition_format = FundraiseRewardEdition.format

@@ -15,7 +15,7 @@ trait EnterpriseCapability {
 
 class EnterpriseClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/enterprise"
+  private[this] val endPoint: String = "/enterprise"
   implicit val format = Enterprise.format
   implicit val creation_format = EnterpriseCreation.format
   implicit val edition_format = EnterpriseEdition.format

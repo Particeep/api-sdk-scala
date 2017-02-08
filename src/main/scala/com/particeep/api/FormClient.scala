@@ -15,7 +15,7 @@ trait FormCapability {
 
 class FormClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/form"
+  private[this] val endPoint: String = "/form"
   implicit val format = Form.format
   implicit val format_simple = SimpleForm.format
   implicit val format_creation = FormCreation.format

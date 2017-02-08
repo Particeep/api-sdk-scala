@@ -17,7 +17,7 @@ trait UserCapability {
 
 class UserClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/user"
+  private[this] val endPoint: String = "/user"
   implicit val format = User.format
   implicit val creation_format = UserCreation.format
   implicit val edition_format = UserEdition.format
@@ -67,9 +67,9 @@ class UserClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/getOrCreate", timeout).post(Json.toJson(user_creation)).map(parse[User])
   }
 
-  private case class ChangePassword(old_password: Option[String], new_password: String)
+  private[this] case class ChangePassword(old_password: Option[String], new_password: String)
 
-  private implicit val change_password_format = Json.format[ChangePassword]
+  private[this] implicit val change_password_format = Json.format[ChangePassword]
 
   def changePassword(id: String, old_password: Option[String], new_password: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
     ws.url(s"$endPoint/$id/changePassword", timeout).post(Json.toJson(ChangePassword(old_password, new_password))).map(parse[User])

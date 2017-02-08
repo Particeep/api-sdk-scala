@@ -15,7 +15,7 @@ trait FundraiseSearchCapability {
 
 class FundraiseSearchClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/fundraises"
+  private[this] val endPoint: String = "/fundraises"
   implicit val format = FundraiseData.format
   implicit val project_by_category_format = NbProjectsByCategory.format
 

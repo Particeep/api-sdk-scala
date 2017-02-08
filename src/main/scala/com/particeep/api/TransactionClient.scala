@@ -15,7 +15,7 @@ trait TransactionCapability {
 
 class TransactionClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/transaction"
+  private[this] val endPoint: String = "/transaction"
   implicit val format = Transaction.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {

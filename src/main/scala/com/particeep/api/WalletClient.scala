@@ -16,7 +16,7 @@ trait WalletCapability {
 
 class WalletClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/wallet"
+  private[this] val endPoint: String = "/wallet"
   implicit val format = Wallet.format
   implicit val creation_format = WalletCreation.format
   implicit val cash_in_format = CashIn.format

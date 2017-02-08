@@ -19,7 +19,7 @@ trait PaymentCapability {
 
 class PaymentClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/payment"
+  private[this] val endPoint: String = "/payment"
   implicit lazy val pay_result_format = PayResult.format
   implicit lazy val payment_cb_creation_format = PaymentCbCreation.format
   implicit lazy val transaction_format = Transaction.format
