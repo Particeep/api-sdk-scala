@@ -8,10 +8,11 @@ resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases
 
 // Change this to another test framework if you prefer
 libraryDependencies ++= Seq(
-  "org.scalatest"     %% "scalatest"  % "2.2.4" % "test" withSources(),
-  "com.typesafe.play" %% "play-ws"    % "2.4.8"          withSources(),
-  "com.github.driox"  %% "sorus"      % "1.0.0"          withSources(),
-  "org.slf4j"         %  "slf4j-api"  % "1.7.21"         withSources()
+  "org.scalatest"     %% "scalatest"  			% "2.2.4" % "test" withSources(),
+  "com.typesafe.play" %% "play-ws"    			% "2.4.8"          withSources() exclude("com.ning", "async-http-client"),
+	"com.ning" 					% "async-http-client" % "1.9.40",
+  "com.github.driox"  %% "sorus"      			% "1.0.0"          withSources(),
+  "org.slf4j"         %  "slf4j-api"  			% "1.7.21"         withSources()
 )
 
 // Uncomment to use Akka
