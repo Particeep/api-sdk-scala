@@ -2,6 +2,7 @@ package com.particeep.api.models.enums
 
 import scala.language.implicitConversions
 
+// scalastyle:off
 object Currency {
 
   sealed abstract class Currency extends Enum
@@ -192,3 +193,4 @@ object Currency {
     implicit def stringToCurrency(value: String): Currency = get(value).getOrElse(EUR)
   }
 }
+// scalastyle:on

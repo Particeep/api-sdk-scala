@@ -1,17 +1,17 @@
 package com.particeep.api
 
-import com.ning.http.client.{AsyncHttpClient, ListenableFuture, Response}
-import com.ning.http.client.multipart.{FilePart, StringPart}
-import com.particeep.api.core.{ResponseParser, WSClient}
-import com.particeep.api.models.document.{Document, DocumentCreation, DocumentSearch}
-import com.particeep.api.models.{ErrorResult, PaginatedSequence}
+import com.ning.http.client.{ AsyncHttpClient, ListenableFuture, Response }
+import com.ning.http.client.multipart.{ FilePart, StringPart }
+import com.particeep.api.core.{ ResponseParser, WSClient }
+import com.particeep.api.models.document.{ Document, DocumentCreation, DocumentSearch }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
 import com.particeep.api.utils.LangUtils
 import play.api.Play.current
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.ws.WS
 import play.api.mvc.MultipartFormData
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * Created by Noe on 27/12/2016.
@@ -25,7 +25,7 @@ trait DocumentCapability {
 
 class DocumentClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/document"
+  private[this] val endPoint: String = "/document"
   implicit val format = Document.format
   implicit val format_creation = DocumentCreation.format
   implicit val format_search = DocumentSearch.format
@@ -35,7 +35,7 @@ class DocumentClient(ws: WSClient) extends ResponseParser {
     Future { prepareRequest(url, file, document).get() }.map(parse[Document])
   }
 
-  private def prepareRequest(url: String, file: MultipartFormData[TemporaryFile], document: DocumentCreation)(implicit exec: ExecutionContext): ListenableFuture[Response] = {
+  private[this] def prepareRequest(url: String, file: MultipartFormData[TemporaryFile], document: DocumentCreation)(implicit exec: ExecutionContext): ListenableFuture[Response] = {
     val documentFilePart = file.files.head
     val client = WS.client.underlying[AsyncHttpClient]
     val postBuilder = ws.urlFileUpload(url, client)
@@ -46,7 +46,7 @@ class DocumentClient(ws: WSClient) extends ResponseParser {
     client.executeRequest(builder.build())
   }
 
-  private def addDocumentApiToBody(builder: AsyncHttpClient#BoundRequestBuilder, document: DocumentCreation) {
+  private[this] def addDocumentApiToBody(builder: AsyncHttpClient#BoundRequestBuilder, document: DocumentCreation) {
     builder.addBodyPart(new StringPart("target_id", document.target_id.getOrElse("")))
       .addBodyPart(new StringPart("target_type", document.target_type.getOrElse("")))
       .addBodyPart(new StringPart("description", document.description.getOrElse("")))

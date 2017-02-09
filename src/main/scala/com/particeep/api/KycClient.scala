@@ -1,12 +1,12 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
+import com.particeep.api.core.{ ResponseParser, WSClient }
 import com.particeep.api.models.ErrorResult
-import com.particeep.api.models.kyc.{KycCreation, KycGroup, KycsEdition}
+import com.particeep.api.models.kyc.{ KycCreation, KycGroup, KycsEdition }
 import play.api.libs.json.Json
 import play.api.mvc.Results
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait KycCapability {
   self: WSClient =>
@@ -16,7 +16,7 @@ trait KycCapability {
 
 class KycClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/kycs"
+  private[this] val endPoint: String = "/kycs"
   implicit val group_format = KycGroup.format
   implicit val creation_format = KycCreation.format
   implicit val edition_format = KycsEdition.format

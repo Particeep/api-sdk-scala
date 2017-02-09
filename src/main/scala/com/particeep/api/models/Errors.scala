@@ -1,6 +1,6 @@
 package com.particeep.api.models
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 
 case class Error(technicalCode: String, message: String, code: Option[String] = None, stack: Option[String] = None)
 

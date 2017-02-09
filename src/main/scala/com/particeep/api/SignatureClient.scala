@@ -1,11 +1,11 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
+import com.particeep.api.core.{ ResponseParser, WSClient }
 import com.particeep.api.models.ErrorResult
-import com.particeep.api.models.signature.{Signature, SignatureCreation}
+import com.particeep.api.models.signature.{ Signature, SignatureCreation }
 import play.api.libs.json.Json
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait SignatureCapability {
   self: WSClient =>
@@ -15,7 +15,7 @@ trait SignatureCapability {
 
 class SignatureClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/signature"
+  private[this] val endPoint: String = "/signature"
   implicit val format = Signature.format
   implicit val creation_format = SignatureCreation.format
 

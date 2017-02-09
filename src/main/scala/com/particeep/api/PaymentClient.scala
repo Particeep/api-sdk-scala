@@ -1,15 +1,15 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
-import com.particeep.api.models.{ErrorResult, PaginatedSequence}
-import com.particeep.api.models.fundraise.loan.{ScheduledPayment, ScheduledPaymentSearch}
-import com.particeep.api.models.payment.{PayResult, PaymentCbCreation, ScheduledPaymentCreation}
+import com.particeep.api.core.{ ResponseParser, WSClient }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.fundraise.loan.{ ScheduledPayment, ScheduledPaymentSearch }
+import com.particeep.api.models.payment.{ PayResult, PaymentCbCreation, ScheduledPaymentCreation }
 import com.particeep.api.models.transaction.Transaction
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 import play.api.mvc.Results
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait PaymentCapability {
   self: WSClient =>
@@ -19,7 +19,7 @@ trait PaymentCapability {
 
 class PaymentClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/payment"
+  private[this] val endPoint: String = "/payment"
   implicit lazy val pay_result_format = PayResult.format
   implicit lazy val payment_cb_creation_format = PaymentCbCreation.format
   implicit lazy val transaction_format = Transaction.format

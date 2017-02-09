@@ -1,6 +1,6 @@
 package com.particeep.test
 
-import java.time.{ZoneOffset, ZonedDateTime}
+import java.time.{ ZoneOffset, ZonedDateTime }
 
 import scala.language.postfixOps
 import com.particeep.api.core.ApiClient
@@ -11,7 +11,7 @@ import com.particeep.api.InfoCapability
 import org.scalatest._
 import play.api.libs.json.Json
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 

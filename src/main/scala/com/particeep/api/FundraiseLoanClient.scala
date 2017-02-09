@@ -1,14 +1,14 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
-import com.particeep.api.models.{ErrorResult, PaginatedSequence}
+import com.particeep.api.core.{ ResponseParser, WSClient }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
 import com.particeep.api.models.fundraise.loan._
-import com.particeep.api.models.transaction.{Transaction, TransactionSearch}
+import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 import play.api.mvc.Results
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait FundraiseLoanCapability {
   self: WSClient =>
@@ -18,7 +18,7 @@ trait FundraiseLoanCapability {
 
 class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/loan"
+  private[this] val endPoint: String = "/loan"
   implicit val format = FundraiseLoan.format
   implicit val creation_format = FundraiseLoanCreation.format
   implicit val edition_format = FundraiseLoanEdition.format

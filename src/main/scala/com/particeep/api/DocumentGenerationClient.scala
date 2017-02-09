@@ -1,12 +1,12 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
+import com.particeep.api.core.{ ResponseParser, WSClient }
 import com.particeep.api.models.ErrorResult
 import com.particeep.api.models.document.Document
 import com.particeep.api.models.document_generation.DocumentGeneration
 import play.api.libs.json.Json
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait DocumentGenerationCapability {
   self: WSClient =>
@@ -16,7 +16,7 @@ trait DocumentGenerationCapability {
 
 class DocumentGenerationClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/document-generation"
+  private[this] val endPoint: String = "/document-generation"
   implicit val format_generation = DocumentGeneration.format
   implicit val format_document = Document.format
 
