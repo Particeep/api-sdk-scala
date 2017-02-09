@@ -1,12 +1,12 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
+import com.particeep.api.core.{ ResponseParser, WSClient }
 import play.api.libs.json._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import com.particeep.api.models._
 import com.particeep.api.utils.LangUtils
-import com.particeep.api.models.user.{User, UserCreation, UserEdition, UserSearch}
+import com.particeep.api.models.user.{ User, UserCreation, UserEdition, UserSearch }
 import play.api.mvc.Results
 
 trait UserCapability {

@@ -1,7 +1,7 @@
 package com.particeep.api.core
 
 import java.time.format.DateTimeFormatter
-import java.time.{ZoneOffset, ZonedDateTime}
+import java.time.{ ZoneOffset, ZonedDateTime }
 
 import com.ning.http.client.AsyncHttpClient
 import play.api.libs.ws._

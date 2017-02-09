@@ -1,6 +1,6 @@
 package com.particeep.api.models.kyc
 
-import com.particeep.api.models.enums.KycStatus.{CREATED, KycStatus}
+import com.particeep.api.models.enums.KycStatus.{ CREATED, KycStatus }
 import play.api.libs.json.Json
 
 case class KycGroup(

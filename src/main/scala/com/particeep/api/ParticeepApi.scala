@@ -1,6 +1,6 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ApiClient, ApiCredential}
+import com.particeep.api.core.{ ApiClient, ApiCredential }
 
 /**
  * This is a high level builder for api client. We may add new

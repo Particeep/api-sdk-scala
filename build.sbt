@@ -33,6 +33,9 @@ scalacOptions ++= Seq(
 // ~~~~~~~~~~~~~~~~~
 //Scalariform config
 
+import com.typesafe.sbt.SbtScalariform
+import com.typesafe.sbt.SbtScalariform.ScalariformKeys
+
 scalariformSettings
 
 ScalariformKeys.preferences := ScalariformKeys.preferences.value

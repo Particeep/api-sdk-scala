@@ -1,11 +1,11 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
+import com.particeep.api.core.{ ResponseParser, WSClient }
 import com.particeep.api.models.ErrorResult
-import com.particeep.api.models.enterprise.{Enterprise, EnterpriseCreation, EnterpriseEdition}
+import com.particeep.api.models.enterprise.{ Enterprise, EnterpriseCreation, EnterpriseEdition }
 import play.api.libs.json.Json
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait EnterpriseCapability {
   self: WSClient =>

@@ -7,7 +7,7 @@ import com.particeep.api.models.ErrorResult
 import com.particeep.api.UserCapability
 import org.scalatest._
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 

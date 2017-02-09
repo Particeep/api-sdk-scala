@@ -1,15 +1,15 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
-import com.particeep.api.models.{ErrorResult, PaginatedSequence}
-import com.particeep.api.models.fundraise.loan.{ScheduledPayment, ScheduledPaymentSearch}
-import com.particeep.api.models.payment.{PayResult, PaymentCbCreation, ScheduledPaymentCreation}
+import com.particeep.api.core.{ ResponseParser, WSClient }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.fundraise.loan.{ ScheduledPayment, ScheduledPaymentSearch }
+import com.particeep.api.models.payment.{ PayResult, PaymentCbCreation, ScheduledPaymentCreation }
 import com.particeep.api.models.transaction.Transaction
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 import play.api.mvc.Results
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait PaymentCapability {
   self: WSClient =>

@@ -1,17 +1,17 @@
 package com.particeep.api
 
-import com.ning.http.client.{AsyncHttpClient, ListenableFuture, Response}
-import com.ning.http.client.multipart.{FilePart, StringPart}
-import com.particeep.api.core.{ResponseParser, WSClient}
-import com.particeep.api.models.document.{Document, DocumentCreation, DocumentSearch}
-import com.particeep.api.models.{ErrorResult, PaginatedSequence}
+import com.ning.http.client.{ AsyncHttpClient, ListenableFuture, Response }
+import com.ning.http.client.multipart.{ FilePart, StringPart }
+import com.particeep.api.core.{ ResponseParser, WSClient }
+import com.particeep.api.models.document.{ Document, DocumentCreation, DocumentSearch }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
 import com.particeep.api.utils.LangUtils
 import play.api.Play.current
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.ws.WS
 import play.api.mvc.MultipartFormData
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * Created by Noe on 27/12/2016.
