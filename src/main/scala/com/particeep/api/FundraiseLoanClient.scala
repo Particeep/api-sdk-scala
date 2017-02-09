@@ -49,6 +49,13 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/fundraise/$id", timeout).post(Json.toJson(fundraise_loan_edition)).map(parse[FundraiseLoan])
   }
 
+  def search(criteria: FundraiseLoanSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseLoan]]] = {
+    ws.url(s"$endPoint/fundraises", timeout)
+      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .get
+      .map(parse[PaginatedSequence[FundraiseLoan]])
+  }
+
   def submit(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.url(s"$endPoint/fundraise/$id/submit", timeout).post(Results.EmptyContent()).map(parse[FundraiseLoan])
   }
