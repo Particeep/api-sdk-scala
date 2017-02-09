@@ -2,7 +2,7 @@ package com.particeep.api
 
 import com.particeep.api.core.{ ResponseParser, WSClient }
 import com.particeep.api.models.ErrorResult
-import com.particeep.api.models.enterprise.{ Enterprise, EnterpriseCreation, EnterpriseEdition }
+import com.particeep.api.models.enterprise.{ Enterprise, EnterpriseCreation, EnterpriseEdition, ManagerLink }
 import play.api.libs.json.Json
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -19,6 +19,7 @@ class EnterpriseClient(ws: WSClient) extends ResponseParser {
   implicit val format = Enterprise.format
   implicit val creation_format = EnterpriseCreation.format
   implicit val edition_format = EnterpriseEdition.format
+  implicit val manager_link_format = ManagerLink.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enterprise]] = {
     ws.url(s"$endPoint/$id", timeout).get().map(parse[Enterprise])
@@ -41,5 +42,9 @@ class EnterpriseClient(ws: WSClient) extends ResponseParser {
 
   def update(id: String, enterprise_edition: EnterpriseEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enterprise]] = {
     ws.url(s"$endPoint/$id", timeout).post(Json.toJson(enterprise_edition)).map(parse[Enterprise])
+  }
+
+  def getManagers(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ManagerLink]]] = {
+    ws.url(s"$endPoint/$id/manager", timeout).get().map(parse[List[ManagerLink]])
   }
 }
