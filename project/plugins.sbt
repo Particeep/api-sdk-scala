@@ -17,4 +17,4 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.3.5")
 addSbtPlugin("org.brianmckenna" % "sbt-wartremover" % "0.13")
 
 // wait for next release
-addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.6.0") //exclude("org.scalariform", "scalariform")
+addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.6.0")
