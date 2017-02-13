@@ -23,8 +23,8 @@ case class RepaymentInfoVector(
 
 object RepaymentInfoVector {
   implicit val date_format = Formatter.ZonedDateTimeWrites
-  private implicit val repayment_info_format = RepaymentInfo.format
-  private implicit val repayment_vector_format = Json.format[RepaymentVector]
-  private implicit val repayment_vector_date_format = Json.format[RepaymentVectorWithDate]
+  private[this] implicit val repayment_info_format = RepaymentInfo.format
+  private[this] implicit val repayment_vector_format = Json.format[RepaymentVector]
+  private[this] implicit val repayment_vector_date_format = Json.format[RepaymentVectorWithDate]
   val format = Json.format[RepaymentInfoVector]
 }

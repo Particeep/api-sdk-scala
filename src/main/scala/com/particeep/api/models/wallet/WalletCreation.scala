@@ -4,7 +4,7 @@ import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
 import com.particeep.api.models.Address
-import com.particeep.api.models.enums.WalletType.{NATURAL, WalletType}
+import com.particeep.api.models.enums.WalletType.{ NATURAL, WalletType }
 import play.api.libs.json.Json
 
 case class WalletCreation(

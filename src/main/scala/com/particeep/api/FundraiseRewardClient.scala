@@ -1,14 +1,14 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
-import com.particeep.api.models.{ErrorResult, PaginatedSequence}
+import com.particeep.api.core.{ ResponseParser, WSClient }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
 import com.particeep.api.models.fundraise.reward._
-import com.particeep.api.models.transaction.{Transaction, TransactionSearch}
+import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 import play.api.mvc.Results
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait FundraiseRewardCapability {
   self: WSClient =>
@@ -20,7 +20,7 @@ trait FundraiseRewardCapability {
  */
 class FundraiseRewardClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/reward"
+  private[this] val endPoint: String = "/reward"
   implicit val format = FundraiseReward.format
   implicit val creation_format = FundraiseRewardCreation.format
   implicit val edition_format = FundraiseRewardEdition.format

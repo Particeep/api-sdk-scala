@@ -1,11 +1,11 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
+import com.particeep.api.core.{ ResponseParser, WSClient }
 import com.particeep.api.models.ErrorResult
 import com.particeep.api.models.form._
 import play.api.libs.json.Json
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait FormCapability {
   self: WSClient =>
@@ -15,7 +15,7 @@ trait FormCapability {
 
 class FormClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/form"
+  private[this] val endPoint: String = "/form"
   implicit val format = Form.format
   implicit val format_simple = SimpleForm.format
   implicit val format_creation = FormCreation.format

@@ -1,6 +1,6 @@
 package com.particeep.api.models.kyc
 
-import com.particeep.api.models.enums.UserType.{NATURAL, UserType}
+import com.particeep.api.models.enums.UserType.{ NATURAL, UserType }
 import play.api.libs.json.Json
 
 case class KycCreation(

@@ -13,7 +13,7 @@ trait ResponseParser {
 
   import com.particeep.api.models.Errors._
 
-  private final val log = LoggerFactory.getLogger(this.getClass)
+  private[this] final val log = LoggerFactory.getLogger(this.getClass)
 
   def parse[A](response: WSResponse)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
     parse(response.json, response.status)(json_reads)
@@ -24,7 +24,7 @@ trait ResponseParser {
     parse(json, response.getStatusCode)(json_reads)
   }
 
-  private def parse[A](json: JsValue, status: Int)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
+  private[this] def parse[A](json: JsValue, status: Int)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
     try {
       val result: Either[ErrorResult, A] = validateStandardError(json)
         .orElse(validateParsingError(json))
@@ -43,14 +43,14 @@ trait ResponseParser {
     }
   }
 
-  private def parse[A](json: JsValue)(implicit json_reads: Reads[A]): Either[JsError, A] = {
+  private[this] def parse[A](json: JsValue)(implicit json_reads: Reads[A]): Either[JsError, A] = {
     json.validate[A] match {
       case result: JsSuccess[A] => Right(result.get)
       case err: JsError         => Left(err)
     }
   }
 
-  private def parseResult[A](json: JsValue)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
+  private[this] def parseResult[A](json: JsValue)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
     parse(json)(json_reads) match {
       case Right(success) => Right(success)
       case Left(json_err) => {
@@ -63,7 +63,7 @@ trait ResponseParser {
     }
   }
 
-  private def ex2error(ex: Throwable): Errors = {
+  private[this] def ex2error(ex: Throwable): Errors = {
     val err = Error(
       technicalCode = ex.toString(),
       message = ex.getMessage,
@@ -75,14 +75,14 @@ trait ResponseParser {
     )
   }
 
-  private def validateStandardError(json: JsValue): Option[ErrorResult] = {
+  private[this] def validateStandardError(json: JsValue): Option[ErrorResult] = {
     json.validate[Errors] match {
       case result: JsSuccess[Errors] => Some(result.get)
       case _: JsError                => validateParsingError(json)
     }
   }
 
-  private def validateParsingError(json: JsValue): Option[ParsingError] = {
+  private[this] def validateParsingError(json: JsValue): Option[ParsingError] = {
     json.validate[ParsingError] match {
       case result: JsSuccess[ParsingError] => Some(result.get)
       case _: JsError                      => None

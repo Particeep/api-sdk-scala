@@ -1,11 +1,11 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
-import com.particeep.api.models.{ErrorResult, PaginatedSequence}
-import com.particeep.api.models.fundraise.{FundraiseData, FundraiseSearch, NbProjectsByCategory}
+import com.particeep.api.core.{ ResponseParser, WSClient }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.fundraise.{ FundraiseData, FundraiseSearch, NbProjectsByCategory }
 import com.particeep.api.utils.LangUtils
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait FundraiseSearchCapability {
   self: WSClient =>
@@ -15,7 +15,7 @@ trait FundraiseSearchCapability {
 
 class FundraiseSearchClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/fundraises"
+  private[this] val endPoint: String = "/fundraises"
   implicit val format = FundraiseData.format
   implicit val project_by_category_format = NbProjectsByCategory.format
 

@@ -1,11 +1,11 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
+import com.particeep.api.core.{ ResponseParser, WSClient }
 import com.particeep.api.models.ErrorResult
-import com.particeep.api.models.role.{RoleCreation, Roles}
+import com.particeep.api.models.role.{ RoleCreation, Roles }
 import play.api.libs.json.Json
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait RoleCapability {
   self: WSClient =>
@@ -15,7 +15,7 @@ trait RoleCapability {
 
 class RoleClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/role"
+  private[this] val endPoint: String = "/role"
   implicit val format = Roles.format
   implicit val creation_format = RoleCreation.format
 

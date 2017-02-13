@@ -1,11 +1,11 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
-import com.particeep.api.models.{ErrorResult, PaginatedSequence}
-import com.particeep.api.models.transaction.{Transaction, TransactionSearch}
+import com.particeep.api.core.{ ResponseParser, WSClient }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait TransactionCapability {
   self: WSClient =>
@@ -15,7 +15,7 @@ trait TransactionCapability {
 
 class TransactionClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/transaction"
+  private[this] val endPoint: String = "/transaction"
   implicit val format = Transaction.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {

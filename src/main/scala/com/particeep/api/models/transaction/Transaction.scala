@@ -3,9 +3,9 @@ package com.particeep.api.models.transaction
 import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
-import com.particeep.api.models.enums.Currency.{Currency, EUR}
+import com.particeep.api.models.enums.Currency.{ Currency, EUR }
 import com.particeep.api.models.enums.PaymentMethod.PaymentMethod
-import com.particeep.api.models.enums.TransactionStatus.{PENDING, TransactionStatus}
+import com.particeep.api.models.enums.TransactionStatus.{ PENDING, TransactionStatus }
 import play.api.libs.json.Json
 
 case class Transaction(

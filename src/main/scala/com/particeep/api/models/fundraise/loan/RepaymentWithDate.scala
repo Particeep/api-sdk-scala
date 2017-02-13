@@ -18,6 +18,6 @@ case class RepaymentWithDate(
 
 object RepaymentWithDate {
   implicit val date_format = Formatter.ZonedDateTimeWrites
-  private implicit val repayment_format = Json.format[Repayment]
+  private[this] implicit val repayment_format = Json.format[Repayment]
   val format = Json.format[RepaymentWithDate]
 }

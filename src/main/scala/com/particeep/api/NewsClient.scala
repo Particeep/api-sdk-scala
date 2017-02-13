@@ -1,12 +1,12 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
-import com.particeep.api.models.{ErrorResult, PaginatedSequence}
+import com.particeep.api.core.{ ResponseParser, WSClient }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
 import com.particeep.api.models.news._
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait NewsCapability {
   self: WSClient =>
@@ -16,7 +16,7 @@ trait NewsCapability {
 
 class NewsClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/newsfeed"
+  private[this] val endPoint: String = "/newsfeed"
 
   implicit val format = News.format
   implicit val prev_and_next_format = NewsPrevAndNext.format

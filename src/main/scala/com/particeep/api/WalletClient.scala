@@ -1,12 +1,12 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ResponseParser, WSClient}
-import com.particeep.api.models.{ErrorResult, PaginatedSequence, TableSearch}
+import com.particeep.api.core.{ ResponseParser, WSClient }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.wallet._
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait WalletCapability {
   self: WSClient =>
@@ -16,7 +16,7 @@ trait WalletCapability {
 
 class WalletClient(ws: WSClient) extends ResponseParser {
 
-  private val endPoint: String = "/wallet"
+  private[this] val endPoint: String = "/wallet"
   implicit val format = Wallet.format
   implicit val creation_format = WalletCreation.format
   implicit val cash_in_format = CashIn.format
@@ -67,8 +67,8 @@ class WalletClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/$id/bankaccount", timeout).put(Json.toJson(bank_account_creation)).map(parse[BankAccount])
   }
 
-  def getBankAccountByWalletId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, BankAccount]] = {
-    ws.url(s"$endPoint/$id/bankaccount", timeout).get.map(parse[BankAccount])
+  def getBankAccountsByWalletId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[BankAccount]]] = {
+    ws.url(s"$endPoint/$id/bankaccount", timeout).get.map(parse[Seq[BankAccount]])
   }
 
   def cashinBankAccount(id: String, cash_in_bank_account_creation: CashInBankAccountCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, CashInBankAccount]] = {
