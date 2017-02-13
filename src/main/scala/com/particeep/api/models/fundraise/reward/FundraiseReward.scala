@@ -2,6 +2,7 @@ package com.particeep.api.models.fundraise.reward
 
 import java.time.ZonedDateTime
 
+import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.Currency.{Currency, EUR}
 import com.particeep.api.models.enums.FundraiseStatus.{FundraiseStatus, INIT}
 import play.api.libs.json.Json
@@ -24,5 +25,6 @@ case class FundraiseReward(
 )
 
 object FundraiseReward {
+  implicit val date_format = Formatter.ZonedDateTimeWrites
   val format = Json.format[FundraiseReward]
 }

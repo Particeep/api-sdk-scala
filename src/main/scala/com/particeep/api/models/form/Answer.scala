@@ -2,6 +2,7 @@ package com.particeep.api.models.form
 
 import java.time.ZonedDateTime
 
+import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class Answer(
@@ -13,5 +14,6 @@ case class Answer(
 )
 
 object Answer {
+  implicit val date_format = Formatter.ZonedDateTimeWrites
   val format = Json.format[Answer]
 }
