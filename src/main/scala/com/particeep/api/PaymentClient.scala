@@ -30,20 +30,20 @@ class PaymentClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/$transaction_id", timeout).post(Json.toJson(payment_cb_creation)).map(parse[PayResult])
   }
 
-  def offlinePayment(transaction_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint/offline/$transaction_id", timeout).post(Results.EmptyContent()).map(parse[Transaction])
+  def offlinePayment(transaction_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
+    ws.url(s"$endPoint/offline/$transaction_id", timeout).post(Results.EmptyContent()).map(parse[PayResult])
   }
 
-  def creditCardPayment(transaction_id: String, payment_cb_creation: PaymentCbCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, String]] = {
-    ws.url(s"$endPoint/credit-card/$transaction_id", timeout).post(Json.toJson(payment_cb_creation)).map(parse[String])
+  def creditCardPayment(transaction_id: String, payment_cb_creation: PaymentCbCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
+    ws.url(s"$endPoint/credit-card/$transaction_id", timeout).post(Json.toJson(payment_cb_creation)).map(parse[PayResult])
   }
 
-  def directCashIn(transaction_id: String, payment_cb_creation: PaymentCbCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, String]] = {
-    ws.url(s"$endPoint/cash-in/direct/$transaction_id", timeout).post(Json.toJson(payment_cb_creation)).map(parse[String])
+  def directCashIn(transaction_id: String, payment_cb_creation: PaymentCbCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
+    ws.url(s"$endPoint/cash-in/direct/$transaction_id", timeout).post(Json.toJson(payment_cb_creation)).map(parse[PayResult])
   }
 
-  def walletPayment(transaction_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint/wallet/$transaction_id", timeout).post(Results.EmptyContent()).map(parse[Transaction])
+  def walletPayment(transaction_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
+    ws.url(s"$endPoint/wallet/$transaction_id", timeout).post(Results.EmptyContent()).map(parse[PayResult])
   }
 
   def refund(transaction_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
