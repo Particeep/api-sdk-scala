@@ -10,7 +10,7 @@ import play.api.libs.json.Json
 case class User(
   id:                       String                = "",
   created_at:               Option[ZonedDateTime] = None,
-  email:                    Option[String]        = None,
+  email:                    String,
   first_name:               Option[String]        = None,
   last_name:                Option[String]        = None,
   gender:                   Option[Gender]        = None,
