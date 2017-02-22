@@ -9,6 +9,7 @@ case class DocumentSearch(
   owner_id:     Option[String] = None,
   target_id:    Option[String] = None,
   target_type:  Option[String] = None,
+  path:         Option[String] = None,
   name:         Option[String] = None,
   description:  Option[String] = None,
   content_type: Option[String] = None,
