@@ -43,12 +43,13 @@ class ParticeepTest extends FlatSpec with Matchers {
       .withSecond(12)
       .withNano(0)
 
-    val user = User(id = "1234", birthday = Some(date))
+    val user = User(id = "1234", email = "toto@gmail.com", birthday = Some(date))
     val json = Json.toJson(user)
 
     val result = Json.parse("""
         |{
         | "id": "1234",
+        | "email": "toto@gmail.com",
         | "birthday": "1980-01-02T03:20:12Z"
         |}
         """.stripMargin)
