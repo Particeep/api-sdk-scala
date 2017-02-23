@@ -25,9 +25,9 @@ case class FundraiseLoan(
   rate:                 Double                 = 0,
   tax_rate:             Double                 = 0,
   amount_min:           Int                    = 0,
-  method:               Option[CalculatorType],
-  repayment_frequency:  Option[Int],
-  repayment_start_date: Option[ZonedDateTime]
+  method:               Option[CalculatorType] = None,
+  repayment_frequency:  Option[Int] = None,
+  repayment_start_date: Option[ZonedDateTime] = None
 )
 
 object FundraiseLoan {
