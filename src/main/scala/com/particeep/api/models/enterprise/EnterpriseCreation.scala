@@ -16,6 +16,7 @@ case class EnterpriseCreation(
   description_long:  Option[String]        = None,
   url:               Option[String]        = None,
   logo_url:          Option[String]        = None,
+  image_cover_url:   Option[String]        = None,
   video_url:         Option[String]        = None,
   status:            Option[String]        = None,
   tag:               Option[String]        = None,
