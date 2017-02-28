@@ -1,6 +1,6 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ ResponseParser, WSClient }
+import com.particeep.api.core.{ ApiCredential, ResponseParser, WSClient }
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
 import com.particeep.api.models.fundraise.{ FundraiseData, FundraiseSearch, NbProjectsByCategory }
 import com.particeep.api.utils.LangUtils
@@ -19,14 +19,14 @@ class FundraiseSearchClient(ws: WSClient) extends ResponseParser {
   implicit val format = FundraiseData.format
   implicit val project_by_category_format = NbProjectsByCategory.format
 
-  def search(criteria: FundraiseSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseData]]] = {
+  def search(criteria: FundraiseSearch, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[FundraiseData]]] = {
     ws.url(s"$endPoint/search", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[FundraiseData]])
   }
 
-  def nbProjectsByActivityDomain(categories: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[NbProjectsByCategory]]] = {
+  def nbProjectsByActivityDomain(categories: List[String], timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[NbProjectsByCategory]]] = {
     ws.url(s"$endPoint/info/categories", timeout)
       .withQueryString("categories" -> categories.mkString(","))
       .get()
