@@ -1,6 +1,6 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ ApiClient, ApiCredential }
+import com.particeep.api.core.ApiClient
 
 /**
  * This is a high level builder for api client. We may add new
@@ -11,11 +11,11 @@ object ParticeepApi {
 
   private[this] val last_version = "1"
 
-  def test(key: String, secret: String): ApiClient = {
-    new ApiClient("https://test-api.particeep.com", ApiCredential(key, secret), last_version) with InfoCapability with UserCapability with WalletCapability with KycCapability with RoleCapability with DocumentCapability with FormCapability with DocumentGenerationCapability with SignatureCapability with EnterpriseCapability with FundraiseLoanCapability with FundraiseSearchCapability with NewsCapability with TransactionCapability with PaymentCapability
+  def test(): ApiClient = {
+    new ApiClient("https://test-api.particeep.com", last_version) with InfoCapability with UserCapability with WalletCapability with KycCapability with RoleCapability with DocumentCapability with FormCapability with DocumentGenerationCapability with SignatureCapability with EnterpriseCapability with FundraiseLoanCapability with FundraiseSearchCapability with NewsCapability with TransactionCapability with PaymentCapability
   }
 
-  def prod(key: String, secret: String): ApiClient = {
-    new ApiClient("https://test-api.particeep.com", ApiCredential(key, secret), last_version) with InfoCapability with UserCapability with WalletCapability with KycCapability with RoleCapability with DocumentCapability with FormCapability with DocumentGenerationCapability with SignatureCapability with EnterpriseCapability with FundraiseLoanCapability with FundraiseSearchCapability with NewsCapability with TransactionCapability with PaymentCapability
+  def prod(): ApiClient = {
+    new ApiClient("https://test-api.particeep.com", last_version) with InfoCapability with UserCapability with WalletCapability with KycCapability with RoleCapability with DocumentCapability with FormCapability with DocumentGenerationCapability with SignatureCapability with EnterpriseCapability with FundraiseLoanCapability with FundraiseSearchCapability with NewsCapability with TransactionCapability with PaymentCapability
   }
 }
