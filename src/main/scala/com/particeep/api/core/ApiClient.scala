@@ -17,8 +17,8 @@ trait WSClient {
    * @param exec : Execution context for the request
    * @return
    */
-  def url(path: String, timeOut: Long = -1)(implicit exec: ExecutionContext): WSRequest
-  def urlFileUpload(path: String, client: AsyncHttpClient, timeOut: Long = -1)(implicit exec: ExecutionContext): AsyncHttpClient#BoundRequestBuilder
+  def url(path: String, timeOut: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): WSRequest
+  def urlFileUpload(path: String, client: AsyncHttpClient, timeOut: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): AsyncHttpClient#BoundRequestBuilder
 }
 
 trait BaseClient {
@@ -37,16 +37,16 @@ trait BaseClient {
 
 }
 
-class ApiClient(val baseUrl: String, val apiCredential: ApiCredential, val version: String) extends WSClient with BaseClient with WithSecurtiy {
+class ApiClient(val baseUrl: String, val version: String) extends WSClient with BaseClient with WithSecurtiy {
 
-  def url(path: String, timeOut: Long = -1)(implicit exec: ExecutionContext): WSRequest = {
+  def url(path: String, timeOut: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): WSRequest = {
     val req = WS.clientUrl(s"$baseUrl/v$version$path")
-    secure(req, apiCredential, timeOut)
+    secure(req, credentials, timeOut)
   }
 
-  def urlFileUpload(path: String, client: AsyncHttpClient, timeOut: Long = -1)(implicit exec: ExecutionContext): AsyncHttpClient#BoundRequestBuilder = {
+  def urlFileUpload(path: String, client: AsyncHttpClient, timeOut: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): AsyncHttpClient#BoundRequestBuilder = {
     val postBuilder = client.preparePost(s"$baseUrl/v$version$path")
-    secure(postBuilder, apiCredential, timeOut)
+    secure(postBuilder, credentials, timeOut)
   }
 }
 
