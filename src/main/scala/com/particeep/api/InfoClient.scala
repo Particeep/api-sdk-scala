@@ -1,11 +1,10 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ ResponseParser, WSClient }
+import com.particeep.api.core.{ ApiCredential, Formatter, ResponseParser, WSClient }
 import com.particeep.api.models._
 import play.api.libs.json._
 
 import scala.concurrent.{ ExecutionContext, Future }
-import com.particeep.api.core.Formatter
 
 case class Info(version: String, debugEnable: Boolean, metaEnable: Boolean)
 
@@ -25,7 +24,7 @@ class InfoClient(ws: WSClient) extends ResponseParser {
   private[this] val endPoint: String = "/info"
   implicit val format = Info.format
 
-  def info(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Info]] = {
+  def info(timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Info]] = {
     ws.url(endPoint, timeout).get().map(parse[Info])
   }
 }
