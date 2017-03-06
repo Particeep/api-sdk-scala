@@ -27,6 +27,13 @@ class SignatureClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/$id", timeout).get().map(parse[Signature])
   }
 
+  def byIds(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[Signature]]] = {
+    ws.url(s"$endPoint", timeout)
+      .withQueryString("ids" -> ids.mkString(","))
+      .get()
+      .map(parse[List[Signature]])
+  }
+
   def getFile(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Stream[Byte]]] = {
     ws.url(s"$endPoint/file/$id").get().map(parse[Stream[Byte]])
   }
