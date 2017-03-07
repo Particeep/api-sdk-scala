@@ -4,7 +4,7 @@ import com.particeep.api.core.{ ApiCredential, ResponseParser, WSClient }
 import com.particeep.api.models.enums.FundraiseStatus.FundraiseStatus
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
 import com.particeep.api.models.fundraise.equity._
-import com.particeep.api.models.transaction.TransactionSearch
+import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 import play.api.mvc.Results
@@ -18,6 +18,8 @@ class FundraiseEquityClient(ws: WSClient) extends ResponseParser {
   implicit val creation_format = FundraiseEquityCreation.format
   implicit val edition_format = FundraiseEquityEdition.format
   implicit val investment_format = Investment.format
+  implicit val transaction_format = Transaction.format
+  implicit val investment_creation_format = InvestmentCreation.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, FundraiseEquity]] = {
     ws.url(s"$endPoint/fundraise/$id", timeout).get().map(parse[FundraiseEquity])
@@ -58,5 +60,16 @@ class FundraiseEquityClient(ws: WSClient) extends ResponseParser {
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[Investment]])
+  }
+
+  def allInvestmentsByUser(user_id: String, criteria: TransactionSearch, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
+    ws.url(s"$endPoint/fundraise/investments/user/$user_id", timeout)
+      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .get
+      .map(parse[PaginatedSequence[Transaction]])
+  }
+
+  def invest(id: String, investment_creation: InvestmentCreation, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Transaction]] = {
+    ws.url(s"$endPoint/fundraise/$id/invest", timeout).post(Json.toJson(investment_creation)).map(parse[Transaction])
   }
 }
