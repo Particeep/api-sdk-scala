@@ -10,7 +10,8 @@ case class RepaymentInfo(
   val method:               CalculatorType,
   val repayment_frequency:  Option[Int],
   val repayment_start_date: ZonedDateTime,
-  val amount:               Option[Int]    = None
+  val does_pay_taxes:       Option[Boolean] = None,
+  val amount:               Option[Int]     = None
 )
 
 object RepaymentInfo {

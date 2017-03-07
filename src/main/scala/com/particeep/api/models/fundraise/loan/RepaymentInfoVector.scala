@@ -6,9 +6,11 @@ import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class RepaymentVector(
-  capital:  Double,
-  interest: Double,
-  taxes:    Double
+  capital:                Double,
+  interest:               Double,
+  taxes:                  Double,
+  amount:                 Double,
+  capital_remains_to_pay: Double
 )
 
 case class RepaymentVectorWithDate(
