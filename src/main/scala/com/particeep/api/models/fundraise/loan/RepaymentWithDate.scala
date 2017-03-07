@@ -6,9 +6,11 @@ import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class Repayment(
-  capital:  Int,
-  interest: Int,
-  taxes:    Int
+  capital:                Int,
+  interest:               Int,
+  taxes:                  Int,
+  amount:                 Int,
+  capital_remains_to_pay: Int
 )
 
 case class RepaymentWithDate(
