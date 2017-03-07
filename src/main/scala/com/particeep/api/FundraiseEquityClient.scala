@@ -11,6 +11,12 @@ import play.api.mvc.Results
 
 import scala.concurrent.{ ExecutionContext, Future }
 
+trait FundraiseEquityCapability {
+  self: WSClient =>
+
+  val fundraise_equity: FundraiseEquityClient = new FundraiseEquityClient(this)
+}
+
 class FundraiseEquityClient(ws: WSClient) extends ResponseParser {
 
   private[this] val endPoint: String = "/equity"
