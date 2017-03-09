@@ -60,6 +60,10 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/fundraise/$id/submit", timeout).post(Results.EmptyContent()).map(parse[FundraiseLoan])
   }
 
+  def reject(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, FundraiseLoan]] = {
+    ws.url(s"$endPoint/fundraise/$id/reject", timeout).post(Results.EmptyContent()).map(parse[FundraiseLoan])
+  }
+
   def launch(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.url(s"$endPoint/fundraise/$id/launch", timeout).post(Results.EmptyContent()).map(parse[FundraiseLoan])
   }
