@@ -14,6 +14,7 @@ case class BankAccountCreation(
   acct_num:    Option[String] = None,
   aba_num:     Option[String] = None,
   transit_num: Option[String] = None,
+  owner_ip:    Option[String] = None,
   target_id:   Option[String] = None
 )
 
