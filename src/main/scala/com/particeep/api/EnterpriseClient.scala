@@ -1,8 +1,9 @@
 package com.particeep.api
 
 import com.particeep.api.core.{ ApiCredential, ResponseParser, WSClient }
-import com.particeep.api.models.ErrorResult
-import com.particeep.api.models.enterprise.{ Enterprise, EnterpriseCreation, EnterpriseEdition, ManagerLink }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.enterprise._
+import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -20,6 +21,8 @@ class EnterpriseClient(ws: WSClient) extends ResponseParser {
   implicit val creation_format = EnterpriseCreation.format
   implicit val edition_format = EnterpriseEdition.format
   implicit val manager_link_format = ManagerLink.format
+  implicit val manager_creation_format = ManagerCreation.format
+  implicit val nb_enterprises_by_activity_domain_format = NbEnterprisesByActivityDomain.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Enterprise]] = {
     ws.url(s"$endPoint/$id", timeout).get().map(parse[Enterprise])
@@ -44,7 +47,30 @@ class EnterpriseClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/$id", timeout).post(Json.toJson(enterprise_edition)).map(parse[Enterprise])
   }
 
+  def search(criteria: EnterpriseSearch, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[Enterprise]]] = {
+    ws.url(s"$endPoint/search", timeout)
+      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .get
+      .map(parse[PaginatedSequence[Enterprise]])
+  }
+
+  def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Enterprise]] = {
+    ws.url(s"$endPoint/$id", timeout).delete().map(parse[Enterprise])
+  }
+
+  def addManager(id: String, manager_creation: ManagerCreation, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, ManagerLink]] = {
+    ws.url(s"$endPoint/$id/manager", timeout).post(Json.toJson(manager_creation)).map(parse[ManagerLink])
+  }
+
   def getManagers(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[ManagerLink]]] = {
     ws.url(s"$endPoint/$id/manager", timeout).get().map(parse[List[ManagerLink]])
+  }
+
+  def deleteManager(id: String, manager_id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, ManagerLink]] = {
+    ws.url(s"$endPoint/$id/manager/$manager_id", timeout).delete().map(parse[ManagerLink])
+  }
+
+  def nbEnterprisesByActivityDomain(timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Seq[NbEnterprisesByActivityDomain]]] = {
+    ws.url(s"$endPoint/info/activity/domain", timeout).get().map(parse[Seq[NbEnterprisesByActivityDomain]])
   }
 }
