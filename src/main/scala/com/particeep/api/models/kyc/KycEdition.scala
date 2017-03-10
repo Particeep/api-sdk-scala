@@ -15,6 +15,7 @@ object KycEdition {
 case class KycsEdition(
   owner_id:   String          = "",
   owner_type: String          = "",
+  owner_ip:   Option[String]  = None,
   docs:       Seq[KycEdition] = Seq()
 )
 
