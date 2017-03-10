@@ -56,7 +56,7 @@ class FormClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/answer/$user_id").put(Json.toJson(answer_creations)).map(parse[Seq[Answer]])
   }
 
-  def addTaggedAnswers(user_id: String, tagged_answer_creations: Seq[AnswerCreationWithTag], timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Seq[Answer]]] = {
-    ws.url(s"$endPoint/tagged-answer/$user_id").put(Json.toJson(tagged_answer_creations)).map(parse[Seq[Answer]])
+  def addTaggedAnswers(user_id: String, tagged_answer_creation: AnswerCreationWithTag, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Seq[Answer]]] = {
+    ws.url(s"$endPoint/tagged-answer/$user_id").put(Json.toJson(tagged_answer_creation)).map(parse[Seq[Answer]])
   }
 }
