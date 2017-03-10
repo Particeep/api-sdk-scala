@@ -22,6 +22,7 @@ class FormClient(ws: WSClient) extends ResponseParser {
   implicit val format_edition = FormEdition.format
   implicit val format_answer = Answer.format
   implicit val format_answer_creation = AnswerCreation.format
+  implicit val format_tagged_answer_creation = AnswerCreationWithTag.format
 
   def all(timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Seq[SimpleForm]]] = {
     ws.url(s"$endPoint/all", timeout).get().map(parse[Seq[SimpleForm]])
@@ -33,6 +34,10 @@ class FormClient(ws: WSClient) extends ResponseParser {
 
   def byIdForUser(id: String, user_id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Form]] = {
     ws.url(s"$endPoint/$id/$user_id", timeout).get().map(parse[Form])
+  }
+
+  def byIdAndTagForUser(id: String, tag: String, user_id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Form]] = {
+    ws.url(s"$endPoint/$id/$user_id/$tag", timeout).get().map(parse[Form])
   }
 
   def create(form_creation: FormCreation, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Form]] = {
@@ -49,5 +54,9 @@ class FormClient(ws: WSClient) extends ResponseParser {
 
   def answer(user_id: String, answer_creations: Seq[AnswerCreation], timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Seq[Answer]]] = {
     ws.url(s"$endPoint/answer/$user_id").put(Json.toJson(answer_creations)).map(parse[Seq[Answer]])
+  }
+
+  def addTaggedAnswers(user_id: String, tagged_answer_creations: Seq[AnswerCreationWithTag], timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Seq[Answer]]] = {
+    ws.url(s"$endPoint/tagged-answer/$user_id").put(Json.toJson(tagged_answer_creations)).map(parse[Seq[Answer]])
   }
 }
