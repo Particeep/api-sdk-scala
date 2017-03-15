@@ -59,7 +59,7 @@ class EnterpriseClient(ws: WSClient) extends ResponseParser {
   }
 
   def addManager(id: String, manager_creation: ManagerCreation, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, ManagerLink]] = {
-    ws.url(s"$endPoint/$id/manager", timeout).post(Json.toJson(manager_creation)).map(parse[ManagerLink])
+    ws.url(s"$endPoint/$id/manager", timeout).put(Json.toJson(manager_creation)).map(parse[ManagerLink])
   }
 
   def getManagers(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[ManagerLink]]] = {
