@@ -28,8 +28,7 @@ case class FundraiseData(
   description_short: Option[String]        = None,
   logo_url:          Option[String]        = None,
   image_cover_url:   Option[String]        = None,
-  visible:           Option[Boolean]       = None,
-  deleted_at:        Option[ZonedDateTime] = None
+  visible:           Option[Boolean]       = None
 )
 
 object FundraiseData {
