@@ -76,12 +76,20 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/fundraise/$id/refund", timeout).post(Results.EmptyContent()).map(parse[FundraiseLoan])
   }
 
-  def getLenderRepaymentScheduleEstimation(id: String, repayment_info: RepaymentInfo, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
+  def getLenderRepaymentScheduleEstimation(
+    id:             String,
+    repayment_info: RepaymentInfo,
+    timeout:        Long          = -1
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
     ws.url(s"$endPoint/fundraise/$id/info/estimate/lender", timeout).post(Json.toJson(repayment_info)).map(parse[List[RepaymentWithDate]])
   }
 
-  def getBorrowerRepaymentScheduleEstimation(id: String, repayment_info: RepaymentInfo, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
-    ws.url(s"$endPoint/fundraise/$id/info/estimate/borrower", timeout).post(Json.toJson(repayment_info)).map(parse[List[RepaymentWithDate]])
+  def getBorrowerRepaymentScheduleEstimation(
+    id:                     String,
+    estimate_borrower_info: EstimateBorrowerInfo,
+    timeout:                Long                 = -1
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
+    ws.url(s"$endPoint/fundraise/info/estimate/borrower", timeout).post(Json.toJson(estimate_borrower_info)).map(parse[List[RepaymentWithDate]])
   }
 
   def getLenderRepaymentSchedule(id: String, user_id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
@@ -92,7 +100,11 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/fundraise/$id/info/borrower", timeout).post(Results.EmptyContent()).map(parse[List[RepaymentWithDate]])
   }
 
-  def generateRepaymentSchedule(id: String, repayment_info: RepaymentInfo, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
+  def generateRepaymentSchedule(
+    id:             String,
+    repayment_info: RepaymentInfo,
+    timeout:        Long          = -1
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
     ws.url(s"$endPoint/fundraise/$id/schedule/define", timeout).post(Json.toJson(repayment_info)).map(parse[List[ScheduledPayment]])
   }
 
@@ -105,21 +117,33 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/fundraise/$id/schedule/cancel-all", timeout).post(Results.EmptyContent()).map(parse[List[ScheduledPayment]])
   }
 
-  def searchScheduledPayments(id: String, criteria: ScheduledPaymentSearch, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[ScheduledPayment]]] = {
+  def searchScheduledPayments(
+    id:       String,
+    criteria: ScheduledPaymentSearch,
+    timeout:  Long                   = -1
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[ScheduledPayment]]] = {
     ws.url(s"$endPoint/fundraise/$id/schedule/search", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[ScheduledPayment]])
   }
 
-  def allLendsOnFundraise(id: String, criteria: TransactionSearch, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[Lend]]] = {
+  def allLendsOnFundraise(
+    id:       String,
+    criteria: TransactionSearch,
+    timeout:  Long              = -1
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[Lend]]] = {
     ws.url(s"$endPoint/fundraise/$id/lends", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[Lend]])
   }
 
-  def allLendsByUser(user_id: String, criteria: TransactionSearch, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
+  def allLendsByUser(
+    user_id:  String,
+    criteria: TransactionSearch,
+    timeout:  Long              = -1
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
     ws.url(s"$endPoint/fundraise/lends/user/$user_id", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
       .get
