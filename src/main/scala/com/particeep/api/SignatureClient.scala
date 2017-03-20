@@ -1,8 +1,9 @@
 package com.particeep.api
 
 import com.particeep.api.core.{ ApiCredential, ResponseParser, WSClient }
-import com.particeep.api.models.ErrorResult
-import com.particeep.api.models.signature.{ Signature, SignatureCreation }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.signature.{ Signature, SignatureCreation, SignatureSearch }
+import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -32,6 +33,13 @@ class SignatureClient(ws: WSClient) extends ResponseParser {
       .withQueryString("ids" -> ids.mkString(","))
       .get()
       .map(parse[List[Signature]])
+  }
+
+  def search(criteria: SignatureSearch, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[Signature]]] = {
+    ws.url(s"$endPoint/search", timeout)
+      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .get
+      .map(parse[PaginatedSequence[Signature]])
   }
 
   def getFile(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Stream[Byte]]] = {
