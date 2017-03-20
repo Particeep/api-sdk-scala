@@ -86,7 +86,6 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
   }
 
   def getBorrowerRepaymentScheduleEstimation(
-    id:                     String,
     estimate_borrower_info: EstimateBorrowerInfo,
     timeout:                Long                 = -1
   )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
