@@ -29,6 +29,7 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
   implicit val lend_format = Lend.format
   implicit val transaction_format = Transaction.format
   implicit val lend_creation_format = LendCreation.format
+  implicit val estimate_borrower_info_format = EstimateBorrowerInfo.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.url(s"$endPoint/fundraise/$id", timeout).get().map(parse[FundraiseLoan])
