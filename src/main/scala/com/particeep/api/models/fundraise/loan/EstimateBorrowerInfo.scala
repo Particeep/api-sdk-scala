@@ -4,7 +4,6 @@ import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.CalculatorType.CalculatorType
-import org.joda.time.DateTime
 import play.api.libs.json.Json
 
 case class EstimateBorrowerInfo(
@@ -15,7 +14,7 @@ case class EstimateBorrowerInfo(
   amount_min:           Int,
   method:               CalculatorType,
   repayment_frequency:  Int,
-  repayment_start_date: DateTime,
+  repayment_start_date: ZonedDateTime,
   does_pay_taxes:       Boolean        = false
 )
 
