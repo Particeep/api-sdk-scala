@@ -16,7 +16,7 @@ case class FundraiseLoanCreation(
   recipient_type:      Option[String]        = None,
   start_at:            Option[ZonedDateTime] = None,
   end_at:              Option[ZonedDateTime] = None,
-  amount_target:       Int,
+  amount_target:       Long,
   currency:            Currency,
   score:               Option[String]        = None,
   tags:                Option[String]        = None,

@@ -18,7 +18,7 @@ case class FundraiseRewardEdition(
   recipient_type:      Option[String]        = None,
   start_at:            Option[ZonedDateTime] = None,
   end_at:              Option[ZonedDateTime] = None,
-  amount_target:       Option[Int]           = None,
+  amount_target:       Option[Long]          = None,
   currency:            Option[Currency]      = None,
   tags:                Option[String]        = None
 )

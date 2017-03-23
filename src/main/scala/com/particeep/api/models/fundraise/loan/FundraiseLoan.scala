@@ -19,7 +19,7 @@ case class FundraiseLoan(
   description_offline: Option[String]        = None,
   start_at:            Option[String]        = None,
   end_at:              Option[String]        = None,
-  amount_target:       Int                   = 0,
+  amount_target:       Long                  = 0,
   currency:            Currency              = EUR,
   status:              FundraiseStatus       = INIT,
   score:               Option[String]        = None,

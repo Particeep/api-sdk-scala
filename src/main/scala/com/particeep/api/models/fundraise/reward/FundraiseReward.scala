@@ -21,7 +21,7 @@ case class FundraiseReward(
   description_offline: Option[String]        = None,
   start_at:            Option[ZonedDateTime] = None,
   end_at:              Option[ZonedDateTime] = None,
-  amount_target:       Int                   = 0,
+  amount_target:       Long                  = 0,
   currency:            Currency              = EUR,
   status:              FundraiseStatus       = INIT,
   tags:                Option[String]        = None
