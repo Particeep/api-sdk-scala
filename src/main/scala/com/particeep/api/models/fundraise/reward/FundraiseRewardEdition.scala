@@ -10,14 +10,17 @@ import play.api.libs.json.Json
  * Created by Noe on 26/01/2017.
  */
 case class FundraiseRewardEdition(
-  name:           Option[String]        = None,
-  recipient_id:   Option[String]        = None,
-  recipient_type: Option[String]        = None,
-  start_at:       Option[ZonedDateTime] = None,
-  end_at:         Option[ZonedDateTime] = None,
-  amount_target:  Option[Int]           = None,
-  currency:       Option[Currency]      = None,
-  tags:           Option[String]        = None
+  name:                Option[String]        = None,
+  description_short:   Option[String]        = None,
+  description_long:    Option[String]        = None,
+  description_offline: Option[String]        = None,
+  recipient_id:        Option[String]        = None,
+  recipient_type:      Option[String]        = None,
+  start_at:            Option[ZonedDateTime] = None,
+  end_at:              Option[ZonedDateTime] = None,
+  amount_target:       Option[Long]          = None,
+  currency:            Option[Currency]      = None,
+  tags:                Option[String]        = None
 )
 
 object FundraiseRewardEdition {

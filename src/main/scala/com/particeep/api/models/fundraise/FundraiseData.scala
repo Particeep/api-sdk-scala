@@ -9,7 +9,6 @@ import play.api.libs.json.Json
 case class FundraiseData(
   id:                String                = "",
   created_at:        Option[ZonedDateTime] = None,
-  created_by:        Option[String]        = None,
   enterprise_id:     Option[String]        = None,
   manager_id:        Option[String]        = None,
   fundraise_id:      Option[String]        = None,
@@ -20,14 +19,15 @@ case class FundraiseData(
   category:          Option[String]        = None,
   city:              Option[String]        = None,
   status:            Option[String]        = None,
-  amount_target:     Option[Int]           = None,
-  amount_engaged:    Option[Int]           = None,
+  amount_target:     Option[Long]          = None,
+  amount_engaged:    Option[Long]          = None,
   transaction_count: Option[Int]           = None,
   tags:              Option[String]        = None,
   fundraise_tags:    Option[String]        = None,
   description_short: Option[String]        = None,
   logo_url:          Option[String]        = None,
   image_cover_url:   Option[String]        = None,
+  score:             Option[String]        = None,
   visible:           Option[Boolean]       = None
 )
 

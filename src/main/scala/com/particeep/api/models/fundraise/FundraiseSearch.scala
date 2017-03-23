@@ -19,6 +19,7 @@ case class FundraiseSearch(
   amount_engaged_max:        Option[Int]           = None,
   percentage_completion_min: Option[Int]           = None,
   percentage_completion_max: Option[Int]           = None,
+  score:                     Option[String]        = None,
   tags:                      Option[String]        = None,
   global_search:             Option[String]        = None,
   sort_by:                   Option[String]        = None,
