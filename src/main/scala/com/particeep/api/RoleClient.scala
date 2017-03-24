@@ -19,7 +19,7 @@ class RoleClient(ws: WSClient) extends ResponseParser {
   implicit val format = Roles.format
   implicit val creation_format = RoleCreation.format
 
-  def all(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[String]]] = {
+  def all(timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[String]]] = {
     ws.url(s"$endPoint/all", timeout).get().map(parse[List[String]])
   }
 

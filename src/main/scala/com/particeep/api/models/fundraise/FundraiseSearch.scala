@@ -9,6 +9,8 @@ case class FundraiseSearch(
   start_at:                  Option[ZonedDateTime] = None,
   end_at:                    Option[ZonedDateTime] = None,
   enterprise_id:             Option[String]        = None,
+  manager_id:                Option[String]        = None,
+  fundraise_type:            Option[String]        = None,
   name:                      Option[String]        = None,
   category:                  Option[String]        = None,
   city:                      Option[String]        = None,
