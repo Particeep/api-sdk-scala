@@ -8,8 +8,8 @@ import play.api.libs.json.Json
 case class WebHook(
   id:         String                = "",
   created_at: Option[ZonedDateTime] = None,
-  name:       String,
-  url:        String
+  name:       String = "",
+  url:        String = ""
 )
 
 object WebHook {
