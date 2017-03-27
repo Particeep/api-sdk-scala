@@ -26,6 +26,13 @@ class FundraiseSearchClient(ws: WSClient) extends ResponseParser {
       .map(parse[PaginatedSequence[FundraiseData]])
   }
 
+  def byIds(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[FundraiseData]]] = {
+    ws.url(s"$endPoint/byIds", timeout)
+      .withQueryString("ids" -> ids.mkString(","))
+      .get()
+      .map(parse[List[FundraiseData]])
+  }
+
   def nbProjectsByActivityDomain(categories: List[String], timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[NbProjectsByCategory]]] = {
     ws.url(s"$endPoint/info/categories", timeout)
       .withQueryString("categories" -> categories.mkString(","))
