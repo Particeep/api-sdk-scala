@@ -24,6 +24,7 @@ case class UserCreation(
   linkedin_url:             Option[String]        = None,
   viadeo_url:               Option[String]        = None,
   allow_mail_notifications: Option[Boolean]       = None,
+  does_pay_taxes:           Option[Boolean]       = None,
   address:                  Option[Address]       = None
 )
 
