@@ -10,6 +10,7 @@ case class FundraiseSearch(
   end_at:                    Option[ZonedDateTime] = None,
   enterprise_id:             Option[String]        = None,
   manager_id:                Option[String]        = None,
+  fundraise_id:              Option[String]        = None,
   fundraise_type:            Option[String]        = None,
   name:                      Option[String]        = None,
   category:                  Option[String]        = None,
@@ -22,12 +23,7 @@ case class FundraiseSearch(
   percentage_completion_min: Option[Int]           = None,
   percentage_completion_max: Option[Int]           = None,
   score:                     Option[String]        = None,
-  tags:                      Option[String]        = None,
-  global_search:             Option[String]        = None,
-  sort_by:                   Option[String]        = None,
-  order_by:                  Option[String]        = Some("asc"),
-  offset:                    Option[Int]           = Some(0),
-  limit:                     Option[Int]           = Some(30)
+  tags:                      Option[String]        = None
 )
 
 object FundraiseSearch {
