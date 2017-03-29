@@ -14,6 +14,7 @@ case class DocumentSearch(
   description:  Option[String] = None,
   content_type: Option[String] = None,
   external_id:  Option[String] = None,
+  doc_type:     Option[String] = None,
   limit:        Option[Int]    = None,
   offset:       Option[Int]    = None,
   sort_by:      Option[String] = None,
