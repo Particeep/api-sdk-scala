@@ -3,6 +3,7 @@ package com.particeep.api.models.fundraise.equity
 import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
+import com.particeep.api.models.enums.Currency.Currency
 import play.api.libs.json.Json
 
 case class FundraiseEquityEdition(
@@ -16,6 +17,7 @@ case class FundraiseEquityEdition(
   end_at:              Option[ZonedDateTime] = None,
   amount_target:       Option[Long]          = None,
   amount_target_max:   Option[Long]          = None,
+  currency:            Option[Currency]      = None,
   score:               Option[String]        = None,
   tags:                Option[String]        = None,
   restricted_to_group: Option[String]        = None,
