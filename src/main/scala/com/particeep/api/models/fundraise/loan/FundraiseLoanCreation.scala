@@ -19,7 +19,7 @@ case class FundraiseLoanCreation(
   amount_target:       Long,
   currency:            Currency,
   score:               Option[String]        = None,
-  tags:                Option[String]        = None,
+  tag:                 Option[String]        = None,
   offer:               LoanOfferCreation
 )
 

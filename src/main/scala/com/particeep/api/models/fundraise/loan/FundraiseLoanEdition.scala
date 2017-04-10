@@ -18,7 +18,7 @@ case class FundraiseLoanEdition(
   amount_target:       Option[Long]             = None,
   currency:            Option[Currency]         = None,
   score:               Option[String]           = None,
-  tags:                Option[String]           = None,
+  tag:                 Option[String]           = None,
   offer:               Option[LoanOfferEdition] = None
 )
 

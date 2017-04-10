@@ -21,7 +21,7 @@ case class FundraiseRewardCreation(
   end_at:              Option[ZonedDateTime] = None,
   amount_target:       Long,
   currency:            Option[Currency]      = None,
-  tags:                Option[String]        = None
+  tag:                 Option[String]        = None
 )
 
 object FundraiseRewardCreation {

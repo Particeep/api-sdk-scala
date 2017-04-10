@@ -12,7 +12,7 @@ case class NewsSearch(
   title:          Option[String]        = None,
   message:        Option[String]        = None,
   is_report:      Option[Boolean]       = None,
-  tags:           Option[String]        = None,
+  tag:            Option[String]        = None,
   publish_before: Option[ZonedDateTime] = None,
   publish_after:  Option[ZonedDateTime] = None,
   sort_by:        Option[String]        = Some("publish_at"),
