@@ -5,9 +5,11 @@ import play.api.libs.json._
 
 import scala.concurrent.{ ExecutionContext, Future }
 import com.particeep.api.models._
+import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.utils.LangUtils
 import com.particeep.api.models.user.{ User, UserCreation, UserEdition, UserSearch }
-import play.api.mvc.Results
+import play.api.libs.Files.TemporaryFile
+import play.api.mvc.{ MultipartFormData, Results }
 
 trait UserCapability {
   self: WSClient =>
@@ -21,6 +23,7 @@ class UserClient(ws: WSClient) extends ResponseParser {
   implicit val format = User.format
   implicit val creation_format = UserCreation.format
   implicit val edition_format = UserEdition.format
+  implicit val importResultFormat = ImportResult.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, User]] = {
     ws.url(s"$endPoint/$id", timeout).get().map(parse[User])
@@ -82,4 +85,9 @@ class UserClient(ws: WSClient) extends ResponseParser {
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, User]] = {
     ws.url(s"$endPoint/$id", timeout).delete().map(parse[User])
   }
+
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, ImportResult]] = {
+    ws.postFile(s"$endPoint/import/csv", csv, List(), timeout).map(parse[ImportResult])
+  }
+
 }

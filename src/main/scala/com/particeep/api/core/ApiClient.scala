@@ -1,10 +1,14 @@
 package com.particeep.api.core
 
-import com.ning.http.client.AsyncHttpClient
+import com.ning.http.client.multipart.{ FilePart, Part }
+import com.ning.http.client.{ AsyncHttpClient, Response }
+import play.api.libs.Files.TemporaryFile
 import play.api.libs.ws._
 import play.api.libs.ws.ning._
+import play.api.Play.current
+import play.api.mvc.MultipartFormData
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ ExecutionContext, Future }
 
 case class ApiCredential(apiKey: String, apiSecret: String)
 
@@ -18,7 +22,7 @@ trait WSClient {
    * @return
    */
   def url(path: String, timeOut: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): WSRequest
-  def urlFileUpload(path: String, client: AsyncHttpClient, timeOut: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): AsyncHttpClient#BoundRequestBuilder
+  def postFile(path: String, file: MultipartFormData[TemporaryFile], bodyParts: List[Part], timeOut: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Response]
 }
 
 trait BaseClient {
@@ -44,7 +48,18 @@ class ApiClient(val baseUrl: String, val version: String) extends WSClient with 
     secure(req, credentials, timeOut)
   }
 
-  def urlFileUpload(path: String, client: AsyncHttpClient, timeOut: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): AsyncHttpClient#BoundRequestBuilder = {
+  def postFile(path: String, file: MultipartFormData[TemporaryFile], bodyParts: List[Part], timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Response] = {
+    val documentFilePart = file.files.head
+    val client = WS.client.underlying[AsyncHttpClient]
+    val postBuilder = urlFileUpload(path, client, timeout)
+    val builder = postBuilder.addBodyPart(
+      new FilePart("document", documentFilePart.ref.file, documentFilePart.contentType.getOrElse("application/octet-stream"))
+    )
+    bodyParts.map(builder.addBodyPart(_))
+    Future { client.executeRequest(builder.build()).get }
+  }
+
+  private[this] def urlFileUpload(path: String, client: AsyncHttpClient, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): AsyncHttpClient#BoundRequestBuilder = {
     val postBuilder = client.preparePost(s"$baseUrl/v$version$path")
     secure(postBuilder, credentials, timeOut)
   }
