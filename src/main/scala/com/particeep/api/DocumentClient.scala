@@ -1,15 +1,12 @@
 package com.particeep.api
 
-import com.ning.http.client.{ AsyncHttpClient, ListenableFuture, Response }
-import com.ning.http.client.multipart.{ FilePart, StringPart }
+import com.ning.http.client.multipart.StringPart
 import com.particeep.api.core.{ ApiCredential, ResponseParser, WSClient }
 import com.particeep.api.models.document._
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
 import com.particeep.api.utils.LangUtils
-import play.api.Play.current
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.libs.ws.WS
 import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -34,29 +31,16 @@ class DocumentClient(ws: WSClient) extends ResponseParser {
   implicit val write_folder_or_file = FolderOrFile.writes
 
   def upload(owner_id: String, file: MultipartFormData[TemporaryFile], document_creation: DocumentCreation, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Document]] = {
-    val url = s"$endPoint/$owner_id/upload"
-    Future { prepareRequest(url, file, document_creation, timeout).get() }.map(parse[Document])
-  }
-
-  private[this] def prepareRequest(url: String, file: MultipartFormData[TemporaryFile], document_creation: DocumentCreation, timeout: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): ListenableFuture[Response] = {
-    val documentFilePart = file.files.head
-    val client = WS.client.underlying[AsyncHttpClient]
-    val postBuilder = ws.urlFileUpload(url, client, timeout)
-    val builder = postBuilder.addBodyPart(
-      new FilePart("document", documentFilePart.ref.file, documentFilePart.contentType.getOrElse("application/octet-stream"))
+    val bodyParts = List(
+      new StringPart("target_id", document_creation.target_id.getOrElse("")),
+      new StringPart("target_type", document_creation.target_type.getOrElse("")),
+      new StringPart("description", document_creation.description.getOrElse("")),
+      new StringPart("name", document_creation.name.getOrElse("")),
+      new StringPart("path", document_creation.path.getOrElse("")),
+      new StringPart("locked", document_creation.locked.getOrElse(false).toString),
+      new StringPart("override_existing_file", document_creation.override_existing_file.getOrElse(false).toString)
     )
-    addDocumentApiToBody(postBuilder, document_creation)
-    client.executeRequest(builder.build())
-  }
-
-  private[this] def addDocumentApiToBody(builder: AsyncHttpClient#BoundRequestBuilder, document_creation: DocumentCreation) {
-    builder.addBodyPart(new StringPart("target_id", document_creation.target_id.getOrElse("")))
-      .addBodyPart(new StringPart("target_type", document_creation.target_type.getOrElse("")))
-      .addBodyPart(new StringPart("description", document_creation.description.getOrElse("")))
-      .addBodyPart(new StringPart("name", document_creation.name.getOrElse("")))
-      .addBodyPart(new StringPart("path", document_creation.path.getOrElse("")))
-      .addBodyPart(new StringPart("locked", document_creation.locked.getOrElse(false).toString))
-      .addBodyPart(new StringPart("override_existing_file", document_creation.override_existing_file.getOrElse(false).toString))
+    ws.postFile(s"$endPoint/$owner_id/upload", file, bodyParts, timeout).map(parse[Document])
   }
 
   def createDir(owner_id: String, document_creation: DocumentCreation, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Document]] = {
