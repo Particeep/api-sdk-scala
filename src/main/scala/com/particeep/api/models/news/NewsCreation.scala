@@ -14,7 +14,7 @@ case class NewsCreation(
   message:     Option[String] = None,
   img_url:     Option[String] = None,
   content_url: Option[String] = None,
-  tags:        Option[String] = None
+  tag:         Option[String] = None
 )
 
 object NewsCreation {

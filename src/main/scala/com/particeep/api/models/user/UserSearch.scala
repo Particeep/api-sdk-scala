@@ -8,7 +8,7 @@ case class UserSearch(
   birth_place:   Option[String] = None,
   nationality:   Option[String] = None,
   sector:        Option[String] = None,
-  tags:          Option[String] = None,
+  tag:           Option[String] = None,
   sort_by:       Option[String] = None,
   order_by:      Option[String] = Some("asc"),
   global_search: Option[String] = None,

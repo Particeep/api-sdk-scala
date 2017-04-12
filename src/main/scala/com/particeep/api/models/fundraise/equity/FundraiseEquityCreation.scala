@@ -20,7 +20,7 @@ case class FundraiseEquityCreation(
   amount_target_max:   Option[Long]          = None,
   currency:            Currency,
   score:               Option[String]        = None,
-  tags:                Option[String]        = None,
+  tag:                 Option[String]        = None,
   restricted_to_group: Option[String]        = None,
   offer:               Option[EquityOffer]   = None
 )

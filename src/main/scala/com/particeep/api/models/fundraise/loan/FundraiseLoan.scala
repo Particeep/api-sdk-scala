@@ -23,7 +23,7 @@ case class FundraiseLoan(
   currency:            Currency              = EUR,
   status:              FundraiseStatus       = INIT,
   score:               Option[String]        = None,
-  tags:                Option[String]        = None,
+  tag:                 Option[String]        = None,
   offer:               LoanOffer             = LoanOffer()
 )
 

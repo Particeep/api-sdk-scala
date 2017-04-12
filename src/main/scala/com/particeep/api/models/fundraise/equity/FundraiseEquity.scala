@@ -24,7 +24,7 @@ case class FundraiseEquity(
   currency:            Currency              = EUR,
   status:              FundraiseStatus       = INIT,
   score:               Option[String]        = None,
-  tags:                Option[String]        = None,
+  tag:                 Option[String]        = None,
   restricted_to_group: Option[String]        = None,
   offer:               EquityOffer           = EquityOffer()
 )
