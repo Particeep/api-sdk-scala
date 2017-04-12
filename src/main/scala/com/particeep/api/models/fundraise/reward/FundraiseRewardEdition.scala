@@ -20,7 +20,7 @@ case class FundraiseRewardEdition(
   end_at:              Option[ZonedDateTime] = None,
   amount_target:       Option[Long]          = None,
   currency:            Option[Currency]      = None,
-  tags:                Option[String]        = None
+  tag:                 Option[String]        = None
 )
 
 object FundraiseRewardEdition {

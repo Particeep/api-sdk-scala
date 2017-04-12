@@ -24,7 +24,7 @@ case class FundraiseReward(
   amount_target:       Long                  = 0,
   currency:            Currency              = EUR,
   status:              FundraiseStatus       = INIT,
-  tags:                Option[String]        = None
+  tag:                 Option[String]        = None
 )
 
 object FundraiseReward {

@@ -17,7 +17,7 @@ case class News(
   img_url:     Option[String]        = None,
   content_url: Option[String]        = None,
   is_report:   Option[Boolean]       = None,
-  tags:        Option[String]        = None
+  tag:         Option[String]        = None
 )
 
 object News {
