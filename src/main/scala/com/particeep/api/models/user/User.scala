@@ -5,6 +5,7 @@ import java.time.ZonedDateTime
 import com.particeep.api.core.Formatter
 import com.particeep.api.models.Address
 import com.particeep.api.models.enums.Gender.Gender
+import com.particeep.api.models.enums.InvestorType.InvestorType
 import play.api.libs.json.Json
 
 case class User(
@@ -21,6 +22,7 @@ case class User(
   nationality:              Option[String]        = None,
   bio:                      Option[String]        = None,
   sector:                   Option[String]        = None,
+  investor_type:            Option[InvestorType]  = None,
   linkedin_url:             Option[String]        = None,
   viadeo_url:               Option[String]        = None,
   allow_mail_notifications: Option[Boolean]       = None,
