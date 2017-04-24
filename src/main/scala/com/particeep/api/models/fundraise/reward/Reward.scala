@@ -15,7 +15,8 @@ case class Reward(
   img_url:      Option[String]        = None,
   quantity:     Option[Int]           = None,
   delivered_at: Option[ZonedDateTime] = None,
-  description:  Option[String]        = None
+  description:  Option[String]        = None,
+  tag:          Option[String]        = None
 )
 
 object Reward {

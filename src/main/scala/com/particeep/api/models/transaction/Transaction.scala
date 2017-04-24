@@ -25,6 +25,7 @@ case class Transaction(
   status:          TransactionStatus     = PENDING,
   payment_method:  Option[PaymentMethod] = None,
   handled_offline: Option[Boolean]       = None,
+  comment:         Option[String]        = None,
   tag:             Option[String]        = None
 )
 
