@@ -30,7 +30,7 @@ class FundraiseRewardClient(ws: WSClient) extends ResponseParser {
   implicit val reward_edition_format = RewardEdition.format
   implicit val backer_format = Backer.format
   implicit val backing_format = Backing.format
-  implicit val donation_format = Amount.format
+  implicit val donation_format = TransactionInfo.format
   implicit val transaction_format = Transaction.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, FundraiseReward]] = {
@@ -117,11 +117,11 @@ class FundraiseRewardClient(ws: WSClient) extends ResponseParser {
       .get().map(parse[PaginatedSequence[Backing]])
   }
 
-  def donate(fundraise_id: String, user_id: String, donation: Amount, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint/fundraise/$fundraise_id/donate/$user_id", timeout).put(Json.toJson(donation)).map(parse[Transaction])
+  def donate(fundraise_id: String, user_id: String, transaction_info: TransactionInfo, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Transaction]] = {
+    ws.url(s"$endPoint/fundraise/$fundraise_id/donate/$user_id", timeout).put(Json.toJson(transaction_info)).map(parse[Transaction])
   }
 
-  def buyReward(fundraise_id: String, reward_id: String, user_id: String, donation: Amount, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint/fundraise/$fundraise_id/reward/$reward_id/buy/$user_id", timeout).put(Json.toJson(donation)).map(parse[Transaction])
+  def buyReward(fundraise_id: String, reward_id: String, user_id: String, transaction_info: TransactionInfo, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Transaction]] = {
+    ws.url(s"$endPoint/fundraise/$fundraise_id/reward/$reward_id/buy/$user_id", timeout).put(Json.toJson(transaction_info)).map(parse[Transaction])
   }
 }
