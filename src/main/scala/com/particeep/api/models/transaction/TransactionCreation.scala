@@ -18,6 +18,7 @@ case class TransactionCreation(
   amount:         Int            = 0,
   fees:           Int            = 0,
   currency:       Currency       = EUR,
+  comment:        Option[String] = None,
   tag:            Option[String] = None
 )
 
