@@ -13,9 +13,11 @@ object KycType {
   case object PRESIDENT_OF_ASSOCIATION extends KycType { val name: String = "PRESIDENT_OF_ASSOCIATION" }
   case object OFFICIAL_JOURNAL extends KycType { val name: String = "OFFICIAL_JOURNAL" }
   case object ASSOCIATION_STATUS extends KycType { val name: String = "ASSOCIATION_STATUS" }
+  case object SHAREHOLDER_KYCS extends KycType { val name: String = "SHAREHOLDER_KYCS" }
+  case object GENERAL_MEETING extends KycType { val name: String = "General Meeting" }
 
   object KycType extends EnumHelper[KycType] {
-    def values: Set[KycType] = Set(ID_CARD, ADDRESS_PROOF, COMPANY_STATUS, RIB, KBIS, TAX_STATUS, PRESIDENT_OF_ASSOCIATION, OFFICIAL_JOURNAL, ASSOCIATION_STATUS)
+    def values: Set[KycType] = Set(ID_CARD, ADDRESS_PROOF, COMPANY_STATUS, RIB, KBIS, TAX_STATUS, PRESIDENT_OF_ASSOCIATION, OFFICIAL_JOURNAL, ASSOCIATION_STATUS, SHAREHOLDER_KYCS, GENERAL_MEETING)
   }
 
   def parseFromHipay(kycType: String): Option[KycType] = {
