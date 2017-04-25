@@ -2,7 +2,7 @@ package com.particeep.api
 
 import com.particeep.api.core.{ ApiCredential, ResponseParser, WSClient }
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
-import com.particeep.api.models.transaction.{ Transaction, TransactionCreation, TransactionSearch }
+import com.particeep.api.models.transaction.{ Transaction, TransactionCreation, TransactionEdition, TransactionSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 
@@ -19,6 +19,7 @@ class TransactionClient(ws: WSClient) extends ResponseParser {
   private[this] val endPoint: String = "/transaction"
   implicit val format = Transaction.format
   implicit val creationFormat = TransactionCreation.format
+  implicit val editionFormat = TransactionEdition.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Transaction]] = {
     ws.url(s"$endPoint/$id", timeout).get().map(parse[Transaction])
@@ -33,6 +34,10 @@ class TransactionClient(ws: WSClient) extends ResponseParser {
 
   def create(transaction_creation: TransactionCreation, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Transaction]] = {
     ws.url(s"$endPoint", timeout).put(Json.toJson(transaction_creation)).map(parse[Transaction])
+  }
+
+  def update(id: String, transaction_edition: TransactionEdition, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Transaction]] = {
+    ws.url(s"$endPoint/$id", timeout).post(Json.toJson(transaction_edition)).map(parse[Transaction])
   }
 
   def search(criteria: TransactionSearch, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
