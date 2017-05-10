@@ -13,7 +13,8 @@ case class LoanOffer(
   amount_min:           Int                    = 0,
   method:               Option[CalculatorType] = None,
   repayment_frequency:  Option[Int]            = None,
-  repayment_start_date: Option[ZonedDateTime]  = None
+  repayment_start_date: Option[ZonedDateTime]  = None,
+  deferred_period:      Option[Int]            = None
 )
 
 object LoanOffer {
