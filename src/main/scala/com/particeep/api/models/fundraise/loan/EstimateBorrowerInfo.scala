@@ -15,6 +15,7 @@ case class EstimateBorrowerInfo(
   method:               CalculatorType,
   repayment_frequency:  Int,
   repayment_start_date: ZonedDateTime,
+  deferred_period:      Option[Int]    = None,
   does_pay_taxes:       Boolean        = false
 )
 
