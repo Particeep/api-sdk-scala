@@ -23,6 +23,7 @@ class FundraiseEquityClient(ws: WSClient) extends ResponseParser {
   implicit val format = FundraiseEquity.format
   implicit val creation_format = FundraiseEquityCreation.format
   implicit val edition_format = FundraiseEquityEdition.format
+  implicit val running_edition_format = FundraiseEquityRunningEdition.format
   implicit val investment_format = Investment.format
   implicit val transaction_format = Transaction.format
   implicit val investment_creation_format = InvestmentCreation.format
@@ -44,6 +45,10 @@ class FundraiseEquityClient(ws: WSClient) extends ResponseParser {
 
   def update(id: String, fundraise_equity_edition: FundraiseEquityEdition, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, FundraiseEquity]] = {
     ws.url(s"$endPoint/fundraise/$id", timeout).post(Json.toJson(fundraise_equity_edition)).map(parse[FundraiseEquity])
+  }
+
+  def updateRunning(id: String, fundraise_equity_running_edition: FundraiseEquityRunningEdition, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, FundraiseEquity]] = {
+    ws.url(s"$endPoint/fundraise/running/$id", timeout).post(Json.toJson(fundraise_equity_running_edition)).map(parse[FundraiseEquity])
   }
 
   def search(criteria: FundraiseEquitySearch, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[FundraiseEquity]]] = {
