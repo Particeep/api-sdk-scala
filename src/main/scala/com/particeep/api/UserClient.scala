@@ -7,7 +7,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 import com.particeep.api.models._
 import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.utils.LangUtils
-import com.particeep.api.models.user.{ User, UserCreation, UserEdition, UserSearch }
+import com.particeep.api.models.user._
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.{ MultipartFormData, Results }
 
@@ -23,6 +23,7 @@ class UserClient(ws: WSClient) extends ResponseParser {
   implicit val format = User.format
   implicit val creation_format = UserCreation.format
   implicit val edition_format = UserEdition.format
+  implicit val data_format = UserData.format
   implicit val importResultFormat = ImportResult.format
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, User]] = {
@@ -44,11 +45,11 @@ class UserClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/name/$name", timeout).get.map(parse[List[User]])
   }
 
-  def search(criteria: UserSearch, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[User]]] = {
+  def search(criteria: UserSearch, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[UserData]]] = {
     ws.url(s"$endPoint/search", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
       .get
-      .map(parse[PaginatedSequence[User]])
+      .map(parse[PaginatedSequence[UserData]])
   }
 
   def create(user_creation: UserCreation, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, User]] = {
