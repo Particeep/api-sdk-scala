@@ -2,8 +2,6 @@ package com.particeep.api.models.user
 
 import java.time.ZonedDateTime
 
-import com.particeep.api.models.enums.Gender.Gender
-
 case class UserSearch(
   gender:         Option[String]        = None,
   first_name:     Option[String]        = None,
