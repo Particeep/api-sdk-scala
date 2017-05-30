@@ -20,6 +20,7 @@ trait UserCapability {
 class UserClient(ws: WSClient) extends ResponseParser {
 
   private[this] val endPoint: String = "/user"
+  private[this] val endPoint_import: String = "/data_import"
   implicit val format = User.format
   implicit val creation_format = UserCreation.format
   implicit val edition_format = UserEdition.format
@@ -88,7 +89,7 @@ class UserClient(ws: WSClient) extends ResponseParser {
   }
 
   def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, ImportResult]] = {
-    ws.postFile(s"$endPoint/import/csv", csv, List(), timeout).map(parse[ImportResult])
+    ws.postFile(s"$endPoint_import/user/csv", csv, List(), timeout).map(parse[ImportResult])
   }
 
 }
