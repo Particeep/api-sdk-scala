@@ -20,7 +20,7 @@ trait UserCapability {
 class UserClient(ws: WSClient) extends ResponseParser {
 
   private[this] val endPoint: String = "/user"
-  private[this] val endPoint_import: String = "/data_import"
+  private[this] val endPoint_import: String = "/import"
   implicit val format = User.format
   implicit val creation_format = UserCreation.format
   implicit val edition_format = UserEdition.format
