@@ -20,6 +20,7 @@ class FormClient(ws: WSClient) extends ResponseParser {
   implicit val format_simple = SimpleForm.format
   implicit val format_creation = FormCreation.format
   implicit val format_edition = FormEdition.format
+  implicit val format_light_edition = LightFormEdition.format
   implicit val format_answer = Answer.format
   implicit val format_answer_creation = AnswerCreation.format
   implicit val format_tagged_answer_creation = AnswerCreationWithTag.format
@@ -46,6 +47,10 @@ class FormClient(ws: WSClient) extends ResponseParser {
 
   def update(id: String, form_edition: FormEdition, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Form]] = {
     ws.url(s"$endPoint/$id").post(Json.toJson(form_edition)).map(parse[Form])
+  }
+
+  def lightUpdate(id: String, form_edition: LightFormEdition, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Form]] = {
+    ws.url(s"$endPoint/light/$id").post(Json.toJson(form_edition)).map(parse[Form])
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, SimpleForm]] = {
