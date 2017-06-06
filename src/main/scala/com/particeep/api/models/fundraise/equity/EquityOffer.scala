@@ -9,12 +9,12 @@ case class EquityOffer(
   fees_out:             Option[Double] = None,
   tax_rate:             Option[Double] = None,
   price_per_share:      Option[Int]    = None,
-  total_shares:         Option[Int]    = None,
-  num_of_shares:        Option[Int]    = None,
+  total_shares:         Option[Long]   = None,
+  num_of_shares:        Option[Long]   = None,
   round:                Option[String] = None,
-  valuation_pre_money:  Option[Int]    = None,
+  valuation_pre_money:  Option[Long]   = None,
   min_commitment:       Option[Int]    = Some(1),
-  max_commitment:       Option[Int]    = None
+  max_commitment:       Option[Long]   = None
 )
 
 object EquityOffer {
