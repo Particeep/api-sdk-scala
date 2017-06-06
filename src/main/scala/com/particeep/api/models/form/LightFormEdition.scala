@@ -6,9 +6,9 @@ import play.api.libs.json.Json
  * Created by Noe on 06/06/2017.
  */
 case class LightFormEdition(
-  name:        Option[String],
-  description: Option[String],
-  tag:         Option[String]
+  name:        Option[String] = None,
+  description: Option[String] = None,
+  tag:         Option[String] = None
 )
 
 object LightFormEdition {
