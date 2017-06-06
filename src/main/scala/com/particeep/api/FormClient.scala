@@ -49,8 +49,8 @@ class FormClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/$id").post(Json.toJson(form_edition)).map(parse[Form])
   }
 
-  def lightUpdate(id: String, form_edition: LightFormEdition, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Form]] = {
-    ws.url(s"$endPoint/light/$id").post(Json.toJson(form_edition)).map(parse[Form])
+  def lightUpdate(id: String, form_edition: LightFormEdition, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, SimpleForm]] = {
+    ws.url(s"$endPoint/light/$id").post(Json.toJson(form_edition)).map(parse[SimpleForm])
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, SimpleForm]] = {
