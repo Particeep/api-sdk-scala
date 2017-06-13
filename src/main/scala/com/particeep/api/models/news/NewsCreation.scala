@@ -9,7 +9,7 @@ case class NewsCreation(
   target_id:   String,
   target_type: String,
   author_id:   String,
-  publish_at:  ZonedDateTime  = ZonedDateTime.now(),
+  publish_at:  ZonedDateTime,
   title:       Option[String] = None,
   message:     Option[String] = None,
   img_url:     Option[String] = None,
