@@ -20,17 +20,16 @@ case class UserData(
   birth_place:       Option[String]        = None,
   phone:             Option[String]        = None,
   nationality:       Option[String]        = None,
-  bio:               Option[String]        = None,
   sector:            Option[String]        = None,
   investor_type:     Option[String]        = None,
   does_pay_taxes:    Option[Boolean]       = None,
   has_been_claimed:  Option[Boolean]       = Some(true),
   city:              Option[String]        = None,
-  address_id:        Option[String]        = None,
   wallet_id:         Option[String]        = None,
   wallet_updated_at: Option[ZonedDateTime] = None,
   wallet_type:       Option[String]        = None,
-  status:            Option[String]        = None
+  status:            Option[String]        = None,
+  roles:             Option[String]        = None
 )
 
 object UserData {
