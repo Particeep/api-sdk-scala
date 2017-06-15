@@ -106,11 +106,10 @@ class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
   }
 
   def generateRepaymentSchedule(
-    id:             String,
-    repayment_info: RepaymentInfo,
-    timeout:        Long          = -1
+    id:      String,
+    timeout: Long   = -1
   )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
-    ws.url(s"$endPoint/fundraise/$id/schedule/define", timeout).post(Json.toJson(repayment_info)).map(parse[List[ScheduledPayment]])
+    ws.url(s"$endPoint/fundraise/$id/schedule/define", timeout).post(Results.EmptyContent()).map(parse[List[ScheduledPayment]])
   }
 
   def generateCustomRepaymentSchedule(id: String, repayment_info_vector: RepaymentInfoVector,
