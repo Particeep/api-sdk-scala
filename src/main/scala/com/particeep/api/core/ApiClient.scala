@@ -33,7 +33,7 @@ trait BaseClient {
   //    val config = new NingAsyncHttpClientConfigBuilder(DefaultWSClientConfig()).build
   //    val builder = new AsyncHttpClientConfig.Builder(config)
   //    val client = new NingWSClient(builder.build)
-  protected implicit val sslClient = NingWSClient()
+  protected implicit val sslClient = ApiClient.sslClient
 
   def cleanup() = {
     sslClient.close()
@@ -80,4 +80,6 @@ object ApiClient {
   def apply(baseUrl: String, apiCredential: ApiCredential, version: String): ApiClient = {
     ApiClient(baseUrl, apiCredential, version)
   }
+
+  val sslClient = NingWSClient()
 }
