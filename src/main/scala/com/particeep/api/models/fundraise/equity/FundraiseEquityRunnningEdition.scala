@@ -13,9 +13,15 @@ case class FundraiseEquityRunningEdition(
   description_short:   Option[String]        = None,
   description_long:    Option[String]        = None,
   description_offline: Option[String]        = None,
+  disclaimer_risk:     Option[String]        = None,
+  disclaimer_fees:     Option[String]        = None,
+  disclaimer_payment:  Option[String]        = None,
   end_at:              Option[ZonedDateTime] = None,
   score:               Option[String]        = None,
-  tag:                 Option[String]        = None
+  tag:                 Option[String]        = None,
+  price_per_share:     Option[Int]           = None,
+  total_shares:        Option[Long]          = None,
+  valuation_pre_money: Option[Long]          = None
 )
 
 object FundraiseEquityRunningEdition {
