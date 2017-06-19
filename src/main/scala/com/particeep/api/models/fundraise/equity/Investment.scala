@@ -5,7 +5,7 @@ import com.particeep.api.models.user.User
 import play.api.libs.json.Json
 
 case class Investment(
-  user:        User,
+  user:        Option[User],
   transaction: Transaction
 )
 
