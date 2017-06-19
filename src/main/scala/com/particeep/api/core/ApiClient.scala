@@ -33,7 +33,7 @@ trait BaseClient {
   //    val config = new NingAsyncHttpClientConfigBuilder(DefaultWSClientConfig()).build
   //    val builder = new AsyncHttpClientConfig.Builder(config)
   //    val client = new NingWSClient(builder.build)
-  protected implicit val sslClient = ApiClient.sslClient
+  protected implicit val sslClient = ApiClient.defaultSslClient
 
   def cleanup() = {
     sslClient.close()
@@ -41,6 +41,16 @@ trait BaseClient {
 
 }
 
+/**
+   * usage
+   * val ws = new ApiClient(
+   *   "https://api.particeep.com",
+   *   creds,
+   *   "1"
+   * ) with UserCapability
+   *
+   * val result:Future[Either[JsError, Info]] = ws.user.byId("some_id")
+   */
 class ApiClient(val baseUrl: String, val version: String) extends WSClient with BaseClient with WithSecurtiy {
 
   def url(path: String, timeOut: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): WSRequest = {
@@ -67,19 +77,5 @@ class ApiClient(val baseUrl: String, val version: String) extends WSClient with 
 
 object ApiClient {
 
-  /**
-   * usage
-   * val ws = new ApiClient(
-   *   "https://api.particeep.com",
-   *   creds,
-   *   "1"
-   * ) with UserCapability
-   *
-   * val result:Future[Either[JsError, Info]] = ws.user.byId("some_id")
-   */
-  def apply(baseUrl: String, apiCredential: ApiCredential, version: String): ApiClient = {
-    ApiClient(baseUrl, apiCredential, version)
-  }
-
-  val sslClient = NingWSClient()
+  lazy val defaultSslClient = NingWSClient()
 }

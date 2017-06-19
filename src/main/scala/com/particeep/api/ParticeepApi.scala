@@ -16,6 +16,6 @@ object ParticeepApi {
   }
 
   def prod(): ApiClient = {
-    new ApiClient("https://test-api.particeep.com", last_version) with InfoCapability with UserCapability with WalletCapability with KycCapability with RoleCapability with DocumentCapability with FormCapability with DocumentGenerationCapability with SignatureCapability with EnterpriseCapability with FundraiseLoanCapability with FundraiseSearchCapability with NewsCapability with TransactionCapability with PaymentCapability with FundraiseEquityCapability
+    new ApiClient("https://api.particeep.com", last_version) with InfoCapability with UserCapability with WalletCapability with KycCapability with RoleCapability with DocumentCapability with FormCapability with DocumentGenerationCapability with SignatureCapability with EnterpriseCapability with FundraiseLoanCapability with FundraiseSearchCapability with NewsCapability with TransactionCapability with PaymentCapability with FundraiseEquityCapability
   }
 }
