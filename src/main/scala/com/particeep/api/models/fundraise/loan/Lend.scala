@@ -6,7 +6,7 @@ import play.api.libs.json.Json
 
 case class Lend(
   transaction: Transaction,
-  user:        User
+  user:        Option[User]
 )
 
 object Lend {
