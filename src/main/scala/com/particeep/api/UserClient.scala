@@ -1,6 +1,6 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ ApiCredential, ResponseParser, WSClient }
+import com.particeep.api.core._
 import play.api.libs.json._
 
 import scala.concurrent.{ ExecutionContext, Future }

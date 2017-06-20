@@ -1,6 +1,6 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ ApiCredential, ResponseParser, WSClient }
+import com.particeep.api.core._
 import com.particeep.api.models._
 import play.api.libs.json._
 
@@ -17,13 +17,14 @@ trait InfoCapability {
   self: WSClient =>
 
   val info: InfoClient = new InfoClient(this)
+  def info(credentials: ApiCredential): InfoClient = new InfoClient(this, Some(credentials))
 }
 
-class InfoClient(ws: WSClient) extends ResponseParser {
+class InfoClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
 
   import InfoClient._
 
-  def info(timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Info]] = {
+  def info(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Info]] = {
     ws.url(endPoint, timeout).get().map(parse[Info])
   }
 }
