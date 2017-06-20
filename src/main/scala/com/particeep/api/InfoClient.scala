@@ -1,6 +1,6 @@
 package com.particeep.api
 
-import com.particeep.api.core.{ ApiCredential, Formatter, ResponseParser, WSClient }
+import com.particeep.api.core._
 import com.particeep.api.models._
 import play.api.libs.json._
 
@@ -8,23 +8,23 @@ import scala.concurrent.{ ExecutionContext, Future }
 
 case class Info(version: String, debugEnable: Boolean, metaEnable: Boolean)
 
-object Info {
-  implicit val date_format = Formatter.ZonedDateTimeWrites
-  implicit val format = Json.format[Info]
+object InfoClient {
+  private val endPoint: String = "/info"
+  private implicit val format = Json.format[Info]
 }
 
 trait InfoCapability {
   self: WSClient =>
 
   val info: InfoClient = new InfoClient(this)
+  def info(credentials: ApiCredential): InfoClient = new InfoClient(this, Some(credentials))
 }
 
-class InfoClient(ws: WSClient) extends ResponseParser {
+class InfoClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
 
-  private[this] val endPoint: String = "/info"
-  implicit val format = Info.format
+  import InfoClient._
 
-  def info(timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Info]] = {
+  def info(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Info]] = {
     ws.url(endPoint, timeout).get().map(parse[Info])
   }
 }

@@ -14,6 +14,7 @@ case class ApiCredential(apiKey: String, apiSecret: String)
 
 trait WSClient {
   def cleanup(): Unit
+  def credentials(): Option[ApiCredential]
 
   /**
    * @param path : relative path for the request
@@ -42,16 +43,16 @@ trait BaseClient {
 }
 
 /**
-   * usage
-   * val ws = new ApiClient(
-   *   "https://api.particeep.com",
-   *   creds,
-   *   "1"
-   * ) with UserCapability
-   *
-   * val result:Future[Either[JsError, Info]] = ws.user.byId("some_id")
-   */
-class ApiClient(val baseUrl: String, val version: String) extends WSClient with BaseClient with WithSecurtiy {
+ * usage
+ * val ws = new ApiClient(
+ *   "https://api.particeep.com",
+ *   "1",
+ *   creds
+ * ) with UserCapability
+ *
+ * val result:Future[Either[JsError, Info]] = ws.user.byId("some_id")
+ */
+class ApiClient(val baseUrl: String, val version: String, val credentials: Option[ApiCredential] = None) extends WSClient with BaseClient with WithSecurtiy {
 
   def url(path: String, timeOut: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): WSRequest = {
     val req = WS.clientUrl(s"$baseUrl/v$version$path")

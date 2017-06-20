@@ -19,8 +19,7 @@ class ParticeepTest extends FlatSpec with Matchers {
 
   "the api client" should "load info" in {
 
-    val ws = new ApiClient(ConfigTest.baseUrl, ConfigTest.version) with InfoCapability
-    implicit val credentials = ConfigTest.credential
+    val ws = new ApiClient(ConfigTest.baseUrl, ConfigTest.version, Some(ConfigTest.credential)) with InfoCapability
 
     val rez_f: Future[Either[ErrorResult, Info]] = ws.info.info()
 
