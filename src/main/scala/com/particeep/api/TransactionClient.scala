@@ -14,12 +14,16 @@ trait TransactionCapability {
   val transaction: TransactionClient = new TransactionClient(this)
 }
 
+object TransactionClient {
+  private val endPoint: String = "/transaction"
+  private implicit val format = Transaction.format
+  private implicit val creationFormat = TransactionCreation.format
+  private implicit val editionFormat = TransactionEdition.format
+}
+
 class TransactionClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/transaction"
-  implicit val format = Transaction.format
-  implicit val creationFormat = TransactionCreation.format
-  implicit val editionFormat = TransactionEdition.format
+  import TransactionClient._
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Transaction]] = {
     ws.url(s"$endPoint/$id", timeout).get().map(parse[Transaction])

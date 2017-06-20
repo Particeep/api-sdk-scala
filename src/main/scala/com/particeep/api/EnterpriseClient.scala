@@ -14,15 +14,20 @@ trait EnterpriseCapability {
   val enterprise: EnterpriseClient = new EnterpriseClient(this)
 }
 
+object EnterpriseClient {
+  private val endPoint: String = "/enterprise"
+  private implicit val format = Enterprise.format
+  private implicit val creation_format = EnterpriseCreation.format
+  private implicit val edition_format = EnterpriseEdition.format
+  private implicit val manager_link_format = ManagerLink.format
+  private implicit val manager_creation_format = ManagerCreation.format
+  private implicit val nb_enterprises_by_activity_domain_format = NbEnterprisesByActivityDomain.format
+
+}
+
 class EnterpriseClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/enterprise"
-  implicit val format = Enterprise.format
-  implicit val creation_format = EnterpriseCreation.format
-  implicit val edition_format = EnterpriseEdition.format
-  implicit val manager_link_format = ManagerLink.format
-  implicit val manager_creation_format = ManagerCreation.format
-  implicit val nb_enterprises_by_activity_domain_format = NbEnterprisesByActivityDomain.format
+  import EnterpriseClient._
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Enterprise]] = {
     ws.url(s"$endPoint/$id", timeout).get().map(parse[Enterprise])

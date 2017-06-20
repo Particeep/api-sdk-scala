@@ -21,16 +21,27 @@ trait DocumentCapability {
   val document: DocumentClient = new DocumentClient(this)
 }
 
+object DocumentClient {
+  private val endPoint: String = "/document"
+  private implicit val format = Document.format
+  private implicit val format_creation = DocumentCreation.format
+  private implicit val format_edition = DocumentEdition.format
+}
+
 class DocumentClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/document"
-  implicit val format = Document.format
-  implicit val format_creation = DocumentCreation.format
-  implicit val format_search = DocumentSearch.format
-  implicit val format_edition = DocumentEdition.format
-  implicit val write_folder_or_file = FolderOrFile.writes
+  import DocumentClient._
 
-  def upload(owner_id: String, file: MultipartFormData[TemporaryFile], document_creation: DocumentCreation, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Document]] = {
+  def upload(
+    owner_id:          String,
+    file:              MultipartFormData[TemporaryFile],
+    document_creation: DocumentCreation,
+    timeout:           Long                             = -1
+  )(
+    implicit
+    exec:        ExecutionContext,
+    credentials: ApiCredential
+  ): Future[Either[ErrorResult, Document]] = {
     val bodyParts = List(
       new StringPart("target_id", document_creation.target_id.getOrElse("")),
       new StringPart("target_type", document_creation.target_type.getOrElse("")),
@@ -66,7 +77,16 @@ class DocumentClient(ws: WSClient) extends ResponseParser {
     ws.url(s"$endPoint/$id", timeout).post(Json.toJson(document_edition)).map(parse[Document])
   }
 
-  def listDir(path: String, target_id: Option[String], target_type: Option[String], timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[FolderOrFile]]] = {
+  def listDir(
+    path:        String,
+    target_id:   Option[String],
+    target_type: Option[String],
+    timeout:     Long           = -1
+  )(
+    implicit
+    exec:        ExecutionContext,
+    credentials: ApiCredential
+  ): Future[Either[ErrorResult, List[FolderOrFile]]] = {
     val params: List[(String, String)] = List(("path", path)) ++
       target_id.map(x => List(("target_id", x))).getOrElse(List()) ++
       target_type.map(x => List(("target_type", x))).getOrElse(List())

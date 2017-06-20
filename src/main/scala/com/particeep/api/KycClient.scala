@@ -14,12 +14,16 @@ trait KycCapability {
   val kyc: KycClient = new KycClient(this)
 }
 
+object KycClient {
+  private val endPoint: String = "/kycs"
+  private implicit val group_format = KycGroup.format
+  private implicit val creation_format = KycCreation.format
+  private implicit val edition_format = KycsEdition.format
+}
+
 class KycClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/kycs"
-  implicit val group_format = KycGroup.format
-  implicit val creation_format = KycCreation.format
-  implicit val edition_format = KycsEdition.format
+  import KycClient._
 
   def create(kyc_creation: KycCreation, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[KycGroup]]] = {
     ws.url(s"$endPoint", timeout).put(Json.toJson(kyc_creation)).map(parse[List[KycGroup]])

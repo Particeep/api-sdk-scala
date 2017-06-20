@@ -13,11 +13,15 @@ trait RoleCapability {
   val role: RoleClient = new RoleClient(this)
 }
 
+object RoleClient {
+  private val endPoint: String = "/role"
+  private implicit val format = Roles.format
+  private implicit val creation_format = RoleCreation.format
+}
+
 class RoleClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/role"
-  implicit val format = Roles.format
-  implicit val creation_format = RoleCreation.format
+  import RoleClient._
 
   def all(timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[String]]] = {
     ws.url(s"$endPoint/all", timeout).get().map(parse[List[String]])

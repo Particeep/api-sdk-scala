@@ -14,6 +14,22 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class UserTest extends FlatSpec with Matchers {
 
+  "the api client" should "load user by id with correct date format" in {
+
+    val user_id = "bf5788e8-9756-4d18-8b0f-100d7fba17a2"
+    val ws = new ApiClient(ConfigTest.baseUrl, ConfigTest.version, Some(ConfigTest.credential)) with UserCapability
+    val rez_f: Future[Either[ErrorResult, User]] = ws.user.byId(user_id)
+
+    val rez = Await.result(rez_f, 10 seconds)
+    rez.isRight shouldBe true
+
+    val user = rez.right.get
+    user.id shouldBe user_id
+
+    val created_at = user.created_at.map(_.toString).getOrElse("")
+    created_at shouldBe "2015-08-10T00:00Z"
+  }
+
   "the api client" should "load user by id with direct credentials" in {
 
     val user_id = "bf5788e8-9756-4d18-8b0f-100d7fba17a2"

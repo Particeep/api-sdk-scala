@@ -14,11 +14,17 @@ trait SignatureCapability {
   val signature: SignatureClient = new SignatureClient(this)
 }
 
+object SignatureClient {
+
+  private val endPoint: String = "/signature"
+  private implicit val format = Signature.format
+  private implicit val creation_format = SignatureCreation.format
+
+}
+
 class SignatureClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/signature"
-  implicit val format = Signature.format
-  implicit val creation_format = SignatureCreation.format
+  import SignatureClient._
 
   def sign(signature_creation: SignatureCreation, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Signature]] = {
     ws.url(s"$endPoint", timeout).post(Json.toJson(signature_creation)).map(parse[Signature])

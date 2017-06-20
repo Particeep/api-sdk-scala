@@ -17,16 +17,20 @@ trait FundraiseEquityCapability {
   val fundraise_equity: FundraiseEquityClient = new FundraiseEquityClient(this)
 }
 
+object FundraiseEquityClient {
+  private val endPoint: String = "/equity"
+  private implicit val format = FundraiseEquity.format
+  private implicit val creation_format = FundraiseEquityCreation.format
+  private implicit val edition_format = FundraiseEquityEdition.format
+  private implicit val running_edition_format = FundraiseEquityRunningEdition.format
+  private implicit val investment_format = Investment.format
+  private implicit val transaction_format = Transaction.format
+  private implicit val investment_creation_format = InvestmentCreation.format
+}
+
 class FundraiseEquityClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/equity"
-  implicit val format = FundraiseEquity.format
-  implicit val creation_format = FundraiseEquityCreation.format
-  implicit val edition_format = FundraiseEquityEdition.format
-  implicit val running_edition_format = FundraiseEquityRunningEdition.format
-  implicit val investment_format = Investment.format
-  implicit val transaction_format = Transaction.format
-  implicit val investment_creation_format = InvestmentCreation.format
+  import FundraiseEquityClient._
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, FundraiseEquity]] = {
     ws.url(s"$endPoint/fundraise/$id", timeout).get().map(parse[FundraiseEquity])

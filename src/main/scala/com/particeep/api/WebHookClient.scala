@@ -13,12 +13,17 @@ trait WebHookCapability {
   val webhook: WebHookClient = new WebHookClient(this)
 }
 
+object WebHookClient {
+  private val endPoint: String = "/webhook"
+
+  private implicit val format = WebHook.format
+  private implicit val simple_format = WebHookSimple.format
+
+}
+
 class WebHookClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/webhook"
-
-  implicit private val format = WebHook.format
-  implicit private val simple_format = WebHookSimple.format
+  import WebHookClient._
 
   def create(webhook_creation: WebHookSimple, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, WebHook]] = {
     ws.url(s"$endPoint", timeout).put(Json.toJson(webhook_creation)).map(parse[WebHook])

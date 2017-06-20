@@ -15,23 +15,28 @@ trait FundraiseRewardCapability {
 
   val fundraise_reward: FundraiseRewardClient = new FundraiseRewardClient(this)
 }
+
+object FundraiseRewardClient {
+  private val endPoint: String = "/reward"
+  private implicit val format = FundraiseReward.format
+  private implicit val creation_format = FundraiseRewardCreation.format
+  private implicit val edition_format = FundraiseRewardEdition.format
+  private implicit val edition_running_format = FundraiseRewardRunningEdition.format
+  private implicit val reward_format = Reward.format
+  private implicit val reward_creation_format = RewardCreation.format
+  private implicit val reward_edition_format = RewardEdition.format
+  private implicit val backer_format = Backer.format
+  private implicit val backing_format = Backing.format
+  private implicit val donation_format = TransactionInfo.format
+  private implicit val transaction_format = Transaction.format
+}
+
 /**
  * Created by Noe on 26/01/2017.
  */
 class FundraiseRewardClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/reward"
-  implicit val format = FundraiseReward.format
-  implicit val creation_format = FundraiseRewardCreation.format
-  implicit val edition_format = FundraiseRewardEdition.format
-  implicit val edition_running_format = FundraiseRewardRunningEdition.format
-  implicit val reward_format = Reward.format
-  implicit val reward_creation_format = RewardCreation.format
-  implicit val reward_edition_format = RewardEdition.format
-  implicit val backer_format = Backer.format
-  implicit val backing_format = Backing.format
-  implicit val donation_format = TransactionInfo.format
-  implicit val transaction_format = Transaction.format
+  import FundraiseRewardClient._
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, FundraiseReward]] = {
     ws.url(s"$endPoint/fundraise/$id", timeout).get().map(parse[FundraiseReward])

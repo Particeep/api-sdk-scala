@@ -14,14 +14,19 @@ trait NewsCapability {
   val news: NewsClient = new NewsClient(this)
 }
 
+object NewsClient {
+
+  private val endPoint: String = "/newsfeed"
+
+  private implicit val format = News.format
+  private implicit val prev_and_next_format = NewsPrevAndNext.format
+  private implicit val creation_format = NewsCreation.format
+  private implicit val edition_format = NewsEdition.format
+}
+
 class NewsClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/newsfeed"
-
-  implicit val format = News.format
-  implicit val prev_and_next_format = NewsPrevAndNext.format
-  implicit val creation_format = NewsCreation.format
-  implicit val edition_format = NewsEdition.format
+  import NewsClient._
 
   def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[News]]] = {
     ws.url(s"$endPoint", timeout)

@@ -17,14 +17,20 @@ trait PaymentCapability {
   val payment: PaymentClient = new PaymentClient(this)
 }
 
+object PaymentClient {
+
+  private val endPoint: String = "/payment"
+  private implicit lazy val pay_result_format = PayResult.format
+  private implicit lazy val payment_cb_creation_format = PaymentCbCreation.format
+  private implicit lazy val transaction_format = Transaction.format
+  private implicit lazy val scheduled_payment_creation_format = ScheduledPaymentCreation.format
+  private implicit lazy val scheduled_payment_format = ScheduledPayment.format
+
+}
+
 class PaymentClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/payment"
-  implicit lazy val pay_result_format = PayResult.format
-  implicit lazy val payment_cb_creation_format = PaymentCbCreation.format
-  implicit lazy val transaction_format = Transaction.format
-  implicit lazy val scheduled_payment_creation_format = ScheduledPaymentCreation.format
-  implicit lazy val scheduled_payment_format = ScheduledPayment.format
+  import PaymentClient._
 
   def payment(transaction_id: String, payment_cb_creation: PaymentCbCreation, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PayResult]] = {
     ws.url(s"$endPoint/$transaction_id", timeout).post(Json.toJson(payment_cb_creation)).map(parse[PayResult])

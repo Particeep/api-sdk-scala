@@ -14,12 +14,16 @@ trait DocumentGenerationCapability {
   val document_generation: DocumentGenerationClient = new DocumentGenerationClient(this)
 }
 
+object DocumentGenerationClient {
+  private val endPoint: String = "/document-generation"
+  private implicit val format_generation = DocumentGeneration.format
+  private implicit val format_generation_and_upload = DocumentGenerationAndUpload.format
+  private implicit val format_document = Document.format
+}
+
 class DocumentGenerationClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/document-generation"
-  implicit val format_generation = DocumentGeneration.format
-  implicit val format_generation_and_upload = DocumentGenerationAndUpload.format
-  implicit val format_document = Document.format
+  import DocumentGenerationClient._
 
   def generation(document_generation: DocumentGeneration, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Stream[Byte]]] = {
     ws.url(s"$endPoint", timeout).post(Json.toJson(document_generation)).map(parse[Stream[Byte]])

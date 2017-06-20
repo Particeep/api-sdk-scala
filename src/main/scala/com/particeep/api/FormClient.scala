@@ -13,17 +13,21 @@ trait FormCapability {
   val form: FormClient = new FormClient(this)
 }
 
+object FormClient {
+  private val endPoint: String = "/form"
+  private implicit val format = Form.format
+  private implicit val format_simple = SimpleForm.format
+  private implicit val format_creation = FormCreation.format
+  private implicit val format_edition = FormEdition.format
+  private implicit val format_light_edition = LightFormEdition.format
+  private implicit val format_answer = Answer.format
+  private implicit val format_answer_creation = AnswerCreation.format
+  private implicit val format_tagged_answer_creation = AnswerCreationWithTag.format
+}
+
 class FormClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/form"
-  implicit val format = Form.format
-  implicit val format_simple = SimpleForm.format
-  implicit val format_creation = FormCreation.format
-  implicit val format_edition = FormEdition.format
-  implicit val format_light_edition = LightFormEdition.format
-  implicit val format_answer = Answer.format
-  implicit val format_answer_creation = AnswerCreation.format
-  implicit val format_tagged_answer_creation = AnswerCreationWithTag.format
+  import FormClient._
 
   def all(timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Seq[SimpleForm]]] = {
     ws.url(s"$endPoint/all", timeout).get().map(parse[Seq[SimpleForm]])

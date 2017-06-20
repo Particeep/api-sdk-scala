@@ -16,21 +16,25 @@ trait FundraiseLoanCapability {
   val fundraise_loan: FundraiseLoanClient = new FundraiseLoanClient(this)
 }
 
+object FundraiseLoanClient {
+  private val endPoint: String = "/loan"
+  private implicit val format = FundraiseLoan.format
+  private implicit val creation_format = FundraiseLoanCreation.format
+  private implicit val edition_format = FundraiseLoanEdition.format
+  private implicit val running_edition_format = FundraiseLoanRunningEdition.format
+  private implicit val repayment_info_format = RepaymentInfo.format
+  private implicit val repayment_with_date_format = RepaymentWithDate.format
+  private implicit val repayment_info_vector_format = RepaymentInfoVector.format
+  private implicit val scheduled_payment_format = ScheduledPayment.format
+  private implicit val lend_format = Lend.format
+  private implicit val transaction_format = Transaction.format
+  private implicit val lend_creation_format = LendCreation.format
+  private implicit val estimate_borrower_info_format = EstimateBorrowerInfo.format
+}
+
 class FundraiseLoanClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/loan"
-  implicit val format = FundraiseLoan.format
-  implicit val creation_format = FundraiseLoanCreation.format
-  implicit val edition_format = FundraiseLoanEdition.format
-  implicit val running_edition_format = FundraiseLoanRunningEdition.format
-  implicit val repayment_info_format = RepaymentInfo.format
-  implicit val repayment_with_date_format = RepaymentWithDate.format
-  implicit val repayment_info_vector_format = RepaymentInfoVector.format
-  implicit val scheduled_payment_format = ScheduledPayment.format
-  implicit val lend_format = Lend.format
-  implicit val transaction_format = Transaction.format
-  implicit val lend_creation_format = LendCreation.format
-  implicit val estimate_borrower_info_format = EstimateBorrowerInfo.format
+  import FundraiseLoanClient._
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.url(s"$endPoint/fundraise/$id", timeout).get().map(parse[FundraiseLoan])

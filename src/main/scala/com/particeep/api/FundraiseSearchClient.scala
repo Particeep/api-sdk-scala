@@ -13,13 +13,25 @@ trait FundraiseSearchCapability {
   val fundraise_search: FundraiseSearchClient = new FundraiseSearchClient(this)
 }
 
+object FundraiseSearchClient {
+  private val endPoint: String = "/fundraises"
+  private implicit val format = FundraiseData.format
+  private implicit val project_by_category_format = NbProjectsByCategory.format
+}
+
 class FundraiseSearchClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/fundraises"
-  implicit val format = FundraiseData.format
-  implicit val project_by_category_format = NbProjectsByCategory.format
+  import FundraiseSearchClient._
 
-  def search(criteria: FundraiseSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, PaginatedSequence[FundraiseData]]] = {
+  def search(
+    criteria:       FundraiseSearch,
+    table_criteria: TableSearch,
+    timeout:        Long            = -1
+  )(
+    implicit
+    exec:        ExecutionContext,
+    credentials: ApiCredential
+  ): Future[Either[ErrorResult, PaginatedSequence[FundraiseData]]] = {
     ws.url(s"$endPoint/search", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
       .withQueryString(LangUtils.productToQueryString(table_criteria): _*)

@@ -14,19 +14,23 @@ trait WalletCapability {
   val wallet: WalletClient = new WalletClient(this)
 }
 
+object WalletClient {
+  private val endPoint: String = "/wallet"
+  private implicit val format = Wallet.format
+  private implicit val creation_format = WalletCreation.format
+  private implicit val cash_in_format = CashIn.format
+  private implicit val cash_out_format = CashOut.format
+  private implicit val transaction_format = TransactionWallet.format
+  private implicit val transfer_format = WalletTransfer.format
+  private implicit val bank_account_format = BankAccount.format
+  private implicit val bank_account_creation_format = BankAccountCreation.format
+  private implicit val cashin_bank_account_format = CashInBankAccount.format
+  private implicit val cashin_bank_account_creation_format = CashInBankAccountCreation.format
+}
+
 class WalletClient(ws: WSClient) extends ResponseParser {
 
-  private[this] val endPoint: String = "/wallet"
-  implicit val format = Wallet.format
-  implicit val creation_format = WalletCreation.format
-  implicit val cash_in_format = CashIn.format
-  implicit val cash_out_format = CashOut.format
-  implicit val transaction_format = TransactionWallet.format
-  implicit val transfer_format = WalletTransfer.format
-  implicit val bank_account_format = BankAccount.format
-  implicit val bank_account_creation_format = BankAccountCreation.format
-  implicit val cashin_bank_account_format = CashInBankAccount.format
-  implicit val cashin_bank_account_creation_format = CashInBankAccountCreation.format
+  import WalletClient._
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Wallet]] = {
     ws.url(s"$endPoint/$id", timeout).get().map(parse[Wallet])
