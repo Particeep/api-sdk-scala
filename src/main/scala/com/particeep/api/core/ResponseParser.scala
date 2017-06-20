@@ -13,7 +13,7 @@ trait ResponseParser {
 
   import com.particeep.api.models.Errors._
 
-  private[this] final val log = LoggerFactory.getLogger(this.getClass)
+  private[this] final lazy val log = LoggerFactory.getLogger(this.getClass)
 
   def parse[A](response: WSResponse)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
     parse(response.json, response.status)(json_reads)
