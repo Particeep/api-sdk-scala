@@ -15,7 +15,7 @@ trait EntityClient {
 
   private[this] final lazy val log = LoggerFactory.getLogger(this.getClass)
 
-  protected implicit val creds: ApiCredential = this.ws.credentials
+  protected implicit lazy val creds: ApiCredential = this.ws.credentials
     .orElse(this.credentials)
     .getOrElse {
       log.warn("""
