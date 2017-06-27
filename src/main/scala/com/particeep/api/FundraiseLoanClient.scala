@@ -126,17 +126,6 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     ws.url(s"$endPoint/fundraise/$id/schedule/cancel-all", timeout).post(Results.EmptyContent()).map(parse[List[ScheduledPayment]])
   }
 
-  def searchScheduledPayments(
-    id:       String,
-    criteria: ScheduledPaymentSearch,
-    timeout:  Long                   = -1
-  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[ScheduledPayment]]] = {
-    ws.url(s"$endPoint/fundraise/$id/schedule/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .get
-      .map(parse[PaginatedSequence[ScheduledPayment]])
-  }
-
   def allLendsOnFundraise(
     id:       String,
     criteria: TransactionSearch,
