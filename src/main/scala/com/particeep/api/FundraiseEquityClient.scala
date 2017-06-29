@@ -4,10 +4,12 @@ import com.particeep.api.core._
 import com.particeep.api.models.enums.FundraiseStatus.FundraiseStatus
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
 import com.particeep.api.models.fundraise.equity._
+import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
+import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.mvc.Results
+import play.api.mvc.{ MultipartFormData, Results }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -21,6 +23,7 @@ trait FundraiseEquityCapability {
 
 object FundraiseEquityClient {
   private val endPoint: String = "/equity"
+  private val endPoint_import: String = "/import"
   private implicit val format = FundraiseEquity.format
   private implicit val creation_format = FundraiseEquityCreation.format
   private implicit val edition_format = FundraiseEquityEdition.format
@@ -28,6 +31,7 @@ object FundraiseEquityClient {
   private implicit val investment_format = Investment.format
   private implicit val transaction_format = Transaction.format
   private implicit val investment_creation_format = InvestmentCreation.format
+  private implicit val importResultFormat = ImportResult.format
 }
 
 class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
@@ -88,5 +92,9 @@ class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredent
 
   def invest(id: String, investment_creation: InvestmentCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
     ws.url(s"$endPoint/fundraise/$id/invest", timeout).post(Json.toJson(investment_creation)).map(parse[Transaction])
+  }
+
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult]] = {
+    ws.postFile(s"$endPoint_import/fundraise-equity/csv", csv, List(), timeout).map(parse[ImportResult])
   }
 }

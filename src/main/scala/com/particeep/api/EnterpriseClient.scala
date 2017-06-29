@@ -3,8 +3,11 @@ package com.particeep.api
 import com.particeep.api.core._
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
 import com.particeep.api.models.enterprise._
+import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.utils.LangUtils
+import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
+import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -17,12 +20,14 @@ trait EnterpriseCapability {
 
 object EnterpriseClient {
   private val endPoint: String = "/enterprise"
+  private val endPoint_import: String = "/import"
   private implicit val format = Enterprise.format
   private implicit val creation_format = EnterpriseCreation.format
   private implicit val edition_format = EnterpriseEdition.format
   private implicit val manager_link_format = ManagerLink.format
   private implicit val manager_creation_format = ManagerCreation.format
   private implicit val nb_enterprises_by_activity_domain_format = NbEnterprisesByActivityDomain.format
+  private implicit val importResultFormat = ImportResult.format
 
 }
 
@@ -78,5 +83,9 @@ class EnterpriseClient(val ws: WSClient, val credentials: Option[ApiCredential] 
 
   def nbEnterprisesByActivityDomain(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[NbEnterprisesByActivityDomain]]] = {
     ws.url(s"$endPoint/info/activity/domain", timeout).get().map(parse[Seq[NbEnterprisesByActivityDomain]])
+  }
+
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult]] = {
+    ws.postFile(s"$endPoint_import/enterprise/csv", csv, List(), timeout).map(parse[ImportResult])
   }
 }
