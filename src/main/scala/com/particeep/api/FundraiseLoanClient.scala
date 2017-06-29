@@ -3,10 +3,12 @@ package com.particeep.api
 import com.particeep.api.core._
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
 import com.particeep.api.models.fundraise.loan._
+import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
+import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.mvc.Results
+import play.api.mvc.{ MultipartFormData, Results }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -19,6 +21,7 @@ trait FundraiseLoanCapability {
 
 object FundraiseLoanClient {
   private val endPoint: String = "/loan"
+  private val endPoint_import: String = "/import"
   private implicit val format = FundraiseLoan.format
   private implicit val creation_format = FundraiseLoanCreation.format
   private implicit val edition_format = FundraiseLoanEdition.format
@@ -31,6 +34,7 @@ object FundraiseLoanClient {
   private implicit val transaction_format = Transaction.format
   private implicit val lend_creation_format = LendCreation.format
   private implicit val estimate_borrower_info_format = EstimateBorrowerInfo.format
+  private implicit val importResultFormat = ImportResult.format
 }
 
 class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
@@ -150,5 +154,9 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
 
   def lend(id: String, lend_creation: LendCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
     ws.url(s"$endPoint/fundraise/$id/lend", timeout).post(Json.toJson(lend_creation)).map(parse[Transaction])
+  }
+
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult]] = {
+    ws.postFile(s"$endPoint_import/fundraise-loan/csv", csv, List(), timeout).map(parse[ImportResult])
   }
 }
