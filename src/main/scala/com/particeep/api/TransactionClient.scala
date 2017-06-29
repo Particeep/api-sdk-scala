@@ -1,10 +1,13 @@
 package com.particeep.api
 
 import com.particeep.api.core._
+import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
 import com.particeep.api.models.transaction.{ Transaction, TransactionCreation, TransactionEdition, TransactionSearch }
 import com.particeep.api.utils.LangUtils
+import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
+import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -17,9 +20,11 @@ trait TransactionCapability {
 
 object TransactionClient {
   private val endPoint: String = "/transaction"
+  private val endPoint_import: String = "/import"
   private implicit val format = Transaction.format
   private implicit val creationFormat = TransactionCreation.format
   private implicit val editionFormat = TransactionEdition.format
+  private implicit val importResultFormat = ImportResult.format
 }
 
 class TransactionClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
@@ -54,5 +59,9 @@ class TransactionClient(val ws: WSClient, val credentials: Option[ApiCredential]
 
   def cancel(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
     ws.url(s"$endPoint/$id/cancel", timeout).delete().map(parse[Transaction])
+  }
+
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult]] = {
+    ws.postFile(s"$endPoint_import/transaction/csv", csv, List(), timeout).map(parse[ImportResult])
   }
 }
