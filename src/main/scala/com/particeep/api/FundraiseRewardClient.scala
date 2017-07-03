@@ -1,7 +1,7 @@
 package com.particeep.api
 
 import com.particeep.api.core._
-import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.fundraise.reward._
 import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
@@ -107,9 +107,10 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.url(s"$endPoint/fundraise/$fundraise_id/rewards", timeout).get().map(parse[List[Reward]])
   }
 
-  def allBoughtRewardsByFundraise(fundraise_id: String, criteria: TransactionSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backer]]] = {
+  def allBoughtRewardsByFundraise(fundraise_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backer]]] = {
     ws.url(s"$endPoint/fundraise/$fundraise_id/rewards/bought", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
       .get().map(parse[PaginatedSequence[Backer]])
   }
 
@@ -117,9 +118,10 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.url(s"$endPoint/fundraise/$fundraise_id/rewards/bought/quantity", timeout).get().map(parse[Map[String, Int]])
   }
 
-  def allBoughtRewardsByUser(user_id: String, criteria: TransactionSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backing]]] = {
+  def allBoughtRewardsByUser(user_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backing]]] = {
     ws.url(s"$endPoint/$user_id/rewards", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
       .get().map(parse[PaginatedSequence[Backing]])
   }
 

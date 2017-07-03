@@ -1,7 +1,7 @@
 package com.particeep.api
 
 import com.particeep.api.core._
-import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.fundraise.loan._
 import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
@@ -131,23 +131,27 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
   }
 
   def allLendsOnFundraise(
-    id:       String,
-    criteria: TransactionSearch,
-    timeout:  Long              = -1
+    id:             String,
+    criteria:       TransactionSearch,
+    table_criteria: TableSearch,
+    timeout:        Long              = -1
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Lend]]] = {
     ws.url(s"$endPoint/fundraise/$id/lends", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[Lend]])
   }
 
   def allLendsByUser(
-    user_id:  String,
-    criteria: TransactionSearch,
-    timeout:  Long              = -1
+    user_id:        String,
+    criteria:       TransactionSearch,
+    table_criteria: TableSearch,
+    timeout:        Long              = -1
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
     ws.url(s"$endPoint/fundraise/lends/user/$user_id", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[Transaction]])
   }

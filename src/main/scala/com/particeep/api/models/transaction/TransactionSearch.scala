@@ -3,7 +3,7 @@ package com.particeep.api.models.transaction
 import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
-import org.cvogt.play.json.Jsonx
+import play.api.libs.json.Json
 
 case class TransactionSearch(
   start_date:       Option[ZonedDateTime] = None,
@@ -26,15 +26,10 @@ case class TransactionSearch(
   handled_offline:  Option[Boolean]       = None,
   comment:          Option[String]        = None,
   signature_id:     Option[String]        = None,
-  signature_status: Option[String]        = None,
-  sort_by:          Option[String]        = None,
-  order_by:         Option[String]        = Some("asc"),
-  global_search:    Option[String]        = None,
-  limit:            Option[Int]           = Some(30),
-  offset:           Option[Int]           = Some(0)
+  signature_status: Option[String]        = None
 )
 
 object TransactionSearch {
   implicit val date_format = Formatter.ZonedDateTimeWrites
-  val format = Jsonx.formatCaseClass[TransactionSearch]
+  val format = Json.format[TransactionSearch]
 }
