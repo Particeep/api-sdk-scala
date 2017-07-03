@@ -2,7 +2,7 @@ package com.particeep.api
 
 import com.particeep.api.core._
 import com.particeep.api.models.enums.FundraiseStatus.FundraiseStatus
-import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.fundraise.equity._
 import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
@@ -76,16 +76,18 @@ class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.url(s"$endPoint/fundraise/$id/status/$new_status", timeout).post(Results.EmptyContent()).map(parse[FundraiseEquity])
   }
 
-  def allInvestmentsOnFundraise(id: String, criteria: TransactionSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Investment]]] = {
+  def allInvestmentsOnFundraise(id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Investment]]] = {
     ws.url(s"$endPoint/fundraise/$id/investments", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[Investment]])
   }
 
-  def allInvestmentsByUser(user_id: String, criteria: TransactionSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
+  def allInvestmentsByUser(user_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
     ws.url(s"$endPoint/fundraise/investments/user/$user_id", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[Transaction]])
   }
