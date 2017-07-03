@@ -2,7 +2,7 @@ package com.particeep.api
 
 import com.particeep.api.core._
 import com.particeep.api.models.imports.ImportResult
-import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.transaction._
 import com.particeep.api.utils.LangUtils
 import play.api.libs.Files.TemporaryFile
@@ -51,9 +51,10 @@ class TransactionClient(val ws: WSClient, val credentials: Option[ApiCredential]
     ws.url(s"$endPoint/$id", timeout).post(Json.toJson(transaction_edition)).map(parse[Transaction])
   }
 
-  def search(criteria: TransactionSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionData]]] = {
+  def search(criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionData]]] = {
     ws.url(s"$endPoint/search", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[TransactionData]])
   }
