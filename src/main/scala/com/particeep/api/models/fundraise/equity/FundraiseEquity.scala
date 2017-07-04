@@ -28,7 +28,7 @@ case class FundraiseEquity(
   status:              FundraiseStatus       = INIT,
   score:               Option[String]        = None,
   tag:                 Option[String]        = None,
-  restricted_to_group: Option[String]        = None,
+  private_group_id:    Option[String]        = None,
   offer:               EquityOffer           = EquityOffer()
 )
 
