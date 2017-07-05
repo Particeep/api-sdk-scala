@@ -22,6 +22,7 @@ object ClubDealClient {
   private implicit val edition_format = DealGroupEdition.format
   private implicit val member_format = DealGroupMember.format
   private implicit val member_creation_format = DealGroupMemberCreation.format
+  private implicit val email_list_format = EmailList.format
 }
 
 class ClubDealClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
@@ -52,7 +53,7 @@ class ClubDealClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
     ws.url(s"$endPoint/$id/members", timeout).post(Json.toJson(deal_group_members)).map(parse[Seq[DealGroupMember]])
   }
 
-  def removeMembers(id: String, emails: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[DealGroupMember]]] = {
+  def removeMembers(id: String, emails: EmailList, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[DealGroupMember]]] = {
     ws.url(s"$endPoint/$id/members", timeout).withMethod("DELETE").withBody(Json.toJson(emails)).execute().map(parse[Seq[DealGroupMember]])
   }
 
