@@ -98,7 +98,7 @@ class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
   }
 
   def udpatePossibility(id: String, possibility_edition: PossibilityEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Possibility]] = {
-    ws.url(s"$endPoint/question/$id").post(Json.toJson(possibility_edition)).map(parse[Possibility])
+    ws.url(s"$endPoint/possibility/$id").post(Json.toJson(possibility_edition)).map(parse[Possibility])
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Form]] = {
