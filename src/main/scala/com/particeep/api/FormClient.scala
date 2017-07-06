@@ -65,8 +65,8 @@ class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
     ws.url(s"$endPoint/$id/$user_id/$tag", timeout).get().map(parse[FormDeep])
   }
 
-  def create(form_creation: FormCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FormDeep]] = {
-    ws.url(s"$endPoint", timeout).put(Json.toJson(form_creation)).map(parse[FormDeep])
+  def create(form_creation: FormCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Form]] = {
+    ws.url(s"$endPoint", timeout).put(Json.toJson(form_creation)).map(parse[Form])
   }
 
   def createSection(section_creation: SectionCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Section]] = {
