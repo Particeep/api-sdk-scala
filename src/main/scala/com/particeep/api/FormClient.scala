@@ -5,7 +5,7 @@ import com.particeep.api.models.ErrorResult
 import com.particeep.api.models.form.creation._
 import com.particeep.api.models.form.edition.{ FormEdition, PossibilityEdition, QuestionEdition, SectionEdition }
 import com.particeep.api.models.form.edition_deep.FormEditionDeep
-import com.particeep.api.models.form.get.{ Form, Possibility, Question, Section }
+import com.particeep.api.models.form.get._
 import com.particeep.api.models.form.get_deep._
 import play.api.libs.json.Json
 
@@ -40,7 +40,7 @@ object FormClient {
   private implicit val format_possibility_creation = PossibilityCreation.format
   private implicit val format_possibility_edition = PossibilityEdition.format
 
-  private implicit val format_answer = AnswerDeep.format
+  private implicit val format_answer = Answer.format
   private implicit val format_answer_creation = AnswerCreation.format
   private implicit val format_tagged_answer_creation = AnswerCreationWithTag.format
 }
@@ -117,11 +117,11 @@ class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
     ws.url(s"$endPoint/possibility/$id").delete().map(parse[Possibility])
   }
 
-  def answer(user_id: String, answer_creations: Seq[AnswerCreation], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[AnswerDeep]]] = {
-    ws.url(s"$endPoint/answer/$user_id").put(Json.toJson(answer_creations)).map(parse[Seq[AnswerDeep]])
+  def answer(user_id: String, answer_creations: Seq[AnswerCreation], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[Answer]]] = {
+    ws.url(s"$endPoint/answer/$user_id").put(Json.toJson(answer_creations)).map(parse[Seq[Answer]])
   }
 
-  def addTaggedAnswers(user_id: String, tagged_answer_creation: AnswerCreationWithTag, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[AnswerDeep]]] = {
-    ws.url(s"$endPoint/tagged-answer/$user_id").put(Json.toJson(tagged_answer_creation)).map(parse[Seq[AnswerDeep]])
+  def addTaggedAnswers(user_id: String, tagged_answer_creation: AnswerCreationWithTag, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[Answer]]] = {
+    ws.url(s"$endPoint/tagged-answer/$user_id").put(Json.toJson(tagged_answer_creation)).map(parse[Seq[Answer]])
   }
 }
