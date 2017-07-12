@@ -38,6 +38,7 @@ object FundraiseLoanClient {
 }
 
 class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+  implicit val repayment_detail_format = RepaymentDetail.format
 
   import FundraiseLoanClient._
 
@@ -112,6 +113,10 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
 
   def getBorrowerRepaymentSchedule(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
     ws.url(s"$endPoint/fundraise/$id/info/borrower", timeout).post(Results.EmptyContent()).map(parse[List[RepaymentWithDate]])
+  }
+
+  def getBorrowerRepaymentScheduleDetail(id: String, payment_month: Int, payment_year: Int, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[RepaymentDetail]]] = {
+    ws.url(s"$endPoint/fundraise/$id/detail/borrower/$payment_month/$payment_year").get().map(parse[List[RepaymentDetail]])
   }
 
   def generateRepaymentSchedule(
