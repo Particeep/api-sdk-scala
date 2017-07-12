@@ -115,8 +115,8 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     ws.url(s"$endPoint/fundraise/$id/info/borrower", timeout).post(Results.EmptyContent()).map(parse[List[RepaymentWithDate]])
   }
 
-  def getBorrowerRepaymentScheduleDetail(id: String, payment_month: Int, payment_year: Int, timeout: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, List[RepaymentDetail]]] = {
-    ws.url(s"$endPoint/fundraise/$id/detail/borrower/$payment_month/$payment_year").get().map(parse[List[RepaymentDetail]])
+  def getBorrowerRepaymentScheduleDetail(id: String, payment_month: Int, payment_year: Int, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentDetail]]] = {
+    ws.url(s"$endPoint/fundraise/$id/detail/borrower/$payment_month/$payment_year", timeout).get().map(parse[List[RepaymentDetail]])
   }
 
   def generateRepaymentSchedule(
