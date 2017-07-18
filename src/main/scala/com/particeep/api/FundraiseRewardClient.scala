@@ -3,10 +3,12 @@ package com.particeep.api
 import com.particeep.api.core._
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.fundraise.reward._
+import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
+import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.mvc.Results
+import play.api.mvc.{ MultipartFormData, Results }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -19,6 +21,7 @@ trait FundraiseRewardCapability {
 
 object FundraiseRewardClient {
   private val endPoint: String = "/reward"
+  private val endPoint_import: String = "/import"
   private implicit val format = FundraiseReward.format
   private implicit val creation_format = FundraiseRewardCreation.format
   private implicit val edition_format = FundraiseRewardEdition.format
@@ -30,6 +33,7 @@ object FundraiseRewardClient {
   private implicit val backing_format = Backing.format
   private implicit val donation_format = TransactionInfo.format
   private implicit val transaction_format = Transaction.format
+  private implicit val importResultFormat = ImportResult.format
 }
 
 /**
@@ -131,5 +135,9 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
 
   def buyReward(fundraise_id: String, reward_id: String, user_id: String, transaction_info: TransactionInfo, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
     ws.url(s"$endPoint/fundraise/$fundraise_id/reward/$reward_id/buy/$user_id", timeout).put(Json.toJson(transaction_info)).map(parse[Transaction])
+  }
+
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult]] = {
+    ws.postFile(s"$endPoint_import/fundraise-reward/csv", csv, List(), timeout).map(parse[ImportResult])
   }
 }
