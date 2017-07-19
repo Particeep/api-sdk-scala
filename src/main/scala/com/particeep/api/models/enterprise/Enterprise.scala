@@ -15,6 +15,7 @@ case class Enterprise(
   legal_status:      Option[String]        = None,
   description_short: Option[String]        = None,
   description_long:  Option[String]        = None,
+  share_price:       Option[Int]           = None,
   url:               Option[String]        = None,
   logo_url:          Option[String]        = None,
   image_cover_url:   Option[String]        = None,
