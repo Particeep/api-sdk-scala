@@ -68,6 +68,13 @@ class WalletClient(val ws: WSClient, val credentials: Option[ApiCredential] = No
       .map(parse[PaginatedSequence[TransactionWallet]])
   }
 
+  def search(criteria: TransactionWalletSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionWallet]]] = {
+    ws.url(s"$endPoint/transactions/search", timeout)
+      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .get
+      .map(parse[PaginatedSequence[TransactionWallet]])
+  }
+
   def addBankAccount(id: String, bank_account_creation: BankAccountCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, BankAccount]] = {
     ws.url(s"$endPoint/$id/bankaccount", timeout).put(Json.toJson(bank_account_creation)).map(parse[BankAccount])
   }
