@@ -13,12 +13,10 @@ case class TransactionWalletSearch(
   debited_amount_min: Option[Int]           = None,
   debited_amount_max: Option[Int]           = None,
   credited_amount:    Option[Int]           = None,
-  createdAfter:       Option[ZonedDateTime] = None,
-  createdBefore:      Option[ZonedDateTime] = None,
+  created_after:      Option[ZonedDateTime] = None,
+  created_before:     Option[ZonedDateTime] = None,
   currency:           Option[String]        = None,
   fees:               Option[Int]           = None,
   status:             Option[String]        = None,
-  tag:                Option[String]        = None,
-  limit:              Option[Int]           = None,
-  offset:             Option[Int]           = None
+  tag:                Option[String]        = None
 )
