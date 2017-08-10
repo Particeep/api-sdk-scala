@@ -5,13 +5,13 @@ import com.particeep.api.models.form.edition_deep
 import play.api.libs.json.Json
 
 case class QuestionEditionDeep(
-  id:            Option[String],
-  label:         Option[String],
-  possibility_id_dep: Option[String]       = None,
-  question_type: Option[QuestionType],
-  required:      Option[Boolean],
-  index:         Option[Int],
-  possibilities: Option[Seq[edition_deep.PossibilityEditionDeep]]
+  id:                 Option[String],
+  label:              Option[String],
+  possibility_id_dep: Option[String]                                   = None,
+  question_type:      Option[QuestionType],
+  required:           Option[Boolean],
+  index:              Option[Int],
+  possibilities:      Option[Seq[edition_deep.PossibilityEditionDeep]]
 )
 
 object QuestionEditionDeep {

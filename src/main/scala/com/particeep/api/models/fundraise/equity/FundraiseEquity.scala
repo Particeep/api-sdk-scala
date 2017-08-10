@@ -5,7 +5,7 @@ import java.time.ZonedDateTime
 import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.Currency.{ Currency, EUR }
 import com.particeep.api.models.enums.FundraiseStatus.{ FundraiseStatus, INIT }
-import play.api.libs.json.Json
+import org.cvogt.play.json.Jsonx
 
 case class FundraiseEquity(
   id:                  String                = "",
@@ -29,11 +29,12 @@ case class FundraiseEquity(
   score:               Option[String]        = None,
   tag:                 Option[String]        = None,
   restricted_to_group: Option[String]        = None,
+  private_group_id:    Option[String]        = None,
   offer:               EquityOffer           = EquityOffer()
 )
 
 object FundraiseEquity {
   implicit val date_format = Formatter.ZonedDateTimeWrites
   implicit lazy val equity_offer_format = EquityOffer.format
-  val format = Json.format[FundraiseEquity]
+  val format = Jsonx.formatCaseClass[FundraiseEquity]
 }
