@@ -1,4 +1,4 @@
-package com.particeep.api.models.form
+package com.particeep.api.models.form.creation
 
 import play.api.libs.json.Json
 

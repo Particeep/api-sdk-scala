@@ -1,9 +1,8 @@
-package com.particeep.api.models.form
+package com.particeep.api.models.form.edition
 
 import play.api.libs.json.Json
 
 case class PossibilityEdition(
-  id:     Option[String],
   label:  Option[String],
   index:  Option[Int],
   weight: Option[Int]

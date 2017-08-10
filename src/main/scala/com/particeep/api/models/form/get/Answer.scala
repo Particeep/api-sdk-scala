@@ -1,4 +1,4 @@
-package com.particeep.api.models.form
+package com.particeep.api.models.form.get
 
 import java.time.ZonedDateTime
 

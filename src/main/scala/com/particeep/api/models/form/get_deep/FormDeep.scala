@@ -1,20 +1,22 @@
-package com.particeep.api.models.form
+package com.particeep.api.models.form.get_deep
 
 import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
-case class SimpleForm(
+case class FormDeep(
   id:              String                = "",
   created_at:      Option[ZonedDateTime] = None,
   name:            Option[String]        = None,
   description:     Option[String]        = None,
   tag:             Option[String]        = None,
-  last_updated_at: Option[ZonedDateTime] = None
+  last_updated_at: Option[ZonedDateTime] = None,
+  sections:        Seq[SectionDeep]      = Seq()
 )
 
-object SimpleForm {
+object FormDeep {
   implicit val date_format = Formatter.ZonedDateTimeWrites
-  val format = Json.format[SimpleForm]
+  implicit val section_format = SectionDeep.format
+  val format = Json.format[FormDeep]
 }
