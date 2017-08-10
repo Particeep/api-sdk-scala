@@ -4,7 +4,7 @@ import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.Currency.Currency
-import org.cvogt.play.json.Jsonx
+import play.api.libs.json.Json
 
 case class FundraiseData(
   id:                String                = "",
@@ -28,11 +28,10 @@ case class FundraiseData(
   logo_url:          Option[String]        = None,
   image_cover_url:   Option[String]        = None,
   score:             Option[String]        = None,
-  visible:           Option[Boolean]       = None,
-  private_group_id:  Option[String]        = None
+  visible:           Option[Boolean]       = None
 )
 
 object FundraiseData {
   implicit val date_format = Formatter.ZonedDateTimeWrites
-  val format = Jsonx.formatCaseClass[FundraiseData]
+  val format = Json.format[FundraiseData]
 }

@@ -1,4 +1,4 @@
-package com.particeep.api.models.form
+package com.particeep.api.models.form.get
 
 import java.time.ZonedDateTime
 
@@ -11,12 +11,10 @@ case class Form(
   name:            Option[String]        = None,
   description:     Option[String]        = None,
   tag:             Option[String]        = None,
-  last_updated_at: Option[ZonedDateTime] = None,
-  sections:        Seq[Section]          = Seq()
+  last_updated_at: Option[ZonedDateTime] = None
 )
 
 object Form {
   implicit val date_format = Formatter.ZonedDateTimeWrites
-  implicit val section_format = Section.format
   val format = Json.format[Form]
 }
