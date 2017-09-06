@@ -1,8 +1,9 @@
 package com.particeep.api
 
 import com.particeep.api.core._
-import com.particeep.api.models.ErrorResult
-import com.particeep.api.models.role.{ RoleCreation, Roles }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.role.{ RoleCreation, RoleSearch, Roles }
+import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -42,5 +43,12 @@ class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   def hasRole(user_id: String, role: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Boolean]] = {
     allByUser(user_id).map(result => result.right.map(roles => roles.roles.map(_.role_name).contains(role)))
+  }
+
+  def search(criteria: RoleSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Roles]]] = {
+    ws.url(s"$endPoint/search", timeout)
+      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .get
+      .map(parse[PaginatedSequence[Roles]])
   }
 }
