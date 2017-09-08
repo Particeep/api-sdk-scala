@@ -6,7 +6,7 @@ import com.particeep.api.core.Formatter
 import com.particeep.api.models.Address
 import com.particeep.api.models.enums.Gender.Gender
 import com.particeep.api.models.enums.InvestorType.InvestorType
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 
 case class User(
   id:                       String                = "",
@@ -28,7 +28,9 @@ case class User(
   allow_mail_notifications: Option[Boolean]       = None,
   does_pay_taxes:           Option[Boolean]       = None,
   has_been_claimed:         Option[Boolean]       = None,
-  address:                  Option[Address]       = None
+  address:                  Option[Address]       = None,
+  tag:                      Option[String]        = None,
+  custom:                   Option[JsObject]      = None
 )
 
 object User {
