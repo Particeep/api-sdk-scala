@@ -11,6 +11,7 @@ case class LoanOfferEdition(
   rate:                 Option[Double]         = None,
   tax_rate:             Option[Double]         = None,
   amount_min:           Option[Int]            = None,
+  bond_price:           Option[Int]            = None,
   method:               Option[CalculatorType] = None,
   repayment_frequency:  Option[Int]            = None,
   repayment_start_date: Option[ZonedDateTime]  = None,
