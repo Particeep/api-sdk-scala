@@ -5,7 +5,7 @@ import com.particeep.api.models.wallet.CashInBankAccount
 import play.api.libs.json.Json
 
 case class PayResult(
-  transaction:  Option[Transaction]       = None,
+  transaction:  Transaction,
   payment_url:  Option[String]            = None,
   bank_account: Option[CashInBankAccount] = None
 )
