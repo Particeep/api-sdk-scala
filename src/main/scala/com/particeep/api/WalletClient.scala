@@ -62,7 +62,7 @@ class WalletClient(val ws: WSClient, val credentials: Option[ApiCredential] = No
   }
 
   def allRelatedTransactions(id: String, criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionWallet]]] = {
-    ws.url(s"$endPoint/transactions/$id", timeout)
+    ws.url(s"$endPoint/$id/transactions", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[TransactionWallet]])
