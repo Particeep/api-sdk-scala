@@ -26,7 +26,8 @@ case class TransactionSearch(
   handled_offline:  Option[Boolean]       = None,
   comment:          Option[String]        = None,
   signature_id:     Option[String]        = None,
-  signature_status: Option[String]        = None
+  signature_status: Option[String]        = None,
+  targeting_roles:  Option[String]        = None
 )
 
 object TransactionSearch {
