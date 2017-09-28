@@ -25,7 +25,7 @@ object TransactionClient {
   private implicit val creationFormat = TransactionCreation.format
   private implicit val editionFormat = TransactionEdition.format
   private implicit val transactionDataFormat = TransactionData.format
-  private implicit val importResultReads = ImportResult.reads[Transaction]
+  private implicit val importResultReads = ImportResult.format[Transaction]
 }
 
 class TransactionClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
