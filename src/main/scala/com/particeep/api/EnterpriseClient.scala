@@ -27,7 +27,7 @@ object EnterpriseClient {
   private implicit val manager_link_format = ManagerLink.format
   private implicit val manager_creation_format = ManagerCreation.format
   private implicit val nb_enterprises_by_activity_domain_format = NbEnterprisesByActivityDomain.format
-  private implicit val importResultFormat = ImportResult.format
+  private implicit val importResultReads = ImportResult.reads[Enterprise]
 
 }
 
@@ -85,7 +85,7 @@ class EnterpriseClient(val ws: WSClient, val credentials: Option[ApiCredential] 
     ws.url(s"$endPoint/info/activity/domain", timeout).get().map(parse[Seq[NbEnterprisesByActivityDomain]])
   }
 
-  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult]] = {
-    ws.postFile(s"$endPoint_import/enterprise/csv", csv, List(), timeout).map(parse[ImportResult])
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[Enterprise]]] = {
+    ws.postFile(s"$endPoint_import/enterprise/csv", csv, List(), timeout).map(parse[ImportResult[Enterprise]])
   }
 }
