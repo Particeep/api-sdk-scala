@@ -29,7 +29,8 @@ case class FundraiseData(
   image_cover_url:   Option[String]        = None,
   score:             Option[String]        = None,
   visible:           Option[Boolean]       = None,
-  private_group_id:  Option[String]        = None
+  private_group_id:  Option[String]        = None,
+  targeting_roles:   Option[String]        = None
 )
 
 object FundraiseData {

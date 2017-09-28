@@ -33,6 +33,7 @@ case class TransactionData(
   comment:            Option[String]        = None,
   signature_id:       Option[String]        = None,
   signature_status:   Option[String]        = None,
+  targeting_roles:    Option[String]        = None,
   tag:                Option[String]        = None
 )
 

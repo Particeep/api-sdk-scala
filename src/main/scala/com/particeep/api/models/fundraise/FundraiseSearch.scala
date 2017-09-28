@@ -24,6 +24,7 @@ case class FundraiseSearch(
   percentage_completion_max: Option[Int]           = None,
   score:                     Option[String]        = None,
   private_group_id:          Option[String]        = None,
+  targeting_roles:           Option[String]        = None,
   tag:                       Option[String]        = None
 )
 
