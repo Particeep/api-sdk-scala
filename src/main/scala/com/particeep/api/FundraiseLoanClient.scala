@@ -34,7 +34,7 @@ object FundraiseLoanClient {
   private implicit val transaction_format = Transaction.format
   private implicit val lend_creation_format = LendCreation.format
   private implicit val estimate_borrower_info_format = EstimateBorrowerInfo.format
-  private implicit val importResultFormat = ImportResult.format
+  private implicit val importResultReads = ImportResult.reads[FundraiseLoan]
 }
 
 class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
@@ -165,7 +165,7 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     ws.url(s"$endPoint/fundraise/$id/lend", timeout).post(Json.toJson(lend_creation)).map(parse[Transaction])
   }
 
-  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult]] = {
-    ws.postFile(s"$endPoint_import/fundraise-loan/csv", csv, List(), timeout).map(parse[ImportResult])
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[FundraiseLoan]]] = {
+    ws.postFile(s"$endPoint_import/fundraise-loan/csv", csv, List(), timeout).map(parse[ImportResult[FundraiseLoan]])
   }
 }

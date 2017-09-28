@@ -27,7 +27,7 @@ object UserClient {
   private implicit val creation_format = UserCreation.format
   private implicit val edition_format = UserEdition.format
   private implicit val data_format = UserData.format
-  private implicit val importResultFormat = ImportResult.format
+  private implicit val importResultReads = ImportResult.reads[User]
 
   private case class ChangePassword(old_password: Option[String], new_password: String)
   private implicit val change_password_format = Json.format[ChangePassword]
@@ -94,8 +94,8 @@ class UserClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
     ws.url(s"$endPoint/$id", timeout).delete().map(parse[User])
   }
 
-  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult]] = {
-    ws.postFile(s"$endPoint_import/user/csv", csv, List(), timeout).map(parse[ImportResult])
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[User]]] = {
+    ws.postFile(s"$endPoint_import/user/csv", csv, List(), timeout).map(parse[ImportResult[User]])
   }
 
 }
