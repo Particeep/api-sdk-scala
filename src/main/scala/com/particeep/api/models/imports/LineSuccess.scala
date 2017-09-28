@@ -11,10 +11,14 @@ case class LineSuccess[T](
 )
 
 object LineSuccess {
-  def reads[T](implicit fmt: Format[T]): Reads[LineSuccess[T]] = new Reads[LineSuccess[T]] {
+  def format[T](implicit fmt: Format[T]): Format[LineSuccess[T]] = new Format[LineSuccess[T]] {
     def reads(json: JsValue): JsResult[LineSuccess[T]] = JsSuccess(new LineSuccess[T](
       (json \ "line").as[Int],
       (json \ "success").as[T]
+    ))
+    def writes(l: LineSuccess[T]) = JsObject(Seq(
+      "line" -> JsNumber(l.line),
+      "success" -> Json.toJson(l.success)
     ))
   }
 }
