@@ -25,7 +25,7 @@ object TransactionClient {
   private implicit val creationFormat = TransactionCreation.format
   private implicit val editionFormat = TransactionEdition.format
   private implicit val transactionDataFormat = TransactionData.format
-  private implicit val importResultFormat = ImportResult.format
+  private implicit val importResultReads = ImportResult.reads[Transaction]
 }
 
 class TransactionClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
@@ -63,7 +63,7 @@ class TransactionClient(val ws: WSClient, val credentials: Option[ApiCredential]
     ws.url(s"$endPoint/$id/cancel", timeout).delete().map(parse[Transaction])
   }
 
-  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult]] = {
-    ws.postFile(s"$endPoint_import/transaction/csv", csv, List(), timeout).map(parse[ImportResult])
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[Transaction]]] = {
+    ws.postFile(s"$endPoint_import/transaction/csv", csv, List(), timeout).map(parse[ImportResult[Transaction]])
   }
 }

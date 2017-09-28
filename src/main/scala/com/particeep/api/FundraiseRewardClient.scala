@@ -33,7 +33,7 @@ object FundraiseRewardClient {
   private implicit val backing_format = Backing.format
   private implicit val donation_format = TransactionInfo.format
   private implicit val transaction_format = Transaction.format
-  private implicit val importResultFormat = ImportResult.format
+  private implicit val importResultReads = ImportResult.reads[FundraiseReward]
 }
 
 /**
@@ -137,7 +137,7 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.url(s"$endPoint/fundraise/$fundraise_id/reward/$reward_id/buy/$user_id", timeout).put(Json.toJson(transaction_info)).map(parse[Transaction])
   }
 
-  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult]] = {
-    ws.postFile(s"$endPoint_import/fundraise-reward/csv", csv, List(), timeout).map(parse[ImportResult])
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[FundraiseReward]]] = {
+    ws.postFile(s"$endPoint_import/fundraise-reward/csv", csv, List(), timeout).map(parse[ImportResult[FundraiseReward]])
   }
 }
