@@ -29,7 +29,8 @@ case class UserData(
   wallet_updated_at: Option[ZonedDateTime] = None,
   wallet_type:       Option[String]        = None,
   status:            Option[String]        = None,
-  roles:             Option[String]        = None
+  roles:             Option[String]        = None,
+  targeting_roles:   Option[String]        = None
 )
 
 object UserData {
