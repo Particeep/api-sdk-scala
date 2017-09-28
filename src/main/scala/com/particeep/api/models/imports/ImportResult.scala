@@ -15,14 +15,21 @@ case class ImportResult[T](
 
 object ImportResult {
   implicit val line_error_format = LineError.format
-  implicit def line_success_reads[T](implicit fmt: Format[T]) = LineSuccess.reads[T]
-  def reads[T](implicit fmt: Format[T]): Reads[ImportResult[T]] = new Reads[ImportResult[T]] {
+  implicit def line_success_format[T](implicit fmt: Format[T]) = LineSuccess.format[T]
+  def format[T](implicit fmt: Format[T]): Reads[ImportResult[T]] = new Format[ImportResult[T]] {
     def reads(json: JsValue): JsResult[ImportResult[T]] = JsSuccess(new ImportResult[T](
       (json \ "lineTreated").as[Int],
       (json \ "nbCreated").as[Int],
       (json \ "nbFail").as[Int],
       (json \ "lineWithError").as[List[LineError]],
       (json \ "lineOnSuccess").as[List[LineSuccess[T]]]
+    ))
+    def writes(ir: ImportResult[T]) = JsObject(Seq(
+      "lineTreated" -> JsNumber(ir.lineTreated),
+      "nbCreated" -> JsNumber(ir.nbCreated),
+      "nbFail" -> JsNumber(ir.nbFail),
+      "lineWithError" -> Json.toJson(ir.lineWithError),
+      "lineOnSuccess" -> Json.toJson(ir.lineOnSuccess)
     ))
   }
 }

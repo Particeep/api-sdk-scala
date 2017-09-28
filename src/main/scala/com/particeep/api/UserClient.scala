@@ -27,7 +27,7 @@ object UserClient {
   private implicit val creation_format = UserCreation.format
   private implicit val edition_format = UserEdition.format
   private implicit val data_format = UserData.format
-  private implicit val importResultReads = ImportResult.reads[User]
+  private implicit val importResultReads = ImportResult.format[User]
 
   private case class ChangePassword(old_password: Option[String], new_password: String)
   private implicit val change_password_format = Json.format[ChangePassword]

@@ -27,7 +27,7 @@ object EnterpriseClient {
   private implicit val manager_link_format = ManagerLink.format
   private implicit val manager_creation_format = ManagerCreation.format
   private implicit val nb_enterprises_by_activity_domain_format = NbEnterprisesByActivityDomain.format
-  private implicit val importResultReads = ImportResult.reads[Enterprise]
+  private implicit val importResultReads = ImportResult.format[Enterprise]
 
 }
 

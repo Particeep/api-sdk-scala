@@ -33,7 +33,7 @@ object FundraiseRewardClient {
   private implicit val backing_format = Backing.format
   private implicit val donation_format = TransactionInfo.format
   private implicit val transaction_format = Transaction.format
-  private implicit val importResultReads = ImportResult.reads[FundraiseReward]
+  private implicit val importResultReads = ImportResult.format[FundraiseReward]
 }
 
 /**

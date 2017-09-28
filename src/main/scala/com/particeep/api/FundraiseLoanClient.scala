@@ -34,7 +34,7 @@ object FundraiseLoanClient {
   private implicit val transaction_format = Transaction.format
   private implicit val lend_creation_format = LendCreation.format
   private implicit val estimate_borrower_info_format = EstimateBorrowerInfo.format
-  private implicit val importResultReads = ImportResult.reads[FundraiseLoan]
+  private implicit val importResultReads = ImportResult.format[FundraiseLoan]
 }
 
 class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
