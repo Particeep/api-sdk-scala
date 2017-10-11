@@ -4,6 +4,7 @@ import java.time.{ ZoneOffset, ZonedDateTime }
 
 import scala.language.postfixOps
 import com.particeep.api.core.ApiClient
+import com.particeep.api.core.Formatter
 import com.particeep.api.models.ErrorResult
 import com.particeep.api.models.user.User
 import com.particeep.api.Info
@@ -55,5 +56,12 @@ class ParticeepTest extends FlatSpec with Matchers {
         """.stripMargin)
 
     Json.prettyPrint(json) shouldBe Json.prettyPrint(result)
+  }
+
+  "the api client" should "format a date in ISO with UTC Zone" in {
+    val date: ZonedDateTime = ZonedDateTime.of(2017, 12, 12, 8, 2, 3, 0, ZoneOffset.of("+03:00"))
+    val json = Formatter.ZonedDateTimeWrites.writes(date).toString()
+
+    json shouldBe "\"2017-12-12T05:02:03Z\""
   }
 }
