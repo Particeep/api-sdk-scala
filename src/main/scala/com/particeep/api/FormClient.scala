@@ -3,13 +3,14 @@ package com.particeep.api
 import com.particeep.api.core._
 import com.particeep.api.models.ErrorResult
 import com.particeep.api.models.form.creation._
-import com.particeep.api.models.form.edition.{ FormEdition, PossibilityEdition, QuestionEdition, SectionEdition }
+import com.particeep.api.models.form.edition.{FormEdition, PossibilityEdition, QuestionEdition, SectionEdition}
 import com.particeep.api.models.form.edition_deep.FormEditionDeep
 import com.particeep.api.models.form.get._
 import com.particeep.api.models.form.get_deep._
 import play.api.libs.json.Json
+import play.api.mvc.Results
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait FormCapability {
   self: WSClient =>
@@ -99,6 +100,10 @@ class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   def udpatePossibility(id: String, possibility_edition: PossibilityEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Possibility]] = {
     ws.url(s"$endPoint/possibility/$id").post(Json.toJson(possibility_edition)).map(parse[Possibility])
+  }
+
+  def moveQuestion(id: String, index: Int, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Question]] = {
+    ws.url(s"$endPoint/question/move/$id/$index").post(Results.EmptyContent()).map(parse[Question])
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Form]] = {
