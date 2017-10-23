@@ -63,6 +63,10 @@ class TransactionClient(val ws: WSClient, val credentials: Option[ApiCredential]
     ws.url(s"$endPoint/$id/cancel", timeout).delete().map(parse[Transaction])
   }
 
+  def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
+    ws.url(s"$endPoint/$id", timeout).delete().map(parse[Transaction])
+  }
+
   def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[Transaction]]] = {
     ws.postFile(s"$endPoint_import/transaction/csv", csv, List(), timeout).map(parse[ImportResult[Transaction]])
   }
