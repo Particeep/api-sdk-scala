@@ -102,10 +102,6 @@ class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
     ws.url(s"$endPoint/possibility/$id").post(Json.toJson(possibility_edition)).map(parse[Possibility])
   }
 
-  def moveQuestion(id: String, index: Int, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Question]] = {
-    ws.url(s"$endPoint/question/move/$id/$index").post(Results.EmptyContent()).map(parse[Question])
-  }
-
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Form]] = {
     ws.url(s"$endPoint/$id").delete().map(parse[Form])
   }
