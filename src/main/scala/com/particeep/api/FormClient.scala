@@ -3,13 +3,14 @@ package com.particeep.api
 import com.particeep.api.core._
 import com.particeep.api.models.ErrorResult
 import com.particeep.api.models.form.creation._
-import com.particeep.api.models.form.edition.{ FormEdition, PossibilityEdition, QuestionEdition, SectionEdition }
+import com.particeep.api.models.form.edition.{FormEdition, PossibilityEdition, QuestionEdition, SectionEdition}
 import com.particeep.api.models.form.edition_deep.FormEditionDeep
 import com.particeep.api.models.form.get._
 import com.particeep.api.models.form.get_deep._
 import play.api.libs.json.Json
+import play.api.mvc.Results
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait FormCapability {
   self: WSClient =>
