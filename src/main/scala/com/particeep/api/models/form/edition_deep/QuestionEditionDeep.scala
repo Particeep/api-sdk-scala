@@ -11,6 +11,7 @@ case class QuestionEditionDeep(
   question_type:      Option[QuestionType],
   required:           Option[Boolean],
   index:              Option[Int],
+  pattern:            Option[String]                                   = None,
   possibilities:      Option[Seq[edition_deep.PossibilityEditionDeep]]
 )
 

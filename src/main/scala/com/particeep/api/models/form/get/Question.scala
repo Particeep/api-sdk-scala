@@ -13,6 +13,7 @@ case class Question(
   label:              Option[String]        = None,
   possibility_id_dep: Option[String]        = None,
   question_type:      Option[QuestionType]  = None,
+  pattern:            Option[String]        = None,
   required:           Boolean               = false,
   index:              Option[Int]           = None
 )
