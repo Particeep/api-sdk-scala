@@ -37,8 +37,8 @@ class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
     ws.url(s"$endPoint/$user_id/add/${role.toLowerCase}", timeout).put(Json.toJson(role_creation)).map(parse[Roles])
   }
 
-  def remove(user_id: String, role: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
-    ws.url(s"$endPoint/$user_id/remove/${role.toLowerCase}", timeout).delete().map(parse[Roles])
+  def remove(user_id: String, role: String, target_id: Option[String] = None, target_type: Option[String] = None, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
+    ws.url(s"$endPoint/$user_id/remove/${role.toLowerCase}${target_id.map(ti => s"/$ti").getOrElse("")}${target_type.map(tt => s"/$tt").getOrElse("")}", timeout).delete().map(parse[Roles])
   }
 
   def hasRole(user_id: String, role: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Boolean]] = {
