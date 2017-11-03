@@ -1,6 +1,6 @@
 # Particeep API Client for Scala
 
-You can sign up for a Particeep account at https://setup.particeep.com
+You can sign up for a Particeep account at https://admin.particeep.com
 
 ## Requirements
 
