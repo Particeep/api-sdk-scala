@@ -10,7 +10,9 @@ case class Repayment(
   interest:               Int,
   taxes:                  Int,
   amount:                 Int,
-  capital_remains_to_pay: Int
+  capital_remains_to_pay: Int,
+  fees:                   Int,
+  is_paid:                Boolean
 )
 
 case class RepaymentWithDate(
