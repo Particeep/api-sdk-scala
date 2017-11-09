@@ -3,7 +3,7 @@ package com.particeep.api.models.document
 import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 
 /**
  * Created by Noe on 04/01/2017.
@@ -20,7 +20,9 @@ case class Document(
   path:         String                = "",
   doc_type:     String                = "",
   locked:       Boolean               = false,
-  permalink:    Option[String]        = None
+  permalink:    Option[String]        = None,
+  tag:          Option[String]        = None,
+  custom:       Option[JsObject]      = None
 )
 
 object Document {
