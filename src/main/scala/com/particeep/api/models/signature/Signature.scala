@@ -1,22 +1,27 @@
 package com.particeep.api.models.signature
 
+import java.time.ZonedDateTime
+
+import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class Signature(
-  id:            String         = "",
+  id:            String                = "",
+  created_at:    Option[ZonedDateTime] = None,
   language:      String,
   fileUrl:       String,
-  fileToSignUrl: Option[String] = None,
+  fileToSignUrl: Option[String]        = None,
   fileName:      String,
-  status:        Option[String] = None,
-  external_id:   Option[String] = None,
+  status:        Option[String]        = None,
+  external_id:   Option[String]        = None,
   firstName:     String,
   lastName:      String,
   email:         String,
   phone:         String,
-  signedFileUrl: Option[String] = None
+  signedFileUrl: Option[String]        = None
 )
 
 object Signature {
+  implicit val date_format = Formatter.ZonedDateTimeWrites
   val format = Json.format[Signature]
 }
