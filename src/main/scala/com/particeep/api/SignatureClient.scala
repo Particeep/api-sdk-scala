@@ -1,7 +1,7 @@
 package com.particeep.api
 
 import com.particeep.api.core._
-import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.signature.{ Signature, SignatureCreation, SignatureSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
@@ -42,9 +42,14 @@ class SignatureClient(val ws: WSClient, val credentials: Option[ApiCredential] =
       .map(parse[List[Signature]])
   }
 
-  def search(criteria: SignatureSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Signature]]] = {
+  def search(
+    criteria:       SignatureSearch,
+    table_criteria: TableSearch,
+    timeout:        Long            = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Signature]]] = {
     ws.url(s"$endPoint/search", timeout)
       .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[Signature]])
   }
