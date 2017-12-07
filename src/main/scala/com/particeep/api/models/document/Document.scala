@@ -19,6 +19,7 @@ case class Document(
   content_type: Option[String]        = None,
   path:         String                = "",
   doc_type:     String                = "",
+  folder_id:    Option[String]        = None,
   locked:       Boolean               = false,
   permalink:    Option[String]        = None,
   tag:          Option[String]        = None,
