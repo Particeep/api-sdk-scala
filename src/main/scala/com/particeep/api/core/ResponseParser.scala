@@ -3,20 +3,25 @@ package com.particeep.api.core
 import com.ning.http.client.Response
 import org.slf4j.LoggerFactory
 import play.api.libs.json._
-import play.api.libs.ws.WSResponse
 
 import scala.compat.Platform
 import scala.util.control.NonFatal
 import com.particeep.api.models._
+import play.api.libs.ws._
 
-trait ResponseParser {
+trait ResponseParser extends DefaultBodyWritables
+    with DefaultBodyReadables
+    with JsonBodyReadables
+    with JsonBodyWritables {
 
   import com.particeep.api.models.Errors._
 
+  protected val EmptyContent: Array[Byte] = Array[Byte]()
+
   private[this] final lazy val log = LoggerFactory.getLogger(this.getClass)
 
-  def parse[A](response: WSResponse)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
-    parse(response.json, response.status)(json_reads)
+  def parse[A](response: StandaloneWSResponse)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
+    parse(response.body[JsValue], response.status)(json_reads)
   }
 
   def parse[A](response: Response)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {

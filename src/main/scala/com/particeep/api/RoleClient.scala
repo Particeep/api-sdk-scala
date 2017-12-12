@@ -40,7 +40,7 @@ class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
   private[this] case class TargetInfo(target_id: Option[String], target_type: Option[String])
   def remove(user_id: String, role: String, target_id: Option[String] = None, target_type: Option[String] = None, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
     ws.url(s"$endPoint/$user_id/remove/${role.toLowerCase}", timeout)
-      .withQueryString(LangUtils.productToQueryString(TargetInfo(target_id, target_type)): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(TargetInfo(target_id, target_type)): _*)
       .delete()
       .map(parse[Roles])
   }
@@ -51,7 +51,7 @@ class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   def search(criteria: RoleSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Roles]]] = {
     ws.url(s"$endPoint/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[Roles]])
   }

@@ -9,11 +9,14 @@ resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases
 // Change this to another test framework if you prefer
 libraryDependencies ++= Seq(
   "org.scalatest"     %% "scalatest"                       % "2.2.4"  % "test" withSources(),
-  "com.typesafe.play" %% "play-ws"                         % "2.4.8"           withSources() exclude("com.ning", "async-http-client"),
+  "com.typesafe.akka" %% "akka-testkit"                    % "2.4.20" % "test" withSources(),
+  //"com.typesafe.play" %% "play-ws"                         % "2.4.8"           withSources() exclude("com.ning", "async-http-client"),
+  "com.typesafe.play" %% "play-ahc-ws-standalone"          % "1.1.3"           withSources(),
+  "com.typesafe.play" %% "play-ws-standalone-json"         % "1.1.3"           withSources(),
   "com.ning"          %  "async-http-client"               % "1.9.40"          withSources(),
   "com.github.driox"  %% "sorus"                           % "1.0.0"           withSources(),
   "org.slf4j"         %  "slf4j-api"                       % "1.7.21"          withSources(),
-  "org.cvogt"         %% "play-json-extensions"            % "0.6.1"           withSources()
+  "ai.x"              %% "play-json-extensions"            % "0.10.0"          withSources()
 )
 
 // Uncomment to use Akka

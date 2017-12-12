@@ -5,7 +5,6 @@ import com.particeep.api.models._
 import com.particeep.api.models.club_deal._
 import com.particeep.api.core._
 import play.api.libs.json.Json
-import play.api.mvc.Results
 
 trait ClubDealCapability {
   self: WSClient =>
@@ -46,7 +45,7 @@ class ClubDealClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
   }
 
   def openDeal(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, DealGroup]] = {
-    ws.url(s"$endPoint/$id/open", timeout).post(Results.EmptyContent()).map(parse[DealGroup])
+    ws.url(s"$endPoint/$id/open", timeout).post(EmptyContent).map(parse[DealGroup])
   }
 
   def addMembers(id: String, deal_group_members: Seq[DealGroupMemberCreation], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[DealGroupMember]]] = {

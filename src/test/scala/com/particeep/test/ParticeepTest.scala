@@ -9,18 +9,18 @@ import com.particeep.api.models.ErrorResult
 import com.particeep.api.models.user.User
 import com.particeep.api.Info
 import com.particeep.api.InfoCapability
-import org.scalatest._
 import play.api.libs.json.Json
+import play.api.libs.ws.ahc.StandaloneAhcWSClient
 
 import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ParticeepTest extends FlatSpec with Matchers {
+class ParticeepTest extends BaseTest {
 
   "the api client" should "load info" in {
 
-    val ws = new ApiClient(ConfigTest.baseUrl, ConfigTest.version, Some(ConfigTest.credential)) with InfoCapability
+    val ws = new ApiClient(StandaloneAhcWSClient(), ConfigTest.baseUrl, ConfigTest.version, Some(ConfigTest.credential)) with InfoCapability
 
     val rez_f: Future[Either[ErrorResult, Info]] = ws.info.info()
 

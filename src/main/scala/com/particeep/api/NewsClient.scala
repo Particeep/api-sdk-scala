@@ -31,7 +31,7 @@ class NewsClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[News]]] = {
     ws.url(s"$endPoint", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
+      .addQueryStringParameters("ids" -> ids.mkString(","))
       .get()
       .map(parse[List[News]])
   }
@@ -54,7 +54,7 @@ class NewsClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   def search(criteria: NewsSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[News]]] = {
     ws.url(s"$endPoint/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[News]])
   }

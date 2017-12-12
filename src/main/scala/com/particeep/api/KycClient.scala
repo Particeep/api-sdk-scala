@@ -4,7 +4,6 @@ import com.particeep.api.core._
 import com.particeep.api.models.ErrorResult
 import com.particeep.api.models.kyc.{ KycCreation, KycGroup, KycsEdition }
 import play.api.libs.json.Json
-import play.api.mvc.Results
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -43,9 +42,9 @@ class KycClient(val ws: WSClient, val credentials: Option[ApiCredential] = None)
     val ws_url = ws.url(s"$endPoint/askValidation/owner/$owner_id/$owner_type", timeout)
 
     owner_ip.map(ip => {
-      ws_url.withQueryString("owner_ip" -> ip).post(Results.EmptyContent()).map(parse[List[KycGroup]])
+      ws_url.addQueryStringParameters("owner_ip" -> ip).post(EmptyContent).map(parse[List[KycGroup]])
     }).getOrElse(
-      ws_url.post(Results.EmptyContent()).map(parse[List[KycGroup]])
+      ws_url.post(EmptyContent).map(parse[List[KycGroup]])
     )
   }
 
@@ -62,7 +61,7 @@ class KycClient(val ws: WSClient, val credentials: Option[ApiCredential] = None)
     val ws_url = ws.url(s"$endPoint/cancel/owner/$owner_id/$owner_type", timeout)
 
     owner_ip.map(ip => {
-      ws_url.withQueryString("owner_ip" -> ip).delete().map(parse[List[KycGroup]])
+      ws_url.addQueryStringParameters("owner_ip" -> ip).delete().map(parse[List[KycGroup]])
     }).getOrElse(
       ws_url.delete().map(parse[List[KycGroup]])
     )

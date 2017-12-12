@@ -8,7 +8,7 @@ import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.mvc.{ MultipartFormData, Results }
+import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -49,13 +49,13 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
 
   def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FundraiseReward]]] = {
     ws.url(s"$endPoint/fundraise", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
+      .addQueryStringParameters("ids" -> ids.mkString(","))
       .get().map(parse[List[FundraiseReward]])
   }
 
   def search(criteria: FundraiseRewardSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseReward]]] = {
     ws.url(s"$endPoint/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
       .get().map(parse[PaginatedSequence[FundraiseReward]])
   }
 
@@ -76,23 +76,23 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
   }
 
   def submitToReview(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id/submit", timeout).post(Results.EmptyContent()).map(parse[FundraiseReward])
+    ws.url(s"$endPoint/fundraise/$id/submit", timeout).post(EmptyContent).map(parse[FundraiseReward])
   }
 
   def reject(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id/reject", timeout).post(Results.EmptyContent()).map(parse[FundraiseReward])
+    ws.url(s"$endPoint/fundraise/$id/reject", timeout).post(EmptyContent).map(parse[FundraiseReward])
   }
 
   def launch(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id/launch", timeout).post(Results.EmptyContent()).map(parse[FundraiseReward])
+    ws.url(s"$endPoint/fundraise/$id/launch", timeout).post(EmptyContent).map(parse[FundraiseReward])
   }
 
   def close(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id/close", timeout).post(Results.EmptyContent()).map(parse[FundraiseReward])
+    ws.url(s"$endPoint/fundraise/$id/close", timeout).post(EmptyContent).map(parse[FundraiseReward])
   }
 
   def refund(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id/refund", timeout).post(Results.EmptyContent()).map(parse[FundraiseReward])
+    ws.url(s"$endPoint/fundraise/$id/refund", timeout).post(EmptyContent).map(parse[FundraiseReward])
   }
 
   def addReward(fundraise_id: String, reward_creation: RewardCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Reward]] = {
@@ -113,8 +113,8 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
 
   def allBoughtRewardsByFundraise(fundraise_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backer]]] = {
     ws.url(s"$endPoint/fundraise/$fundraise_id/rewards/bought", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)
       .get().map(parse[PaginatedSequence[Backer]])
   }
 
@@ -124,8 +124,8 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
 
   def allBoughtRewardsByUser(user_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backing]]] = {
     ws.url(s"$endPoint/$user_id/rewards", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)
       .get().map(parse[PaginatedSequence[Backing]])
   }
 

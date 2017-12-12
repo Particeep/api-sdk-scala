@@ -63,15 +63,15 @@ class WalletClient(val ws: WSClient, val credentials: Option[ApiCredential] = No
 
   def allRelatedTransactions(id: String, criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionWallet]]] = {
     ws.url(s"$endPoint/$id/transactions", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[TransactionWallet]])
   }
 
   def search(criteria: TransactionWalletSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionWallet]]] = {
     ws.url(s"$endPoint/transactions/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[TransactionWallet]])
   }

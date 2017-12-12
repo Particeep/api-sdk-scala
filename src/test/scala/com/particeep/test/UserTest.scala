@@ -6,18 +6,18 @@ import com.particeep.api.core.ApiClient
 import com.particeep.api.models.ErrorResult
 import com.particeep.api.UserCapability
 import com.particeep.api.ParticeepApi
-import org.scalatest._
+import play.api.libs.ws.ahc.StandaloneAhcWSClient
 
 import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class UserTest extends FlatSpec with Matchers {
+class UserTest extends BaseTest {
 
   "the api client" should "load user by id with correct date format" in {
 
     val user_id = "bf5788e8-9756-4d18-8b0f-100d7fba17a2"
-    val ws = new ApiClient(ConfigTest.baseUrl, ConfigTest.version, Some(ConfigTest.credential)) with UserCapability
+    val ws = new ApiClient(StandaloneAhcWSClient(), ConfigTest.baseUrl, ConfigTest.version, Some(ConfigTest.credential)) with UserCapability
     val rez_f: Future[Either[ErrorResult, User]] = ws.user.byId(user_id)
 
     val rez = Await.result(rez_f, 10 seconds)
@@ -33,7 +33,7 @@ class UserTest extends FlatSpec with Matchers {
   "the api client" should "load user by id with direct credentials" in {
 
     val user_id = "bf5788e8-9756-4d18-8b0f-100d7fba17a2"
-    val ws = new ApiClient(ConfigTest.baseUrl, ConfigTest.version, Some(ConfigTest.credential)) with UserCapability
+    val ws = new ApiClient(StandaloneAhcWSClient(), ConfigTest.baseUrl, ConfigTest.version, Some(ConfigTest.credential)) with UserCapability
     val rez_f: Future[Either[ErrorResult, User]] = ws.user.byId(user_id)
 
     val rez = Await.result(rez_f, 10 seconds)
@@ -46,7 +46,7 @@ class UserTest extends FlatSpec with Matchers {
   "the api client" should "load user by id with custom credentials" in {
 
     val user_id = "bf5788e8-9756-4d18-8b0f-100d7fba17a2"
-    val ws = new ApiClient(ConfigTest.baseUrl, ConfigTest.version) with UserCapability
+    val ws = new ApiClient(StandaloneAhcWSClient(), ConfigTest.baseUrl, ConfigTest.version) with UserCapability
     val credentials = ConfigTest.credential
     val rez_f: Future[Either[ErrorResult, User]] = ws.user(credentials).byId(user_id)
 

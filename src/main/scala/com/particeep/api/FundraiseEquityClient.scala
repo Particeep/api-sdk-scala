@@ -9,7 +9,7 @@ import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.mvc.{ MultipartFormData, Results }
+import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -44,7 +44,7 @@ class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredent
 
   def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FundraiseEquity]]] = {
     ws.url(s"$endPoint/fundraise", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
+      .addQueryStringParameters("ids" -> ids.mkString(","))
       .get()
       .map(parse[List[FundraiseEquity]])
   }
@@ -63,7 +63,7 @@ class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredent
 
   def search(criteria: FundraiseEquitySearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseEquity]]] = {
     ws.url(s"$endPoint/fundraises", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[FundraiseEquity]])
   }
@@ -73,21 +73,21 @@ class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredent
   }
 
   def updateStatus(id: String, new_status: FundraiseStatus, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseEquity]] = {
-    ws.url(s"$endPoint/fundraise/$id/status/$new_status", timeout).post(Results.EmptyContent()).map(parse[FundraiseEquity])
+    ws.url(s"$endPoint/fundraise/$id/status/$new_status", timeout).post(EmptyContent).map(parse[FundraiseEquity])
   }
 
   def allInvestmentsOnFundraise(id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Investment]]] = {
     ws.url(s"$endPoint/fundraise/$id/investments", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[Investment]])
   }
 
   def allInvestmentsByUser(user_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
     ws.url(s"$endPoint/fundraise/investments/user/$user_id", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[Transaction]])
   }

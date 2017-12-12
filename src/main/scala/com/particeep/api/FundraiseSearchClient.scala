@@ -30,22 +30,22 @@ class FundraiseSearchClient(val ws: WSClient, val credentials: Option[ApiCredent
     timeout:        Long            = -1
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseData]]] = {
     ws.url(s"$endPoint/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[FundraiseData]])
   }
 
   def byIds(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FundraiseData]]] = {
     ws.url(s"$endPoint/byIds", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
+      .addQueryStringParameters("ids" -> ids.mkString(","))
       .get()
       .map(parse[List[FundraiseData]])
   }
 
   def nbProjectsByActivityDomain(categories: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[NbProjectsByCategory]]] = {
     ws.url(s"$endPoint/info/categories", timeout)
-      .withQueryString("categories" -> categories.mkString(","))
+      .addQueryStringParameters("categories" -> categories.mkString(","))
       .get()
       .map(parse[List[NbProjectsByCategory]])
   }

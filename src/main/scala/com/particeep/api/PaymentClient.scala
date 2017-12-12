@@ -7,7 +7,6 @@ import com.particeep.api.models.payment.{ PayResult, PaymentCbCreation, Schedule
 import com.particeep.api.models.transaction.Transaction
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
-import play.api.mvc.Results
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -38,7 +37,7 @@ class PaymentClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
   }
 
   def offlinePayment(transaction_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
-    ws.url(s"$endPoint/offline/$transaction_id", timeout).post(Results.EmptyContent()).map(parse[PayResult])
+    ws.url(s"$endPoint/offline/$transaction_id", timeout).post(EmptyContent).map(parse[PayResult])
   }
 
   def creditCardPayment(transaction_id: String, payment_cb_creation: PaymentCbCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
@@ -50,11 +49,11 @@ class PaymentClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
   }
 
   def walletPayment(transaction_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
-    ws.url(s"$endPoint/wallet/$transaction_id", timeout).post(Results.EmptyContent()).map(parse[PayResult])
+    ws.url(s"$endPoint/wallet/$transaction_id", timeout).post(EmptyContent).map(parse[PayResult])
   }
 
   def refund(transaction_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint/refund/$transaction_id", timeout).post(Results.EmptyContent()).map(parse[Transaction])
+    ws.url(s"$endPoint/refund/$transaction_id", timeout).post(EmptyContent).map(parse[Transaction])
   }
 
   def addScheduledPayment(scheduled_payment_creations: List[ScheduledPaymentCreation], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
@@ -63,21 +62,21 @@ class PaymentClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
 
   def scheduledPaymentByIds(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
     ws.url(s"$endPoint/schedule", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
+      .addQueryStringParameters("ids" -> ids.mkString(","))
       .get()
       .map(parse[List[ScheduledPayment]])
   }
 
   def searchScheduledPayments(criteria: ScheduledPaymentSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[ScheduledPayment]]] = {
     ws.url(s"$endPoint/schedule/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[ScheduledPayment]])
   }
 
   def cancelScheduledPayment(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
     ws.url(s"$endPoint/schedule/cancel", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
+      .addQueryStringParameters("ids" -> ids.mkString(","))
       .get()
       .map(parse[List[ScheduledPayment]])
   }

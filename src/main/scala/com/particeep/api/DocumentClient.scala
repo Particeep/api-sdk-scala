@@ -65,7 +65,7 @@ class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
 
   def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Document]]] = {
     ws.url(s"$endPoint", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
+      .addQueryStringParameters("ids" -> ids.mkString(","))
       .get()
       .map(parse[List[Document]])
   }
@@ -84,11 +84,11 @@ class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
       target_id.map(x => List(("target_id", x))).getOrElse(List()) ++
       target_type.map(x => List(("target_type", x))).getOrElse(List())
 
-    ws.url(s"$endPoint/dir", timeout).withQueryString(params: _*).get().map(parse[List[FolderOrFile]])
+    ws.url(s"$endPoint/dir", timeout).addQueryStringParameters(params: _*).get().map(parse[List[FolderOrFile]])
   }
 
   def search(criteria: DocumentSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Document]]] = {
-    ws.url(s"$endPoint/search", timeout).withQueryString(LangUtils.productToQueryString(criteria): _*).get().map(parse[PaginatedSequence[Document]])
+    ws.url(s"$endPoint/search", timeout).addQueryStringParameters(LangUtils.productToQueryString(criteria): _*).get().map(parse[PaginatedSequence[Document]])
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {

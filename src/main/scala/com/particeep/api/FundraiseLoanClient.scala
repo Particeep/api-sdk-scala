@@ -8,7 +8,7 @@ import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.mvc.{ MultipartFormData, Results }
+import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -48,7 +48,7 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
 
   def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FundraiseLoan]]] = {
     ws.url(s"$endPoint/fundraise", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
+      .addQueryStringParameters("ids" -> ids.mkString(","))
       .get()
       .map(parse[List[FundraiseLoan]])
   }
@@ -67,29 +67,29 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
 
   def search(criteria: FundraiseLoanSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseLoan]]] = {
     ws.url(s"$endPoint/fundraises", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[FundraiseLoan]])
   }
 
   def submit(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
-    ws.url(s"$endPoint/fundraise/$id/submit", timeout).post(Results.EmptyContent()).map(parse[FundraiseLoan])
+    ws.url(s"$endPoint/fundraise/$id/submit", timeout).post(EmptyContent).map(parse[FundraiseLoan])
   }
 
   def reject(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
-    ws.url(s"$endPoint/fundraise/$id/reject", timeout).post(Results.EmptyContent()).map(parse[FundraiseLoan])
+    ws.url(s"$endPoint/fundraise/$id/reject", timeout).post(EmptyContent).map(parse[FundraiseLoan])
   }
 
   def launch(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
-    ws.url(s"$endPoint/fundraise/$id/launch", timeout).post(Results.EmptyContent()).map(parse[FundraiseLoan])
+    ws.url(s"$endPoint/fundraise/$id/launch", timeout).post(EmptyContent).map(parse[FundraiseLoan])
   }
 
   def success(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
-    ws.url(s"$endPoint/fundraise/$id/close", timeout).post(Results.EmptyContent()).map(parse[FundraiseLoan])
+    ws.url(s"$endPoint/fundraise/$id/close", timeout).post(EmptyContent).map(parse[FundraiseLoan])
   }
 
   def refund(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
-    ws.url(s"$endPoint/fundraise/$id/refund", timeout).post(Results.EmptyContent()).map(parse[FundraiseLoan])
+    ws.url(s"$endPoint/fundraise/$id/refund", timeout).post(EmptyContent).map(parse[FundraiseLoan])
   }
 
   def getLenderRepaymentScheduleEstimation(
@@ -108,11 +108,11 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
   }
 
   def getLenderRepaymentSchedule(id: String, user_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
-    ws.url(s"$endPoint/fundraise/$id/info/user/$user_id", timeout).post(Results.EmptyContent()).map(parse[List[RepaymentWithDate]])
+    ws.url(s"$endPoint/fundraise/$id/info/user/$user_id", timeout).post(EmptyContent).map(parse[List[RepaymentWithDate]])
   }
 
   def getBorrowerRepaymentSchedule(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
-    ws.url(s"$endPoint/fundraise/$id/info/borrower", timeout).post(Results.EmptyContent()).map(parse[List[RepaymentWithDate]])
+    ws.url(s"$endPoint/fundraise/$id/info/borrower", timeout).post(EmptyContent).map(parse[List[RepaymentWithDate]])
   }
 
   def getBorrowerRepaymentScheduleDetail(id: String, payment_month: Int, payment_year: Int, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentDetail]]] = {
@@ -123,7 +123,7 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     id:      String,
     timeout: Long   = -1
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
-    ws.url(s"$endPoint/fundraise/$id/schedule/define", timeout).post(Results.EmptyContent()).map(parse[List[ScheduledPayment]])
+    ws.url(s"$endPoint/fundraise/$id/schedule/define", timeout).post(EmptyContent).map(parse[List[ScheduledPayment]])
   }
 
   def generateCustomRepaymentSchedule(id: String, repayment_info_vector: RepaymentInfoVector,
@@ -132,7 +132,7 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
   }
 
   def cancelRemainingPayments(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
-    ws.url(s"$endPoint/fundraise/$id/schedule/cancel-all", timeout).post(Results.EmptyContent()).map(parse[List[ScheduledPayment]])
+    ws.url(s"$endPoint/fundraise/$id/schedule/cancel-all", timeout).post(EmptyContent).map(parse[List[ScheduledPayment]])
   }
 
   def allLendsOnFundraise(
@@ -142,8 +142,8 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     timeout:        Long              = -1
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Lend]]] = {
     ws.url(s"$endPoint/fundraise/$id/lends", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[Lend]])
   }
@@ -155,8 +155,8 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     timeout:        Long              = -1
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
     ws.url(s"$endPoint/fundraise/lends/user/$user_id", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[Transaction]])
   }

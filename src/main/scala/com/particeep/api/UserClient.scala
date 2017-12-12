@@ -9,7 +9,7 @@ import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.utils.LangUtils
 import com.particeep.api.models.user._
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{ MultipartFormData, Results }
+import play.api.mvc.MultipartFormData
 import com.particeep.api.core._
 
 trait UserCapability {
@@ -43,7 +43,7 @@ class UserClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[User]]] = {
     ws.url(s"$endPoint", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
+      .addQueryStringParameters("ids" -> ids.mkString(","))
       .get()
       .map(parse[List[User]])
   }
@@ -58,7 +58,7 @@ class UserClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   def search(criteria: UserSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[UserData]]] = {
     ws.url(s"$endPoint/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
       .get
       .map(parse[PaginatedSequence[UserData]])
   }
@@ -87,7 +87,7 @@ class UserClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
   }
 
   def verifyAccount(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
-    ws.url(s"$endPoint/verify/$id", timeout).post(Results.EmptyContent()).map(parse[User])
+    ws.url(s"$endPoint/verify/$id", timeout).post(EmptyContent).map(parse[User])
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {

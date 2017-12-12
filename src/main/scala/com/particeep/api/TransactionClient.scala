@@ -38,7 +38,7 @@ class TransactionClient(val ws: WSClient, val credentials: Option[ApiCredential]
 
   def byIds(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Transaction]]] = {
     ws.url(s"$endPoint", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
+      .addQueryStringParameters("ids" -> ids.mkString(","))
       .get()
       .map(parse[List[Transaction]])
   }
@@ -53,8 +53,8 @@ class TransactionClient(val ws: WSClient, val credentials: Option[ApiCredential]
 
   def search(criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionData]]] = {
     ws.url(s"$endPoint/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
+      .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)
       .get
       .map(parse[PaginatedSequence[TransactionData]])
   }
