@@ -10,19 +10,13 @@ Java 1.8 or later.
 
 ### Sbt users
 
-Add this dependency to your project's POM:
-
-```scala
-libraryDependencies += "com.particeep" %% "api-scala-client" % "1.0.0"
-```
-
-Or add the project as a dependency
+Add the project as a dependency
 
 ```scala
 lazy val root = Project("root", file("."))
                     .dependsOn(apiParticeepClient)
 
-lazy val apiParticeepClient = RootProject(uri("https://github.com/Particeep/api-sdk-scala.git"))
+lazy val apiParticeepClient = RootProject(uri("https://github.com/Particeep/api-sdk-scala.git#feature/stand_alone"))
 
 ```
 
@@ -31,11 +25,13 @@ lazy val apiParticeepClient = RootProject(uri("https://github.com/Particeep/api-
 You'll need to manually install the following JARs and dependencies :
 
 * Download the JAR from https://github.com/particeep/api-scala-client/releases/latest
-* "com.typesafe.play" %% "play-ws"    % "2.4.8"
+* "com.typesafe.play" %% "play-ahc-ws-standalone"          % "1.1.3"
+* "com.typesafe.play" %% "play-ws-standalone-json"         % "1.1.3"
 * "com.github.driox"  %% "sorus"      % "1.0.0"
 * "org.slf4j"         %  "slf4j-api"  % "1.7.21"
+* "ai.x"              %% "play-json-extensions"            % "0.10.0"
 
-NB : You also need transitive dependencies of play-ws
+NB : You also need transitive dependencies of these dependencies
 
 ## Documentation
 
@@ -51,7 +47,8 @@ import com.particeep.api._
 
 object ParticeepExample {
 
-    def basicUsage() {
+    def basicUsage()(implicit system:ActorSystem) {
+        implicit val materializer: akka.stream.Materializer = ActorMaterializer()
         val ws = ParticeepApi.test(apiKey, apiSecret)
         val result:Future[Either[JsError, User]] = ws.user.byId("some_user_id")
 
@@ -65,7 +62,7 @@ object ParticeepExample {
         val creds = ApiCredential(apiKey, apiSecret)
 
         // here you have access only to User and Info endpoints
-        val ws = new ApiClient(
+        val ws = ApiClient(
             baseUrl = "https://api.particeep.com", // prod url
             apiCredential = creds,
             version = "1"
@@ -76,9 +73,48 @@ object ParticeepExample {
 }
 ```
 
+/!\ Warning
+
+When you do
+```
+val ws = ApiClient(
+            baseUrl = "https://api.particeep.com", // prod url
+            apiCredential = creds,
+            version = "1"
+        )
+```
+You use the more simple way and the lib will create its own actor system named "particeep-api-client".
+You don't want to build actor system multiple time so don't create multiple instance of ApiClient this way
+
+For huge application we recommend you to build your own actor system with a tailored config and pass it as a parameter
+
+```
+val ws = ApiClient(
+            system,
+            baseUrl = "https://api.particeep.com", // prod url
+            apiCredential = creds,
+            version = "1"
+        )
+```
+
+
 See the [tests](https://github.com/particeep/api-scala-client/blob/master/src/test/scala/com/particeep/test) for more examples.
 
-If you need to customize the http client, take a look at [ApiClient.scala](https://github.com/particeep/api-scala-client/blob/master/src/main/scala/com/particeep/core/ApiClient.scala)
+If you need to customize the http client, use it like that
+
+```
+// the lib https://github.com/playframework/play-ws will explain how to build and customise a StandaloneAhcWSClient
+val http_client:StandaloneAhcWSClient = ???
+
+val ws = ApiClient(
+            http_client
+            baseUrl = "https://api.particeep.com", // prod url
+            apiCredential = creds,
+            version = "1"
+        ) with InfoCapability with UserCapability
+
+```
+
 
 
 ## Testing
