@@ -6,6 +6,20 @@ You can sign up for a Particeep account at https://admin.particeep.com
 
 Java 1.8 or later.
 
+
+### Play dependencies
+
+By default this lib depends on Play framework.
+
+If you don't use Play!, you can checkout the branch `https://github.com/Particeep/api-sdk-scala/tree/feature/stand_alone`
+You'll be able to use the lib without bringing all the Play framework into your code base. The dependancies in the stand_alone branch
+is limited to 2 libraries extracted from Play project.
+
+* https://github.com/playframework/play-ws
+* https://github.com/playframework/play-json
+
+If you want to use your own json parser and http wrapper, you'll better build everything by yourself
+
 ## Installation
 
 ### Sbt users
