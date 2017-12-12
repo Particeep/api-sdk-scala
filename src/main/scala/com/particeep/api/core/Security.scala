@@ -12,10 +12,10 @@ import scala.concurrent.duration._
 trait WithSecurtiy {
 
   protected def secure(req: StandaloneWSRequest, apiCredential: ApiCredential, timeOut: Long)(implicit exec: ExecutionContext) = {
-    val timeout_ms = Math.max(timeOut, 2000).milliseconds
+    val timeout_ms = if (timeOut < 0) Int.MaxValue else timeOut
     val today = buildDateHeader()
     req
-      .withRequestTimeout(timeout_ms)
+      .withRequestTimeout(timeout_ms.milliseconds)
       .withHttpHeaders(
         ("DateTime", today),
         ("Authorization", buildAuthorizationHeader(today, apiCredential))
@@ -23,7 +23,7 @@ trait WithSecurtiy {
   }
 
   protected def secure(req: AsyncHttpClient#BoundRequestBuilder, apiCredential: ApiCredential, timeOut: Long)(implicit exec: ExecutionContext) = {
-    val timeout_ms = Math.max(timeOut, 2000L)
+    val timeout_ms = if (timeOut < 0) Int.MaxValue else timeOut
     val today = buildDateHeader()
     req
       .setRequestTimeout(timeout_ms.toInt)
