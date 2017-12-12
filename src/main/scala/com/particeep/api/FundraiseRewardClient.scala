@@ -111,7 +111,12 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.url(s"$endPoint/fundraise/$fundraise_id/rewards", timeout).get().map(parse[List[Reward]])
   }
 
-  def allBoughtRewardsByFundraise(fundraise_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backer]]] = {
+  def allBoughtRewardsByFundraise(
+    fundraise_id:   String,
+    criteria:       TransactionSearch,
+    table_criteria: TableSearch,
+    timeout:        Long              = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backer]]] = {
     ws.url(s"$endPoint/fundraise/$fundraise_id/rewards/bought", timeout)
       .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
       .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)
@@ -122,7 +127,12 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.url(s"$endPoint/fundraise/$fundraise_id/rewards/bought/quantity", timeout).get().map(parse[Map[String, Int]])
   }
 
-  def allBoughtRewardsByUser(user_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backing]]] = {
+  def allBoughtRewardsByUser(
+    user_id:        String,
+    criteria:       TransactionSearch,
+    table_criteria: TableSearch,
+    timeout:        Long              = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backing]]] = {
     ws.url(s"$endPoint/$user_id/rewards", timeout)
       .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
       .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)
@@ -133,7 +143,13 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.url(s"$endPoint/fundraise/$fundraise_id/donate/$user_id", timeout).put(Json.toJson(transaction_info)).map(parse[Transaction])
   }
 
-  def buyReward(fundraise_id: String, reward_id: String, user_id: String, transaction_info: TransactionInfo, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
+  def buyReward(
+    fundraise_id:     String,
+    reward_id:        String,
+    user_id:          String,
+    transaction_info: TransactionInfo,
+    timeout:          Long            = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
     ws.url(s"$endPoint/fundraise/$fundraise_id/reward/$reward_id/buy/$user_id", timeout).put(Json.toJson(transaction_info)).map(parse[Transaction])
   }
 

@@ -76,7 +76,12 @@ class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.url(s"$endPoint/fundraise/$id/status/$new_status", timeout).post(EmptyContent).map(parse[FundraiseEquity])
   }
 
-  def allInvestmentsOnFundraise(id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Investment]]] = {
+  def allInvestmentsOnFundraise(
+    id:             String,
+    criteria:       TransactionSearch,
+    table_criteria: TableSearch,
+    timeout:        Long              = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Investment]]] = {
     ws.url(s"$endPoint/fundraise/$id/investments", timeout)
       .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
       .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)
@@ -84,7 +89,12 @@ class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredent
       .map(parse[PaginatedSequence[Investment]])
   }
 
-  def allInvestmentsByUser(user_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
+  def allInvestmentsByUser(
+    user_id:        String,
+    criteria:       TransactionSearch,
+    table_criteria: TableSearch,
+    timeout:        Long              = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
     ws.url(s"$endPoint/fundraise/investments/user/$user_id", timeout)
       .addQueryStringParameters(LangUtils.productToQueryString(criteria): _*)
       .addQueryStringParameters(LangUtils.productToQueryString(table_criteria): _*)

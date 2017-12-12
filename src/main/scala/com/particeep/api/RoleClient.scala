@@ -38,7 +38,13 @@ class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
   }
 
   private[this] case class TargetInfo(target_id: Option[String], target_type: Option[String])
-  def remove(user_id: String, role: String, target_id: Option[String] = None, target_type: Option[String] = None, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
+  def remove(
+    user_id:     String,
+    role:        String,
+    target_id:   Option[String] = None,
+    target_type: Option[String] = None,
+    timeout:     Long           = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
     ws.url(s"$endPoint/$user_id/remove/${role.toLowerCase}", timeout)
       .addQueryStringParameters(LangUtils.productToQueryString(TargetInfo(target_id, target_type)): _*)
       .delete()
