@@ -10,7 +10,6 @@ resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases
 libraryDependencies ++= Seq(
   "org.scalatest"     %% "scalatest"                       % "2.2.4"  % "test" withSources(),
   "com.typesafe.akka" %% "akka-testkit"                    % "2.4.20" % "test" withSources(),
-  //"com.typesafe.play" %% "play-ws"                         % "2.4.8"           withSources() exclude("com.ning", "async-http-client"),
   "com.typesafe.play" %% "play-ahc-ws-standalone"          % "1.1.3"           withSources(),
   "com.typesafe.play" %% "play-ws-standalone-json"         % "1.1.3"           withSources(),
   "com.ning"          %  "async-http-client"               % "1.9.40"          withSources(),
