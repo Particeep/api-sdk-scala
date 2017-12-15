@@ -49,7 +49,7 @@ class UserClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
   }
 
   def byEmail(email: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
-    ws.url(s"$endPoint/email/$email", timeout).get().map(parse[User])
+    ws.get[User](s"$endPoint/email/$email")
   }
 
   def searchByName(name: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[User]]] = {
