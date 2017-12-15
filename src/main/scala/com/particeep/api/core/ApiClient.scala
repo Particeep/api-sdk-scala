@@ -87,7 +87,7 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
 
   private[this] def handle_error[T](e: Exception, method: String, path: String): Either[ErrorResult, T] = {
     val technical_code = "error.api.no.response"
-    val error_msg = s"ApiClient error for GET method on path $path"
+    val error_msg = s"ApiClient error for $method method on path $path"
     val error_id = "#" + Random.alphanumeric.take(8).mkString
     Left(Errors(true, List(Error(technical_code, error_msg, Some(error_id), Some(e.getMessage)))))
   }
