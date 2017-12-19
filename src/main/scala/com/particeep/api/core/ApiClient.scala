@@ -79,19 +79,19 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
 
   def post[T](path: String, timeOut: Long, body: JsValue, params: List[(String, String)] = List())(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
     url(path).withQueryString(params: _*).post(body).map(parse[T](_)).recover {
-      case e: Exception => handle_error(e, "POST", path)
+      case NonFatal(e) => handle_error(e, "POST", path)
     }
   }
 
   def put[T](path: String, timeOut: Long, body: JsValue)(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
     url(path).put(body).map(parse[T](_)).recover {
-      case e: Exception => handle_error(e, "PUT", path)
+      case NonFatal(e) => handle_error(e, "PUT", path)
     }
   }
 
   def delete[T](path: String, timeOut: Long, body: JsValue = Json.toJson(""), params: List[(String, String)] = List())(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
     url(path).withQueryString(params: _*).withMethod("DELETE").withBody(body).execute().map(parse[T](_)).recover {
-      case e: Exception => handle_error(e, "DELETE", path)
+      case NonFatal(e) => handle_error(e, "DELETE", path)
     }
   }
 
@@ -104,7 +104,7 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
     )
     bodyParts.map(builder.addBodyPart(_))
     Future { client.executeRequest(builder.build()).get }.map(parse[T](_)).recover {
-      case e: Exception => handle_error(e, "DELETE", path)
+      case NonFatal(e) => handle_error(e, "DELETE", path)
     }
   }
 
