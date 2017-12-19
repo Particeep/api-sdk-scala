@@ -21,28 +21,25 @@ object RoleClient {
   private implicit val creation_format = RoleCreation.format
 }
 
-class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import RoleClient._
 
   def all(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[String]]] = {
-    ws.url(s"$endPoint/all", timeout).get().map(parse[List[String]])
+    ws.get[List[String]](s"$endPoint/all", timeout)
   }
 
   def allByUser(user_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
-    ws.url(s"$endPoint/all_by_user/$user_id", timeout).get().map(parse[Roles])
+    ws.get[Roles](s"$endPoint/all_by_user/$user_id", timeout)
   }
 
   def add(user_id: String, role: String, role_creation: RoleCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
-    ws.url(s"$endPoint/$user_id/add/${role.toLowerCase}", timeout).put(Json.toJson(role_creation)).map(parse[Roles])
+    ws.put[Roles](s"$endPoint/$user_id/add/${role.toLowerCase}", timeout, Json.toJson(role_creation))
   }
 
   private[this] case class TargetInfo(target_id: Option[String], target_type: Option[String])
   def remove(user_id: String, role: String, target_id: Option[String] = None, target_type: Option[String] = None, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
-    ws.url(s"$endPoint/$user_id/remove/${role.toLowerCase}", timeout)
-      .withQueryString(LangUtils.productToQueryString(TargetInfo(target_id, target_type)): _*)
-      .delete()
-      .map(parse[Roles])
+    ws.delete[Roles](s"$endPoint/$user_id/remove/${role.toLowerCase}", timeout, Json.toJson(""), LangUtils.productToQueryString(TargetInfo(target_id, target_type)))
   }
 
   def hasRole(user_id: String, role: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Boolean]] = {
@@ -50,9 +47,6 @@ class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
   }
 
   def search(criteria: RoleSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Roles]]] = {
-    ws.url(s"$endPoint/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .get
-      .map(parse[PaginatedSequence[Roles]])
+    ws.get[PaginatedSequence[Roles]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria))
   }
 }

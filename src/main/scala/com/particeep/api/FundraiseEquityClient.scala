@@ -9,7 +9,7 @@ import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.mvc.{ MultipartFormData, Results }
+import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -34,69 +34,55 @@ object FundraiseEquityClient {
   private implicit val importResultReads = ImportResult.format[FundraiseEquity]
 }
 
-class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import FundraiseEquityClient._
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseEquity]] = {
-    ws.url(s"$endPoint/fundraise/$id", timeout).get().map(parse[FundraiseEquity])
+    ws.get[FundraiseEquity](s"$endPoint/fundraise/$id", timeout)
   }
 
   def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FundraiseEquity]]] = {
-    ws.url(s"$endPoint/fundraise", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
-      .get()
-      .map(parse[List[FundraiseEquity]])
+    ws.get[List[FundraiseEquity]](s"$endPoint/fundraise", timeout, List("ids" -> ids.mkString(",")))
   }
 
   def create(fundraise_equity_creation: FundraiseEquityCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseEquity]] = {
-    ws.url(s"$endPoint/fundraise", timeout).put(Json.toJson(fundraise_equity_creation)).map(parse[FundraiseEquity])
+    ws.put[FundraiseEquity](s"$endPoint/fundraise", timeout, Json.toJson(fundraise_equity_creation))
   }
 
   def update(id: String, fundraise_equity_edition: FundraiseEquityEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseEquity]] = {
-    ws.url(s"$endPoint/fundraise/$id", timeout).post(Json.toJson(fundraise_equity_edition)).map(parse[FundraiseEquity])
+    ws.post[FundraiseEquity](s"$endPoint/fundraise/$id", timeout, Json.toJson(fundraise_equity_edition))
   }
 
   def updateRunning(id: String, fundraise_equity_running_edition: FundraiseEquityRunningEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseEquity]] = {
-    ws.url(s"$endPoint/fundraise/running/$id", timeout).post(Json.toJson(fundraise_equity_running_edition)).map(parse[FundraiseEquity])
+    ws.post[FundraiseEquity](s"$endPoint/fundraise/running/$id", timeout, Json.toJson(fundraise_equity_running_edition))
   }
 
   def search(criteria: FundraiseEquitySearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseEquity]]] = {
-    ws.url(s"$endPoint/fundraises", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .get
-      .map(parse[PaginatedSequence[FundraiseEquity]])
+    ws.get[PaginatedSequence[FundraiseEquity]](s"$endPoint/fundraises", timeout, LangUtils.productToQueryString(criteria))
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseEquity]] = {
-    ws.url(s"$endPoint/fundraise/$id", timeout).delete().map(parse[FundraiseEquity])
+    ws.delete[FundraiseEquity](s"$endPoint/fundraise/$id", timeout)
   }
 
   def updateStatus(id: String, new_status: FundraiseStatus, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseEquity]] = {
-    ws.url(s"$endPoint/fundraise/$id/status/$new_status", timeout).post(Results.EmptyContent()).map(parse[FundraiseEquity])
+    ws.post[FundraiseEquity](s"$endPoint/fundraise/$id/status/$new_status", timeout, Json.toJson(""))
   }
 
   def allInvestmentsOnFundraise(id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Investment]]] = {
-    ws.url(s"$endPoint/fundraise/$id/investments", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
-      .get
-      .map(parse[PaginatedSequence[Investment]])
+    ws.get[PaginatedSequence[Investment]](s"$endPoint/fundraise/$id/investments", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def allInvestmentsByUser(user_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
-    ws.url(s"$endPoint/fundraise/investments/user/$user_id", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
-      .get
-      .map(parse[PaginatedSequence[Transaction]])
+    ws.get[PaginatedSequence[Transaction]](s"$endPoint/fundraise/investments/user/$user_id", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def invest(id: String, investment_creation: InvestmentCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint/fundraise/$id/invest", timeout).post(Json.toJson(investment_creation)).map(parse[Transaction])
+    ws.post[Transaction](s"$endPoint/fundraise/$id/invest", timeout, Json.toJson(investment_creation))
   }
 
   def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[FundraiseEquity]]] = {
-    ws.postFile(s"$endPoint_import/fundraise-equity/csv", csv, List(), timeout).map(parse[ImportResult[FundraiseEquity]])
+    ws.postFile[ImportResult[FundraiseEquity]](s"$endPoint_import/fundraise-equity/csv", timeout, csv, List())
   }
 }

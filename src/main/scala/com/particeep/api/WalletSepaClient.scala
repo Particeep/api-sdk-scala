@@ -24,16 +24,16 @@ object WalletSepaClient {
   private implicit val transaction_wallet_format = TransactionWallet.format
 }
 
-class WalletSepaClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class WalletSepaClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import WalletSepaClient._
 
   def sddMandates(wallet_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[SddMandate]]] = {
-    ws.url(s"$endPoint/$wallet_id/sepa", timeout).get().map(parse[Seq[SddMandate]])
+    ws.get[Seq[SddMandate]](s"$endPoint/$wallet_id/sepa", timeout)
   }
 
   def addSddMandate(wallet_id: String, sdd_mandate_creation: SddMandateCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, SddMandate]] = {
-    ws.url(s"$endPoint/$wallet_id/sepa", timeout).put(Json.toJson(sdd_mandate_creation)).map(parse[SddMandate])
+    ws.put[SddMandate](s"$endPoint/$wallet_id/sepa", timeout, Json.toJson(sdd_mandate_creation))
   }
 
   private[this] case class OwnerIp(owner_ip: String)
@@ -41,15 +41,14 @@ class WalletSepaClient(val ws: WSClient, val credentials: Option[ApiCredential] 
   private[this] implicit lazy val owner_ip_format = Json.format[OwnerIp]
 
   def removeSddMandate(sdd_mandate_id: String, owner_ip: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, SddMandate]] = {
-    val body = Json.toJson(OwnerIp(owner_ip))
-    ws.url(s"$endPoint/sepa/$sdd_mandate_id", timeout).withMethod("DELETE").withBody(body).execute().map(parse[SddMandate])
+    ws.delete[SddMandate](s"$endPoint/sepa/$sdd_mandate_id", timeout, Json.toJson(OwnerIp(owner_ip)))
   }
 
   def signSddMandate(sdd_mandate_id: String, sepa_sdd_signature: SepaSddSignature, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, String]] = {
-    ws.url(s"$endPoint/sepa/$sdd_mandate_id/sign", timeout).post(Json.toJson(sepa_sdd_signature)).map(parse[String])
+    ws.post[String](s"$endPoint/sepa/$sdd_mandate_id/sign", timeout, Json.toJson(sepa_sdd_signature))
   }
 
   def cashInSddMandate(sdd_mandate_id: String, sdd_cashin: SddCashIn, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, TransactionWallet]] = {
-    ws.url(s"$endPoint/sepa/$sdd_mandate_id/cashin", timeout).post(Json.toJson(sdd_cashin)).map(parse[TransactionWallet])
+    ws.post[TransactionWallet](s"$endPoint/sepa/$sdd_mandate_id/cashin", timeout, Json.toJson(sdd_cashin))
   }
 }

@@ -4,7 +4,6 @@ import com.particeep.api.core._
 import com.particeep.api.models.ErrorResult
 import com.particeep.api.models.kyc.{ KycCreation, KycGroup, KycsEdition }
 import play.api.libs.json.Json
-import play.api.mvc.Results
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -22,16 +21,16 @@ object KycClient {
   private implicit val edition_format = KycsEdition.format
 }
 
-class KycClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class KycClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import KycClient._
 
   def create(kyc_creation: KycCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
-    ws.url(s"$endPoint", timeout).put(Json.toJson(kyc_creation)).map(parse[List[KycGroup]])
+    ws.put[List[KycGroup]](s"$endPoint", timeout, Json.toJson(kyc_creation))
   }
 
   def update(kycs_edition: KycsEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
-    ws.url(s"$endPoint", timeout).post(Json.toJson(kycs_edition)).map(parse[List[KycGroup]])
+    ws.post[List[KycGroup]](s"$endPoint", timeout, Json.toJson(kycs_edition))
   }
 
   def askValidation(
@@ -40,17 +39,15 @@ class KycClient(val ws: WSClient, val credentials: Option[ApiCredential] = None)
     owner_ip:   Option[String] = None,
     timeout:    Long           = -1
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
-    val ws_url = ws.url(s"$endPoint/askValidation/owner/$owner_id/$owner_type", timeout)
-
     owner_ip.map(ip => {
-      ws_url.withQueryString("owner_ip" -> ip).post(Results.EmptyContent()).map(parse[List[KycGroup]])
+      ws.post[List[KycGroup]](s"$endPoint/askValidation/owner/$owner_id/$owner_type", timeout, Json.toJson(""), List("owner_ip" -> ip))
     }).getOrElse(
-      ws_url.post(Results.EmptyContent()).map(parse[List[KycGroup]])
+      ws.post[List[KycGroup]](s"$endPoint/askValidation/owner/$owner_id/$owner_type", timeout, Json.toJson(""))
     )
   }
 
   def byOwnerIdAndType(owner_id: String, owner_type: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
-    ws.url(s"$endPoint/owner/$owner_id/$owner_type", timeout).get().map(parse[List[KycGroup]])
+    ws.get[List[KycGroup]](s"$endPoint/owner/$owner_id/$owner_type", timeout)
   }
 
   def cancel(
@@ -59,12 +56,10 @@ class KycClient(val ws: WSClient, val credentials: Option[ApiCredential] = None)
     owner_ip:   Option[String] = None,
     timeout:    Long           = -1
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
-    val ws_url = ws.url(s"$endPoint/cancel/owner/$owner_id/$owner_type", timeout)
-
     owner_ip.map(ip => {
-      ws_url.withQueryString("owner_ip" -> ip).delete().map(parse[List[KycGroup]])
+      ws.delete[List[KycGroup]](s"$endPoint/cancel/owner/$owner_id/$owner_type", timeout, Json.toJson(""), List("owner_ip" -> ip))
     }).getOrElse(
-      ws_url.delete().map(parse[List[KycGroup]])
+      ws.delete[List[KycGroup]](s"$endPoint/cancel/owner/$owner_id/$owner_type", timeout, Json.toJson(""))
     )
   }
 }
