@@ -16,12 +16,8 @@ case class UserSearch(
   city:            Option[String]        = None,
   wallet_type:     Option[String]        = None,
   status:          Option[String]        = None,
+  tag:             Option[String]        = None,
   roles:           Option[String]        = None,
   targeting_roles: Option[String]        = None,
-  tag:             Option[String]        = None,
-  sort_by:         Option[String]        = None,
-  order_by:        Option[String]        = Some("asc"),
-  global_search:   Option[String]        = None,
-  limit:           Option[Int]           = Some(30),
-  offset:          Option[Int]           = Some(0)
+  ids:             Option[String]        = None
 )
