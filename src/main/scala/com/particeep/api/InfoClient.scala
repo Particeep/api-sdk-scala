@@ -20,11 +20,11 @@ trait InfoCapability {
   def info(credentials: ApiCredential): InfoClient = new InfoClient(this, Some(credentials))
 }
 
-class InfoClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class InfoClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import InfoClient._
 
   def info(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Info]] = {
-    ws.url(endPoint, timeout).get().map(parse[Info])
+    ws.get[Info](endPoint, timeout)
   }
 }

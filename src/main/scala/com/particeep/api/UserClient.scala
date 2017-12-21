@@ -9,7 +9,7 @@ import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.utils.LangUtils
 import com.particeep.api.models.user._
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{ MultipartFormData, Results }
+import play.api.mvc.MultipartFormData
 import com.particeep.api.core._
 
 trait UserCapability {
@@ -33,69 +33,60 @@ object UserClient {
   private implicit val change_password_format = Json.format[ChangePassword]
 }
 
-class UserClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class UserClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import UserClient._
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
-    ws.url(s"$endPoint/$id", timeout).get().map(parse[User])
+    ws.get[User](s"$endPoint/$id", timeout)
   }
 
   def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[User]]] = {
-    ws.url(s"$endPoint", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
-      .get()
-      .map(parse[List[User]])
+    ws.get[List[User]](s"$endPoint", timeout, List("ids" -> ids.mkString(",")))
   }
 
   def byEmail(email: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
-    ws.url(s"$endPoint/email/$email", timeout).get().map(parse[User])
+    ws.get[User](s"$endPoint/email/$email", timeout)
   }
 
   def searchByName(name: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[User]]] = {
-    ws.url(s"$endPoint/name/$name", timeout).get.map(parse[List[User]])
+    ws.get[List[User]](s"$endPoint/name/$name", timeout)
   }
 
   def search(criteria: UserSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[UserData]]] = {
-    ws.url(s"$endPoint/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .get
-      .map(parse[PaginatedSequence[UserData]])
+    ws.get[PaginatedSequence[UserData]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria))
   }
 
   def create(user_creation: UserCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
-    ws.url(s"$endPoint", timeout).put(Json.toJson(user_creation)).map(parse[User])
+    ws.put[User](s"$endPoint", timeout, Json.toJson(user_creation))
   }
 
   def update(id: String, user_edition: UserEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
-    ws.url(s"$endPoint/$id", timeout).post(Json.toJson(user_edition)).map(parse[User])
+    ws.post[User](s"$endPoint/$id", timeout, Json.toJson(user_edition))
   }
 
   def authenticate(email: String, password: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
-    val authenticateJson: JsValue = Json.toJson(Map("email" -> email, "password" -> password))
-    ws.url(s"$endPoint/authenticate", timeout)
-      .post(authenticateJson)
-      .map(parse[User])
+    ws.post[User](s"$endPoint/authenticate", timeout, Json.toJson(Map("email" -> email, "password" -> password)))
   }
 
   def getOrCreate(user_creation: UserCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
-    ws.url(s"$endPoint/getOrCreate", timeout).post(Json.toJson(user_creation)).map(parse[User])
+    ws.post[User](s"$endPoint/getOrCreate", timeout, Json.toJson(user_creation))
   }
 
   def changePassword(id: String, old_password: Option[String], new_password: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
-    ws.url(s"$endPoint/$id/changePassword", timeout).post(Json.toJson(ChangePassword(old_password, new_password))).map(parse[User])
+    ws.post[User](s"$endPoint/$id/changePassword", timeout, Json.toJson(ChangePassword(old_password, new_password)))
   }
 
   def verifyAccount(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
-    ws.url(s"$endPoint/verify/$id", timeout).post(Results.EmptyContent()).map(parse[User])
+    ws.post[User](s"$endPoint/verify/$id", timeout, Json.toJson(""))
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
-    ws.url(s"$endPoint/$id", timeout).delete().map(parse[User])
+    ws.delete[User](s"$endPoint/$id", timeout)
   }
 
   def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[User]]] = {
-    ws.postFile(s"$endPoint_import/user/csv", csv, List(), timeout).map(parse[ImportResult[User]])
+    ws.postFile[ImportResult[User]](s"$endPoint_import/user/csv", timeout, csv, List())
   }
 
 }

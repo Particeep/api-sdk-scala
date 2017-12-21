@@ -25,39 +25,39 @@ object PartnerClient {
   private implicit val partner_fees_on_target_edition_format = PartnerFeesOnTargetEdition.format
 }
 
-class PartnerClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class PartnerClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import PartnerClient._
 
   def createDefaultPartnerFees(user_id: String, partner_fees_creation: PartnerFeesCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
-    ws.url(s"$endPoint/fees/$user_id/default", timeout).put(Json.toJson(partner_fees_creation)).map(parse[PartnerFees])
+    ws.put[PartnerFees](s"$endPoint/fees/$user_id/default", timeout, Json.toJson(partner_fees_creation))
   }
 
   def getDefaultPartnerFeesByUserId(user_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
-    ws.url(s"$endPoint/fees/$user_id/default", timeout).get().map(parse[PartnerFees])
+    ws.get[PartnerFees](s"$endPoint/fees/$user_id/default", timeout)
   }
 
   def updateDefaultPartnerFees(user_id: String, partner_fees_edition: PartnerFeesEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
-    ws.url(s"$endPoint/fees/$user_id/default", timeout).post(Json.toJson(partner_fees_edition)).map(parse[PartnerFees])
+    ws.post[PartnerFees](s"$endPoint/fees/$user_id/default", timeout, Json.toJson(partner_fees_edition))
   }
 
   def deleteDefaultPartnerFees(user_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
-    ws.url(s"$endPoint/fees/$user_id/default", timeout).delete().map(parse[PartnerFees])
+    ws.delete[PartnerFees](s"$endPoint/fees/$user_id/default", timeout)
   }
 
   def createPartnerFees(user_id: String, target_id: String, target_type: String, partner_fees_on_target_creation: PartnerFeesOnTargetCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
-    ws.url(s"$endPoint/fees/$user_id/$target_id/$target_type", timeout).put(Json.toJson(partner_fees_on_target_creation)).map(parse[PartnerFeesOnTarget])
+    ws.put[PartnerFeesOnTarget](s"$endPoint/fees/$user_id/$target_id/$target_type", timeout, Json.toJson(partner_fees_on_target_creation))
   }
 
   def getPartnerFees(user_id: String, target_id: String, target_type: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
-    ws.url(s"$endPoint/fees/$user_id/$target_id/$target_type", timeout).get().map(parse[PartnerFeesOnTarget])
+    ws.get[PartnerFeesOnTarget](s"$endPoint/fees/$user_id/$target_id/$target_type", timeout)
   }
 
   def updatePartnerFees(user_id: String, target_id: String, target_type: String, partner_fees_on_target_edition: PartnerFeesOnTargetEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
-    ws.url(s"$endPoint/fees/$user_id/$target_id/$target_type", timeout).post(Json.toJson(partner_fees_on_target_edition)).map(parse[PartnerFeesOnTarget])
+    ws.post[PartnerFeesOnTarget](s"$endPoint/fees/$user_id/$target_id/$target_type", timeout, Json.toJson(partner_fees_on_target_edition))
   }
 
   def deletePartnerFees(user_id: String, target_id: String, target_type: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
-    ws.url(s"$endPoint/fees/$user_id/$target_id/$target_type", timeout).delete().map(parse[PartnerFeesOnTarget])
+    ws.delete[PartnerFeesOnTarget](s"$endPoint/fees/$user_id/$target_id/$target_type", timeout)
   }
 }

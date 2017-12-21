@@ -8,7 +8,7 @@ import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.mvc.{ MultipartFormData, Results }
+import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -39,105 +39,95 @@ object FundraiseRewardClient {
 /**
  * Created by Noe on 26/01/2017.
  */
-class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import FundraiseRewardClient._
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id", timeout).get().map(parse[FundraiseReward])
+    ws.get[FundraiseReward](s"$endPoint/fundraise/$id", timeout)
   }
 
   def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FundraiseReward]]] = {
-    ws.url(s"$endPoint/fundraise", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
-      .get().map(parse[List[FundraiseReward]])
+    ws.get[List[FundraiseReward]](s"$endPoint/fundraise", timeout, List("ids" -> ids.mkString(",")))
   }
 
   def search(criteria: FundraiseRewardSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseReward]]] = {
-    ws.url(s"$endPoint/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .get().map(parse[PaginatedSequence[FundraiseReward]])
+    ws.get[PaginatedSequence[FundraiseReward]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria))
   }
 
   def create(fundraise_reward_creation: FundraiseRewardCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise", timeout).put(Json.toJson(fundraise_reward_creation)).map(parse[FundraiseReward])
+    ws.put[FundraiseReward](s"$endPoint/fundraise", timeout, Json.toJson(fundraise_reward_creation))
   }
 
   def update(id: String, fundraise_reward_edition: FundraiseRewardEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id", timeout).post(Json.toJson(fundraise_reward_edition)).map(parse[FundraiseReward])
+    ws.post[FundraiseReward](s"$endPoint/fundraise/$id", timeout, Json.toJson(fundraise_reward_edition))
   }
 
   def updateRunning(id: String, fundraise_reward_running_edition: FundraiseRewardRunningEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/running/$id", timeout).post(Json.toJson(fundraise_reward_running_edition)).map(parse[FundraiseReward])
+    ws.post[FundraiseReward](s"$endPoint/fundraise/running/$id", timeout, Json.toJson(fundraise_reward_running_edition))
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id", timeout).delete().map(parse[FundraiseReward])
+    ws.delete[FundraiseReward](s"$endPoint/fundraise/$id", timeout)
   }
 
   def submitToReview(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id/submit", timeout).post(Results.EmptyContent()).map(parse[FundraiseReward])
+    ws.post[FundraiseReward](s"$endPoint/fundraise/$id/submit", timeout, Json.toJson(""))
   }
 
   def reject(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id/reject", timeout).post(Results.EmptyContent()).map(parse[FundraiseReward])
+    ws.post[FundraiseReward](s"$endPoint/fundraise/$id/reject", timeout, Json.toJson(""))
   }
 
   def launch(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id/launch", timeout).post(Results.EmptyContent()).map(parse[FundraiseReward])
+    ws.post[FundraiseReward](s"$endPoint/fundraise/$id/launch", timeout, Json.toJson(""))
   }
 
   def close(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id/close", timeout).post(Results.EmptyContent()).map(parse[FundraiseReward])
+    ws.post[FundraiseReward](s"$endPoint/fundraise/$id/close", timeout, Json.toJson(""))
   }
 
   def refund(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
-    ws.url(s"$endPoint/fundraise/$id/refund", timeout).post(Results.EmptyContent()).map(parse[FundraiseReward])
+    ws.post[FundraiseReward](s"$endPoint/fundraise/$id/refund", timeout, Json.toJson(""))
   }
 
   def addReward(fundraise_id: String, reward_creation: RewardCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Reward]] = {
-    ws.url(s"$endPoint/fundraise/$fundraise_id/reward", timeout).put(Json.toJson(reward_creation)).map(parse[Reward])
+    ws.put[Reward](s"$endPoint/fundraise/$fundraise_id/reward", timeout, Json.toJson(reward_creation))
   }
 
   def updateReward(fundraise_id: String, id: String, reward_edition: RewardEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Reward]] = {
-    ws.url(s"$endPoint/fundraise/$fundraise_id/reward/$id", timeout).post(Json.toJson(reward_edition)).map(parse[Reward])
+    ws.post[Reward](s"$endPoint/fundraise/$fundraise_id/reward/$id", timeout, Json.toJson(reward_edition))
   }
 
   def deleteReward(fundraise_id: String, id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Reward]] = {
-    ws.url(s"$endPoint/fundraise/$fundraise_id/reward/$id", timeout).delete().map(parse[Reward])
+    ws.delete[Reward](s"$endPoint/fundraise/$fundraise_id/reward/$id", timeout)
   }
 
   def allRewardsByFundraise(fundraise_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Reward]]] = {
-    ws.url(s"$endPoint/fundraise/$fundraise_id/rewards", timeout).get().map(parse[List[Reward]])
+    ws.get[List[Reward]](s"$endPoint/fundraise/$fundraise_id/rewards", timeout)
   }
 
   def allBoughtRewardsByFundraise(fundraise_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backer]]] = {
-    ws.url(s"$endPoint/fundraise/$fundraise_id/rewards/bought", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
-      .get().map(parse[PaginatedSequence[Backer]])
+    ws.get[PaginatedSequence[Backer]](s"$endPoint/fundraise/$fundraise_id/rewards/bought", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def quantityAllBoughtRewardsByFundraise(fundraise_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Map[String, Int]]] = {
-    ws.url(s"$endPoint/fundraise/$fundraise_id/rewards/bought/quantity", timeout).get().map(parse[Map[String, Int]])
+    ws.get[Map[String, Int]](s"$endPoint/fundraise/$fundraise_id/rewards/bought/quantity", timeout)
   }
 
   def allBoughtRewardsByUser(user_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backing]]] = {
-    ws.url(s"$endPoint/$user_id/rewards", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
-      .get().map(parse[PaginatedSequence[Backing]])
+    ws.get[PaginatedSequence[Backing]](s"$endPoint/$user_id/rewards", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def donate(fundraise_id: String, user_id: String, transaction_info: TransactionInfo, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint/fundraise/$fundraise_id/donate/$user_id", timeout).put(Json.toJson(transaction_info)).map(parse[Transaction])
+    ws.put[Transaction](s"$endPoint/fundraise/$fundraise_id/donate/$user_id", timeout, Json.toJson(transaction_info))
   }
 
   def buyReward(fundraise_id: String, reward_id: String, user_id: String, transaction_info: TransactionInfo, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint/fundraise/$fundraise_id/reward/$reward_id/buy/$user_id", timeout).put(Json.toJson(transaction_info)).map(parse[Transaction])
+    ws.put[Transaction](s"$endPoint/fundraise/$fundraise_id/reward/$reward_id/buy/$user_id", timeout, Json.toJson(transaction_info))
   }
 
   def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[FundraiseReward]]] = {
-    ws.postFile(s"$endPoint_import/fundraise-reward/csv", csv, List(), timeout).map(parse[ImportResult[FundraiseReward]])
+    ws.postFile[ImportResult[FundraiseReward]](s"$endPoint_import/fundraise-reward/csv", timeout, csv, List())
   }
 }

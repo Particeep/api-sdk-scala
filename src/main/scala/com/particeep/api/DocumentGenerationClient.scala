@@ -23,15 +23,15 @@ object DocumentGenerationClient {
   private implicit val format_document = Document.format
 }
 
-class DocumentGenerationClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class DocumentGenerationClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import DocumentGenerationClient._
 
   def generation(document_generation: DocumentGeneration, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Stream[Byte]]] = {
-    ws.url(s"$endPoint", timeout).post(Json.toJson(document_generation)).map(parse[Stream[Byte]])
+    ws.post[Stream[Byte]](s"$endPoint", timeout, Json.toJson(document_generation))
   }
 
   def generationAndUpload(document_generation: DocumentGenerationAndUpload, owner_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
-    ws.url(s"$endPoint/upload/$owner_id", timeout).post(Json.toJson(document_generation)).map(parse[Document])
+    ws.post[Document](s"$endPoint/upload/$owner_id", timeout, Json.toJson(document_generation))
   }
 }

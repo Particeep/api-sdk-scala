@@ -31,61 +31,55 @@ object EnterpriseClient {
 
 }
 
-class EnterpriseClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class EnterpriseClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import EnterpriseClient._
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enterprise]] = {
-    ws.url(s"$endPoint/$id", timeout).get().map(parse[Enterprise])
+    ws.get[Enterprise](s"$endPoint/$id", timeout)
   }
 
   def byIds(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Enterprise]]] = {
-    ws.url(s"$endPoint", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
-      .get()
-      .map(parse[List[Enterprise]])
+    ws.get[List[Enterprise]](s"$endPoint", timeout, List("ids" -> ids.mkString(",")))
   }
 
   def byUserId(user_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Enterprise]]] = {
-    ws.url(s"$endPoint/user/$user_id", timeout).get().map(parse[List[Enterprise]])
+    ws.get[List[Enterprise]](s"$endPoint/user/$user_id", timeout)
   }
 
   def create(enterprise_creation: EnterpriseCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enterprise]] = {
-    ws.url(s"$endPoint", timeout).put(Json.toJson(enterprise_creation)).map(parse[Enterprise])
+    ws.put[Enterprise](s"$endPoint", timeout, Json.toJson(enterprise_creation))
   }
 
   def update(id: String, enterprise_edition: EnterpriseEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enterprise]] = {
-    ws.url(s"$endPoint/$id", timeout).post(Json.toJson(enterprise_edition)).map(parse[Enterprise])
+    ws.post[Enterprise](s"$endPoint/$id", timeout, Json.toJson(enterprise_edition))
   }
 
   def search(criteria: EnterpriseSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Enterprise]]] = {
-    ws.url(s"$endPoint/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .get
-      .map(parse[PaginatedSequence[Enterprise]])
+    ws.get[PaginatedSequence[Enterprise]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria))
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enterprise]] = {
-    ws.url(s"$endPoint/$id", timeout).delete().map(parse[Enterprise])
+    ws.delete[Enterprise](s"$endPoint/$id", timeout)
   }
 
   def addManager(id: String, manager_creation: ManagerCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ManagerLink]] = {
-    ws.url(s"$endPoint/$id/manager", timeout).put(Json.toJson(manager_creation)).map(parse[ManagerLink])
+    ws.put[ManagerLink](s"$endPoint/$id/manager", timeout, Json.toJson(manager_creation))
   }
 
   def getManagers(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ManagerLink]]] = {
-    ws.url(s"$endPoint/$id/manager", timeout).get().map(parse[List[ManagerLink]])
+    ws.get[List[ManagerLink]](s"$endPoint/$id/manager", timeout)
   }
 
   def deleteManager(id: String, manager_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ManagerLink]] = {
-    ws.url(s"$endPoint/$id/manager/$manager_id", timeout).delete().map(parse[ManagerLink])
+    ws.delete[ManagerLink](s"$endPoint/$id/manager/$manager_id", timeout)
   }
 
   def nbEnterprisesByActivityDomain(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[NbEnterprisesByActivityDomain]]] = {
-    ws.url(s"$endPoint/info/activity/domain", timeout).get().map(parse[Seq[NbEnterprisesByActivityDomain]])
+    ws.get[Seq[NbEnterprisesByActivityDomain]](s"$endPoint/info/activity/domain", timeout)
   }
 
   def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[Enterprise]]] = {
-    ws.postFile(s"$endPoint_import/enterprise/csv", csv, List(), timeout).map(parse[ImportResult[Enterprise]])
+    ws.postFile[ImportResult[Enterprise]](s"$endPoint_import/enterprise/csv", timeout, csv, List())
   }
 }

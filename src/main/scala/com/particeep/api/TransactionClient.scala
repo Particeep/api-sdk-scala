@@ -28,46 +28,39 @@ object TransactionClient {
   private implicit val importResultReads = ImportResult.format[Transaction]
 }
 
-class TransactionClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class TransactionClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import TransactionClient._
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint/$id", timeout).get().map(parse[Transaction])
+    ws.get[Transaction](s"$endPoint/$id", timeout)
   }
 
   def byIds(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Transaction]]] = {
-    ws.url(s"$endPoint", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
-      .get()
-      .map(parse[List[Transaction]])
+    ws.get[List[Transaction]](s"$endPoint", timeout, List("ids" -> ids.mkString(",")))
   }
 
   def create(transaction_creation: TransactionCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint", timeout).put(Json.toJson(transaction_creation)).map(parse[Transaction])
+    ws.put[Transaction](s"$endPoint", timeout, Json.toJson(transaction_creation))
   }
 
   def update(id: String, transaction_edition: TransactionEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint/$id", timeout).post(Json.toJson(transaction_edition)).map(parse[Transaction])
+    ws.post[Transaction](s"$endPoint/$id", timeout, Json.toJson(transaction_edition))
   }
 
   def search(criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionData]]] = {
-    ws.url(s"$endPoint/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
-      .get
-      .map(parse[PaginatedSequence[TransactionData]])
+    ws.get[PaginatedSequence[TransactionData]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def cancel(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint/$id/cancel", timeout).delete().map(parse[Transaction])
+    ws.delete[Transaction](s"$endPoint/$id/cancel", timeout)
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
-    ws.url(s"$endPoint/$id", timeout).delete().map(parse[Transaction])
+    ws.delete[Transaction](s"$endPoint/$id", timeout)
   }
 
   def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[Transaction]]] = {
-    ws.postFile(s"$endPoint_import/transaction/csv", csv, List(), timeout).map(parse[ImportResult[Transaction]])
+    ws.postFile[ImportResult[Transaction]](s"$endPoint_import/transaction/csv", timeout, csv, List())
   }
 }
