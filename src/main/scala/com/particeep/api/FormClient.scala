@@ -45,83 +45,83 @@ object FormClient {
   private implicit val format_tagged_answer_creation = AnswerCreationWithTag.format
 }
 
-class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import FormClient._
 
   def all(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[Form]]] = {
-    ws.url(s"$endPoint/all", timeout).get().map(parse[Seq[Form]])
+    ws.get[Seq[Form]](s"$endPoint/all", timeout)
   }
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FormDeep]] = {
-    ws.url(s"$endPoint/$id", timeout).get().map(parse[FormDeep])
+    ws.get[FormDeep](s"$endPoint/$id", timeout)
   }
 
   def byIdForUser(id: String, user_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FormDeep]] = {
-    ws.url(s"$endPoint/$id/$user_id", timeout).get().map(parse[FormDeep])
+    ws.get[FormDeep](s"$endPoint/$id/$user_id", timeout)
   }
 
   def byIdAndTagForUser(id: String, tag: String, user_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FormDeep]] = {
-    ws.url(s"$endPoint/$id/$user_id/$tag", timeout).get().map(parse[FormDeep])
+    ws.get[FormDeep](s"$endPoint/$id/$user_id/$tag", timeout)
   }
 
   def create(form_creation: FormCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Form]] = {
-    ws.url(s"$endPoint", timeout).put(Json.toJson(form_creation)).map(parse[Form])
+    ws.put[Form](s"$endPoint", timeout, Json.toJson(form_creation))
   }
 
   def createSection(section_creation: SectionCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Section]] = {
-    ws.url(s"$endPoint/section", timeout).put(Json.toJson(section_creation)).map(parse[Section])
+    ws.put[Section](s"$endPoint/section", timeout, Json.toJson(section_creation))
   }
 
   def createQuestion(question_creation: QuestionCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Question]] = {
-    ws.url(s"$endPoint/question", timeout).put(Json.toJson(question_creation)).map(parse[Question])
+    ws.put[Question](s"$endPoint/question", timeout, Json.toJson(question_creation))
   }
 
   def createPossibility(possibility_creation: PossibilityCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Possibility]] = {
-    ws.url(s"$endPoint/possibility", timeout).put(Json.toJson(possibility_creation)).map(parse[Possibility])
+    ws.put[Possibility](s"$endPoint/possibility", timeout, Json.toJson(possibility_creation))
   }
 
   def updateDeep(id: String, form_edition: FormEditionDeep, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FormDeep]] = {
-    ws.url(s"$endPoint/$id").post(Json.toJson(form_edition)).map(parse[FormDeep])
+    ws.post[FormDeep](s"$endPoint/$id", timeout, Json.toJson(form_edition))
   }
 
   def update(id: String, form_edition: FormEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Form]] = {
-    ws.url(s"$endPoint/light/$id").post(Json.toJson(form_edition)).map(parse[Form])
+    ws.post[Form](s"$endPoint/light/$id", timeout, Json.toJson(form_edition))
   }
 
   def udpateSection(id: String, section_edition: SectionEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Section]] = {
-    ws.url(s"$endPoint/section/$id").post(Json.toJson(section_edition)).map(parse[Section])
+    ws.post[Section](s"$endPoint/section/$id", timeout, Json.toJson(section_edition))
   }
 
   def udpateQuestion(id: String, question_edition: QuestionEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Question]] = {
-    ws.url(s"$endPoint/question/$id").post(Json.toJson(question_edition)).map(parse[Question])
+    ws.post[Question](s"$endPoint/question/$id", timeout, Json.toJson(question_edition))
   }
 
   def udpatePossibility(id: String, possibility_edition: PossibilityEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Possibility]] = {
-    ws.url(s"$endPoint/possibility/$id").post(Json.toJson(possibility_edition)).map(parse[Possibility])
+    ws.post[Possibility](s"$endPoint/possibility/$id", timeout, Json.toJson(possibility_edition))
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Form]] = {
-    ws.url(s"$endPoint/$id").delete().map(parse[Form])
+    ws.delete[Form](s"$endPoint/$id", timeout)
   }
 
   def deleteSection(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Section]] = {
-    ws.url(s"$endPoint/section/$id").delete().map(parse[Section])
+    ws.delete[Section](s"$endPoint/section/$id", timeout)
   }
 
   def deleteQuestion(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Question]] = {
-    ws.url(s"$endPoint/question/$id").delete().map(parse[Question])
+    ws.delete[Question](s"$endPoint/question/$id", timeout)
   }
 
   def deletePossibility(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Possibility]] = {
-    ws.url(s"$endPoint/possibility/$id").delete().map(parse[Possibility])
+    ws.delete[Possibility](s"$endPoint/possibility/$id", timeout)
   }
 
   def answer(user_id: String, answer_creations: Seq[AnswerCreation], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[Answer]]] = {
-    ws.url(s"$endPoint/answer/$user_id").put(Json.toJson(answer_creations)).map(parse[Seq[Answer]])
+    ws.put[Seq[Answer]](s"$endPoint/answer/$user_id", timeout, Json.toJson(answer_creations))
   }
 
   def addTaggedAnswers(user_id: String, tagged_answer_creation: AnswerCreationWithTag, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[Answer]]] = {
-    ws.url(s"$endPoint/tagged-answer/$user_id").put(Json.toJson(tagged_answer_creation)).map(parse[Seq[Answer]])
+    ws.put[Seq[Answer]](s"$endPoint/tagged-answer/$user_id", timeout, Json.toJson(tagged_answer_creation))
   }
 }

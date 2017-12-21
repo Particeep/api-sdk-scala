@@ -29,62 +29,55 @@ object WalletClient {
   private implicit val cashin_bank_account_creation_format = CashInBankAccountCreation.format
 }
 
-class WalletClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class WalletClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import WalletClient._
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Wallet]] = {
-    ws.url(s"$endPoint/$id", timeout).get().map(parse[Wallet])
+    ws.get[Wallet](s"$endPoint/$id", timeout)
   }
 
   def byTargetIdAndType(owner_id: String, owner_type: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Wallet]] = {
-    ws.url(s"$endPoint/owner/$owner_id/$owner_type", timeout).get().map(parse[Wallet])
+    ws.get[Wallet](s"$endPoint/owner/$owner_id/$owner_type", timeout)
   }
 
   def consumerWallet(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Wallet]] = {
-    ws.url(s"$endPoint/consumer", timeout).get().map(parse[Wallet])
+    ws.get[Wallet](s"$endPoint/consumer", timeout)
   }
 
   def create(wallet_creation: WalletCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Wallet]] = {
-    ws.url(s"$endPoint", timeout).put(Json.toJson(wallet_creation)).map(parse[Wallet])
+    ws.put[Wallet](s"$endPoint", timeout, Json.toJson(wallet_creation))
   }
 
   def cashin(id: String, cash_in: CashIn, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, String]] = {
-    ws.url(s"$endPoint/$id/cashin", timeout).post(Json.toJson(cash_in)).map(parse[String])
+    ws.post[String](s"$endPoint/$id/cashin", timeout, Json.toJson(cash_in))
   }
 
   def withdraw(id: String, cash_out: CashOut, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, TransactionWallet]] = {
-    ws.url(s"$endPoint/$id/cashout", timeout).post(Json.toJson(cash_out)).map(parse[TransactionWallet])
+    ws.post[TransactionWallet](s"$endPoint/$id/cashout", timeout, Json.toJson(cash_out))
   }
 
   def transfer(transfer: WalletTransfer, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, TransactionWallet]] = {
-    ws.url(s"$endPoint/transfer", timeout).post(Json.toJson(transfer)).map(parse[TransactionWallet])
+    ws.post[TransactionWallet](s"$endPoint/transfer", timeout, Json.toJson(transfer))
   }
 
   def allRelatedTransactions(id: String, criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionWallet]]] = {
-    ws.url(s"$endPoint/$id/transactions", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .get
-      .map(parse[PaginatedSequence[TransactionWallet]])
+    ws.get[PaginatedSequence[TransactionWallet]](s"$endPoint/$id/transactions", timeout, LangUtils.productToQueryString(criteria))
   }
 
   def search(criteria: TransactionWalletSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionWallet]]] = {
-    ws.url(s"$endPoint/transactions/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
-      .get
-      .map(parse[PaginatedSequence[TransactionWallet]])
+    ws.get[PaginatedSequence[TransactionWallet]](s"$endPoint/transactions/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def addBankAccount(id: String, bank_account_creation: BankAccountCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, BankAccount]] = {
-    ws.url(s"$endPoint/$id/bankaccount", timeout).put(Json.toJson(bank_account_creation)).map(parse[BankAccount])
+    ws.put[BankAccount](s"$endPoint/$id/bankaccount", timeout, Json.toJson(bank_account_creation))
   }
 
   def getBankAccountsByWalletId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[BankAccount]]] = {
-    ws.url(s"$endPoint/$id/bankaccount", timeout).get.map(parse[Seq[BankAccount]])
+    ws.get[Seq[BankAccount]](s"$endPoint/$id/bankaccount", timeout)
   }
 
   def cashinBankAccount(id: String, cash_in_bank_account_creation: CashInBankAccountCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, CashInBankAccount]] = {
-    ws.url(s"$endPoint/$id/cashin/bankAccount", timeout).post(Json.toJson(cash_in_bank_account_creation)).map(parse[CashInBankAccount])
+    ws.post[CashInBankAccount](s"$endPoint/$id/cashin/bankAccount", timeout, Json.toJson(cash_in_bank_account_creation))
   }
 }

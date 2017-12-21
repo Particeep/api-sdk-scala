@@ -23,23 +23,20 @@ object SignatureClient {
 
 }
 
-class SignatureClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class SignatureClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import SignatureClient._
 
   def sign(signature_creation: SignatureCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Signature]] = {
-    ws.url(s"$endPoint", timeout).post(Json.toJson(signature_creation)).map(parse[Signature])
+    ws.post[Signature](s"$endPoint", timeout, Json.toJson(signature_creation))
   }
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Signature]] = {
-    ws.url(s"$endPoint/$id", timeout).get().map(parse[Signature])
+    ws.get[Signature](s"$endPoint/$id", timeout)
   }
 
   def byIds(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Signature]]] = {
-    ws.url(s"$endPoint", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
-      .get()
-      .map(parse[List[Signature]])
+    ws.get[List[Signature]](s"$endPoint", timeout, List("ids" -> ids.mkString(",")))
   }
 
   def search(
@@ -47,18 +44,14 @@ class SignatureClient(val ws: WSClient, val credentials: Option[ApiCredential] =
     table_criteria: TableSearch,
     timeout:        Long            = -1
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Signature]]] = {
-    ws.url(s"$endPoint/search", timeout)
-      .withQueryString(LangUtils.productToQueryString(criteria): _*)
-      .withQueryString(LangUtils.productToQueryString(table_criteria): _*)
-      .get
-      .map(parse[PaginatedSequence[Signature]])
+    ws.get[PaginatedSequence[Signature]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def getFile(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Stream[Byte]]] = {
-    ws.url(s"$endPoint/file/$id").get().map(parse[Stream[Byte]])
+    ws.get[Stream[Byte]](s"$endPoint/file/$id", timeout)
   }
 
   def getStatus(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, String]] = {
-    ws.url(s"$endPoint/status/$id").get().map(parse[String])
+    ws.get[String](s"$endPoint/status/$id", timeout)
   }
 }

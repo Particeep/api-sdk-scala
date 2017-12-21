@@ -29,7 +29,7 @@ object DocumentClient {
   private implicit val format_edition = DocumentEdition.format
 }
 
-class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import DocumentClient._
 
@@ -48,30 +48,27 @@ class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
       new StringPart("locked", document_creation.locked.getOrElse(false).toString),
       new StringPart("override_existing_file", document_creation.override_existing_file.getOrElse(false).toString)
     )
-    ws.postFile(s"$endPoint/$owner_id/upload", file, bodyParts, timeout).map(parse[Document])
+    ws.postFile[Document](s"$endPoint/$owner_id/upload", timeout, file, bodyParts)
   }
 
   def createDir(owner_id: String, document_creation: DocumentCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
-    ws.url(s"$endPoint/$owner_id/dir", timeout).post(Json.toJson(document_creation)).map(parse[Document])
+    ws.post[Document](s"$endPoint/$owner_id/dir", timeout, Json.toJson(document_creation))
   }
 
   def download(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Stream[Byte]]] = {
-    ws.url(s"$endPoint/download/$id", timeout).get().map(parse[Stream[Byte]])
+    ws.get[Stream[Byte]](s"$endPoint/download/$id", timeout)
   }
 
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
-    ws.url(s"$endPoint/$id", timeout).get().map(parse[Document])
+    ws.get[Document](s"$endPoint/$id", timeout)
   }
 
   def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Document]]] = {
-    ws.url(s"$endPoint", timeout)
-      .withQueryString("ids" -> ids.mkString(","))
-      .get()
-      .map(parse[List[Document]])
+    ws.get[List[Document]](s"$endPoint", timeout, List("ids" -> ids.mkString(",")))
   }
 
   def update(id: String, document_edition: DocumentEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
-    ws.url(s"$endPoint/$id", timeout).post(Json.toJson(document_edition)).map(parse[Document])
+    ws.post[Document](s"$endPoint/$id", timeout, Json.toJson(document_edition))
   }
 
   def listDir(
@@ -84,14 +81,14 @@ class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
       target_id.map(x => List(("target_id", x))).getOrElse(List()) ++
       target_type.map(x => List(("target_type", x))).getOrElse(List())
 
-    ws.url(s"$endPoint/dir", timeout).withQueryString(params: _*).get().map(parse[List[FolderOrFile]])
+    ws.get[List[FolderOrFile]](s"$endPoint/dir", timeout, params)
   }
 
   def search(criteria: DocumentSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Document]]] = {
-    ws.url(s"$endPoint/search", timeout).withQueryString(LangUtils.productToQueryString(criteria): _*).get().map(parse[PaginatedSequence[Document]])
+    ws.get[PaginatedSequence[Document]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria))
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
-    ws.url(s"$endPoint/$id", timeout).delete().map(parse[Document])
+    ws.delete[Document](s"$endPoint/$id", timeout)
   }
 }

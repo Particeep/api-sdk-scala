@@ -22,19 +22,19 @@ object WebHookClient {
 
 }
 
-class WebHookClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends ResponseParser with WithWS with WithCredentials with EntityClient {
+class WebHookClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
 
   import WebHookClient._
 
   def create(webhook_creation: WebHookSimple, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, WebHook]] = {
-    ws.url(s"$endPoint", timeout).put(Json.toJson(webhook_creation)).map(parse[WebHook])
+    ws.put[WebHook](s"$endPoint", timeout, Json.toJson(webhook_creation))
   }
 
   def edition(id: String, webhook_edition: WebHookSimple, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, WebHook]] = {
-    ws.url(s"$endPoint/$id", timeout).post(Json.toJson(webhook_edition)).map(parse[WebHook])
+    ws.post[WebHook](s"$endPoint/$id", timeout, Json.toJson(webhook_edition))
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, WebHook]] = {
-    ws.url(s"$endPoint/$id", timeout).delete().map(parse[WebHook])
+    ws.delete[WebHook](s"$endPoint/$id", timeout)
   }
 }
