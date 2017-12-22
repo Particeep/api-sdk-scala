@@ -1,7 +1,7 @@
 package com.particeep.api
 
 import com.particeep.api.core._
-import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.news._
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
@@ -49,7 +49,7 @@ class NewsClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
     ws.post[News](s"$endPoint/$id", timeout, Json.toJson(news_edition))
   }
 
-  def search(criteria: NewsSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[News]]] = {
-    ws.get[PaginatedSequence[News]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria))
+  def search(criteria: NewsSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[News]]] = {
+    ws.get[PaginatedSequence[News]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 }
