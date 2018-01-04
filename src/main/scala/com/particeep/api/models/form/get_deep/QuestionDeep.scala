@@ -15,6 +15,7 @@ case class QuestionDeep(
   possibility_id_dep: Option[String]        = None,
   question_type:      Option[QuestionType]  = None,
   required:           Boolean               = false,
+  pattern:            Option[String]        = None,
   index:              Option[Int]           = None,
   possibilities:      Seq[Possibility]      = Seq(),
 
