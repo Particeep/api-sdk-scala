@@ -7,7 +7,10 @@ import com.particeep.api.models.form.edition.{ FormEdition, PossibilityEdition, 
 import com.particeep.api.models.form.edition_deep.FormEditionDeep
 import com.particeep.api.models.form.get._
 import com.particeep.api.models.form.get_deep._
+import com.particeep.api.models.imports.ImportResult
+import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
+import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -21,6 +24,7 @@ trait FormCapability {
 
 object FormClient {
   private val endPoint: String = "/form"
+  private val endPoint_import: String = "/import"
   private implicit val format = FormDeep.format
 
   private implicit val format_form_get = Form.format
@@ -43,6 +47,8 @@ object FormClient {
   private implicit val format_answer = Answer.format
   private implicit val format_answer_creation = AnswerCreation.format
   private implicit val format_tagged_answer_creation = AnswerCreationWithTag.format
+
+  private implicit val importResultReads = ImportResult.format[Answer]
 }
 
 class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
@@ -123,5 +129,9 @@ class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   def addTaggedAnswers(user_id: String, tagged_answer_creation: AnswerCreationWithTag, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[Answer]]] = {
     ws.put[Seq[Answer]](s"$endPoint/tagged-answer/$user_id", timeout, Json.toJson(tagged_answer_creation))
+  }
+
+  def importAnswersFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[Answer]]] = {
+    ws.postFile[ImportResult[Answer]](s"$endPoint_import/form/answer", timeout, csv, List())
   }
 }
