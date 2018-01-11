@@ -48,7 +48,7 @@ object FormClient {
   private implicit val format_answer_creation = AnswerCreation.format
   private implicit val format_tagged_answer_creation = AnswerCreationWithTag.format
 
-  private implicit val importResultReads = ImportResult.format[Answer]
+  private implicit val importResultReads = ImportResult.format[Seq[Answer]]
 }
 
 class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
