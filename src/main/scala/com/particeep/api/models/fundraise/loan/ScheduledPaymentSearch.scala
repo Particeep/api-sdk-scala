@@ -15,11 +15,8 @@ case class ScheduledPaymentSearch(
   recipient_type:     Option[String]        = None,
   parent_id:          Option[String]        = None,
   parent_type:        Option[String]        = None,
-  tag:                Option[String]        = None,
-  sort_by:            Option[String]        = None,
-  order_by:           Option[String]        = Some("asc"),
-  offset:             Option[Int]           = Some(0),
-  limit:              Option[Int]           = Some(30)
+  dependency_id:      Option[String]        = None,
+  tag:                Option[String]        = None
 )
 
 object ScheduledPaymentSearch {

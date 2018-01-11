@@ -3,7 +3,7 @@ package com.particeep.api
 import com.ning.http.client.multipart.StringPart
 import com.particeep.api.core._
 import com.particeep.api.models.document._
-import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
@@ -84,8 +84,8 @@ class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
     ws.get[List[FolderOrFile]](s"$endPoint/dir", timeout, params)
   }
 
-  def search(criteria: DocumentSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Document]]] = {
-    ws.get[PaginatedSequence[Document]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria))
+  def search(criteria: DocumentSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Document]]] = {
+    ws.get[PaginatedSequence[Document]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {

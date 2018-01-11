@@ -1,7 +1,7 @@
 package com.particeep.api
 
 import com.particeep.api.core._
-import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.enterprise._
 import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.utils.LangUtils
@@ -55,8 +55,8 @@ class EnterpriseClient(val ws: WSClient, val credentials: Option[ApiCredential] 
     ws.post[Enterprise](s"$endPoint/$id", timeout, Json.toJson(enterprise_edition))
   }
 
-  def search(criteria: EnterpriseSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Enterprise]]] = {
-    ws.get[PaginatedSequence[Enterprise]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria))
+  def search(criteria: EnterpriseSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Enterprise]]] = {
+    ws.get[PaginatedSequence[Enterprise]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enterprise]] = {
