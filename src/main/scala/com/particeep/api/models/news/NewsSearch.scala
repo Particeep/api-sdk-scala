@@ -14,11 +14,7 @@ case class NewsSearch(
   is_report:      Option[Boolean]       = None,
   tag:            Option[String]        = None,
   publish_before: Option[ZonedDateTime] = None,
-  publish_after:  Option[ZonedDateTime] = None,
-  sort_by:        Option[String]        = Some("publish_at"),
-  order_by:       Option[String]        = Some("desc"),
-  offset:         Option[Int]           = None,
-  limit:          Option[Int]           = None
+  publish_after:  Option[ZonedDateTime] = None
 )
 
 object NewsSearch {

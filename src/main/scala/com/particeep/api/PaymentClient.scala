@@ -1,7 +1,7 @@
 package com.particeep.api
 
 import com.particeep.api.core._
-import com.particeep.api.models.{ ErrorResult, PaginatedSequence }
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.fundraise.loan.{ ScheduledPayment, ScheduledPaymentSearch }
 import com.particeep.api.models.payment.{ PayResult, PaymentCbCreation, ScheduledPaymentCreation }
 import com.particeep.api.models.transaction.Transaction
@@ -64,8 +64,8 @@ class PaymentClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
     ws.get[List[ScheduledPayment]](s"$endPoint/schedule", timeout, List("ids" -> ids.mkString(",")))
   }
 
-  def searchScheduledPayments(criteria: ScheduledPaymentSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[ScheduledPayment]]] = {
-    ws.get[PaginatedSequence[ScheduledPayment]](s"$endPoint/schedule/search", timeout, LangUtils.productToQueryString(criteria))
+  def searchScheduledPayments(criteria: ScheduledPaymentSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[ScheduledPayment]]] = {
+    ws.get[PaginatedSequence[ScheduledPayment]](s"$endPoint/schedule/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def cancelScheduledPayment(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {

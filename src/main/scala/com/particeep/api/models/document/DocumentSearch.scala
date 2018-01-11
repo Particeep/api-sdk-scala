@@ -15,11 +15,7 @@ case class DocumentSearch(
   content_type: Option[String],
   external_id:  Option[String],
   doc_type:     Option[String],
-  custom:       Option[String],
-  limit:        Option[Int]    = None,
-  offset:       Option[Int]    = None,
-  sort_by:      Option[String] = None,
-  order_by:     Option[String] = Some("asc")
+  custom:       Option[String]
 )
 
 object DocumentSearch {
