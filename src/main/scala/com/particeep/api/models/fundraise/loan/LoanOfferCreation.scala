@@ -11,6 +11,7 @@ case class LoanOfferCreation(
   rate:                 Double,
   tax_rate:             Option[Double]         = None,
   amount_min:           Option[Int]            = None,
+  amount_max:           Option[Int]            = None,
   method:               Option[CalculatorType] = None,
   repayment_frequency:  Option[Int]            = None,
   repayment_start_date: Option[ZonedDateTime]  = None,
