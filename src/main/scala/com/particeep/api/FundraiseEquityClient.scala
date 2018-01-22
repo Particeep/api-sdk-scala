@@ -58,8 +58,8 @@ class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.post[FundraiseEquity](s"$endPoint/fundraise/running/$id", timeout, Json.toJson(fundraise_equity_running_edition))
   }
 
-  def search(criteria: FundraiseEquitySearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseEquity]]] = {
-    ws.get[PaginatedSequence[FundraiseEquity]](s"$endPoint/fundraises", timeout, LangUtils.productToQueryString(criteria))
+  def search(criteria: FundraiseEquitySearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseEquity]]] = {
+    ws.get[PaginatedSequence[FundraiseEquity]](s"$endPoint/fundraises", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseEquity]] = {

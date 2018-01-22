@@ -13,9 +13,7 @@ case class FundraiseLoanSearch(
   term_min:       Option[Int]           = None,
   term_max:       Option[Int]           = None,
   rate_min:       Option[Double]        = None,
-  rate_max:       Option[Double]        = None,
-  offset:         Option[Int]           = Some(0),
-  limit:          Option[Int]           = Some(30)
+  rate_max:       Option[Double]        = None
 )
 
 object FundraiseLoanSearch {
