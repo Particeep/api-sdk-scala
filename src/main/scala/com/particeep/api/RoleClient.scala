@@ -2,7 +2,7 @@ package com.particeep.api
 
 import com.particeep.api.core._
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
-import com.particeep.api.models.role.{ RoleCreation, RoleSearch, Roles }
+import com.particeep.api.models.role._
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 
@@ -19,6 +19,7 @@ object RoleClient {
   private val endPoint: String = "/role"
   private implicit val format = Roles.format
   private implicit val creation_format = RoleCreation.format
+  private implicit val creations_format = RolesCreation.format
 }
 
 class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
@@ -35,6 +36,10 @@ class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   def add(user_id: String, role: String, role_creation: RoleCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
     ws.put[Roles](s"$endPoint/$user_id/add/${role.toLowerCase}", timeout, Json.toJson(role_creation))
+  }
+
+  def addRoles(roles_creation: List[RolesCreation], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Roles]]] = {
+    ws.put[List[Roles]](s"$endPoint", timeout, Json.toJson(roles_creation))
   }
 
   private[this] case class TargetInfo(target_id: Option[String], target_type: Option[String])
