@@ -51,8 +51,8 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.get[List[FundraiseReward]](s"$endPoint/fundraise", timeout, List("ids" -> ids.mkString(",")))
   }
 
-  def search(criteria: FundraiseRewardSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseReward]]] = {
-    ws.get[PaginatedSequence[FundraiseReward]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria))
+  def search(criteria: FundraiseRewardSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseReward]]] = {
+    ws.get[PaginatedSequence[FundraiseReward]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def create(fundraise_reward_creation: FundraiseRewardCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
