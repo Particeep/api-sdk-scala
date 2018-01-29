@@ -25,7 +25,8 @@ case class TransactionSearch(
   payment_method:  Option[String]        = None,
   handled_offline: Option[Boolean]       = None,
   comment:         Option[String]        = None,
-  targeting_roles: Option[String]        = None
+  targeting_roles: Option[String]        = None,
+  ids:             Option[String]        = None
 )
 
 object TransactionSearch {
