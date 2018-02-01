@@ -5,11 +5,11 @@ import play.api.libs.json.Json
 
 case class QuestionCreation(
   section_id:    String,
-  label:         Option[String],
-  question_type: Option[QuestionType],
-  required:      Option[Boolean],
+  label:         Option[String]       = None,
+  question_type: Option[QuestionType] = None,
+  required:      Option[Boolean]      = None,
   pattern:       Option[String]       = None,
-  index:         Option[Int]
+  index:         Option[Int]          = None
 )
 
 object QuestionCreation {
