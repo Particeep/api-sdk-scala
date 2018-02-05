@@ -26,6 +26,10 @@ class WebHookClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
 
   import WebHookClient._
 
+  def all(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[WebHook]]] = {
+    ws.get[List[WebHook]](s"$endPoint/all", timeout)
+  }
+
   def create(webhook_creation: WebHookSimple, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, WebHook]] = {
     ws.put[WebHook](s"$endPoint", timeout, Json.toJson(webhook_creation))
   }
