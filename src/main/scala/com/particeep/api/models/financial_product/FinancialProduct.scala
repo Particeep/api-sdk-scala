@@ -9,7 +9,7 @@ case class FinancialProduct(
   id:                String                = "",
   created_at:        Option[ZonedDateTime] = None,
   last_updated_at:   Option[ZonedDateTime] = None,
-  name:              String,
+  name:              String                = "",
   description:       Option[String]        = None,
   picture_url:       Option[String]        = None,
   price_per_share:   Option[Int]           = None,
