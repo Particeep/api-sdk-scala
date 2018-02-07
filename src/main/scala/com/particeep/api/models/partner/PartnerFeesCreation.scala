@@ -2,6 +2,7 @@ package com.particeep.api.models.partner
 
 import java.time.ZonedDateTime
 
+import com.particeep.api.core.Formatter
 import play.api.libs.json.{ JsObject, Json }
 
 case class PartnerFeesCreation(
@@ -17,5 +18,6 @@ case class PartnerFeesCreation(
 )
 
 object PartnerFeesCreation {
+  implicit val date_format = Formatter.ZonedDateTimeWrites
   val format = Json.format[PartnerFeesCreation]
 }
