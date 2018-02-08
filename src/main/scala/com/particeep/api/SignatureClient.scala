@@ -54,4 +54,8 @@ class SignatureClient(val ws: WSClient, val credentials: Option[ApiCredential] =
   def getStatus(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, String]] = {
     ws.get[String](s"$endPoint/status/$id", timeout)
   }
+
+  def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Signature]] = {
+    ws.delete[Signature](s"$endPoint/$id", timeout)
+  }
 }
