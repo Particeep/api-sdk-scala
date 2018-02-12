@@ -6,11 +6,10 @@ import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class RepaymentVector(
-  capital:                Double,
-  interest:               Double,
-  taxes:                  Double,
-  amount:                 Double,
-  capital_remains_to_pay: Double
+  capital:                BigDecimal,
+  interest:               BigDecimal,
+  taxes:                  BigDecimal,
+  capital_remains_to_pay: BigDecimal
 )
 
 case class RepaymentVectorWithDate(
@@ -19,13 +18,11 @@ case class RepaymentVectorWithDate(
 )
 
 case class RepaymentInfoVector(
-  repaymentInfo: RepaymentInfo,
-  repayments:    List[RepaymentVectorWithDate]
+  repayments: Option[List[RepaymentVectorWithDate]] = None
 )
 
 object RepaymentInfoVector {
   implicit val date_format = Formatter.ZonedDateTimeWrites
-  private[this] implicit val repayment_info_format = RepaymentInfo.format
   private[this] implicit val repayment_vector_format = Json.format[RepaymentVector]
   private[this] implicit val repayment_vector_date_format = Json.format[RepaymentVectorWithDate]
   val format = Json.format[RepaymentInfoVector]
