@@ -121,8 +121,8 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
   }
 
   def generateCustomRepaymentSchedule(id: String, repayment_info_vector: RepaymentInfoVector,
-                                      timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
-    ws.post[List[ScheduledPayment]](s"$endPoint/fundraise/$id/schedule/update", timeout, Json.toJson(repayment_info_vector))
+                                      timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
+    ws.post[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/schedule/update", timeout, Json.toJson(repayment_info_vector))
   }
 
   def cancelRemainingPayments(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
