@@ -45,16 +45,32 @@ class PartnerClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
     ws.delete[PartnerFees](s"$endPoint/fees/$user_id/default", timeout)
   }
 
-  def createPartnerFees(user_id: String, target_id: String, target_type: String, partner_fees_on_target_creation: PartnerFeesOnTargetCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
-    ws.put[PartnerFeesOnTarget](s"$endPoint/fees/$user_id/$target_id/$target_type", timeout, Json.toJson(partner_fees_on_target_creation))
+  def createPartnerFees(
+    user_id:                         String,
+    target_id:                       String,
+    target_type:                     String,
+    partner_fees_on_target_creation: PartnerFeesOnTargetCreation,
+    timeout:                         Long                        = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
+    ws.put[PartnerFeesOnTarget](
+      s"$endPoint/fees/$user_id/$target_id/$target_type", timeout, Json.toJson(partner_fees_on_target_creation)
+    )
   }
 
   def getPartnerFees(user_id: String, target_id: String, target_type: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
     ws.get[PartnerFeesOnTarget](s"$endPoint/fees/$user_id/$target_id/$target_type", timeout)
   }
 
-  def updatePartnerFees(user_id: String, target_id: String, target_type: String, partner_fees_on_target_edition: PartnerFeesOnTargetEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
-    ws.post[PartnerFeesOnTarget](s"$endPoint/fees/$user_id/$target_id/$target_type", timeout, Json.toJson(partner_fees_on_target_edition))
+  def updatePartnerFees(
+    user_id:                        String,
+    target_id:                      String,
+    target_type:                    String,
+    partner_fees_on_target_edition: PartnerFeesOnTargetEdition,
+    timeout:                        Long                       = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
+    ws.post[PartnerFeesOnTarget](
+      s"$endPoint/fees/$user_id/$target_id/$target_type", timeout, Json.toJson(partner_fees_on_target_edition)
+    )
   }
 
   def deletePartnerFees(user_id: String, target_id: String, target_type: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {

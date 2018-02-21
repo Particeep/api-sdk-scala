@@ -64,8 +64,16 @@ class PaymentClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
     ws.get[List[ScheduledPayment]](s"$endPoint/schedule", timeout, List("ids" -> ids.mkString(",")))
   }
 
-  def searchScheduledPayments(criteria: ScheduledPaymentSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[ScheduledPayment]]] = {
-    ws.get[PaginatedSequence[ScheduledPayment]](s"$endPoint/schedule/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
+  def searchScheduledPayments(
+    criteria:       ScheduledPaymentSearch,
+    table_criteria: TableSearch,
+    timeout:        Long                   = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[ScheduledPayment]]] = {
+    ws.get[PaginatedSequence[ScheduledPayment]](
+      s"$endPoint/schedule/search",
+      timeout,
+      LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria)
+    )
   }
 
   def cancelScheduledPayment(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {

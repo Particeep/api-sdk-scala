@@ -19,7 +19,7 @@ trait EntityClient {
     .orElse(this.credentials)
     .getOrElse {
       log.warn("""
-        You haven't set any api credentials. Your call to Particeep's API won't work. 
+        You haven't set any api credentials. Your call to Particeep's API won't work.
         Please set your api_key and api_secret to to continue.
 
         More information in the documentation : https://github.com/Particeep/api-sdk-scala
