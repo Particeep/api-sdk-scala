@@ -70,11 +70,21 @@ class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.post[FundraiseEquity](s"$endPoint/fundraise/$id/status/$new_status", timeout, Json.toJson(""))
   }
 
-  def allInvestmentsOnFundraise(id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Investment]]] = {
+  def allInvestmentsOnFundraise(
+    id:             String,
+    criteria:       TransactionSearch,
+    table_criteria: TableSearch,
+    timeout:        Long              = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Investment]]] = {
     ws.get[PaginatedSequence[Investment]](s"$endPoint/fundraise/$id/investments", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
-  def allInvestmentsByUser(user_id: String, criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
+  def allInvestmentsByUser(
+    user_id:        String,
+    criteria:       TransactionSearch,
+    table_criteria: TableSearch,
+    timeout:        Long              = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
     ws.get[PaginatedSequence[Transaction]](s"$endPoint/fundraise/investments/user/$user_id", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 

@@ -52,7 +52,11 @@ class FinancialProductClient(val ws: WSClient, val credentials: Option[ApiCreden
     ws.get[List[FinancialProduct]](s"$endPoint/$id/composition", timeout)
   }
 
-  def addToComposition(id: String, financial_product_composition_creations: List[FinancialProductCompositionCreation], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FinancialProduct]]] = {
+  def addToComposition(
+    id:                                      String,
+    financial_product_composition_creations: List[FinancialProductCompositionCreation],
+    timeout:                                 Long                                      = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FinancialProduct]]] = {
     ws.post[List[FinancialProduct]](s"$endPoint/$id/composition", timeout, Json.toJson(financial_product_composition_creations))
   }
 

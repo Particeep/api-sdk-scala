@@ -77,7 +77,12 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
     }
   }
 
-  def post[T](path: String, timeOut: Long, body: JsValue, params: List[(String, String)] = List())(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
+  def post[T](
+    path:    String,
+    timeOut: Long,
+    body:    JsValue,
+    params:  List[(String, String)] = List()
+  )(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
     url(path).withQueryString(params: _*).post(body).map(parse[T](_)).recover {
       case NonFatal(e) => handle_error(e, "POST", path)
     }
@@ -89,13 +94,23 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
     }
   }
 
-  def delete[T](path: String, timeOut: Long, body: JsValue = Json.toJson(""), params: List[(String, String)] = List())(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
+  def delete[T](
+    path:    String,
+    timeOut: Long,
+    body:    JsValue                = Json.toJson(""),
+    params:  List[(String, String)] = List()
+  )(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
     url(path).withQueryString(params: _*).withMethod("DELETE").withBody(body).execute().map(parse[T](_)).recover {
       case NonFatal(e) => handle_error(e, "DELETE", path)
     }
   }
 
-  def postFile[T](path: String, timeout: Long, file: MultipartFormData[TemporaryFile], bodyParts: List[Part])(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
+  def postFile[T](
+    path:      String,
+    timeout:   Long,
+    file:      MultipartFormData[TemporaryFile],
+    bodyParts: List[Part]
+  )(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
     val documentFilePart = file.files.head
     val client = WS.client.underlying[AsyncHttpClient]
     val postBuilder = urlFileUpload(path, client, timeout)
