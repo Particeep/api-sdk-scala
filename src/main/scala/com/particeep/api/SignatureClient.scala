@@ -2,7 +2,7 @@ package com.particeep.api
 
 import com.particeep.api.core._
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
-import com.particeep.api.models.signature.{ Signature, SignatureCreation, SignatureSearch }
+import com.particeep.api.models.signature._
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 
@@ -19,7 +19,9 @@ object SignatureClient {
 
   private val endPoint: String = "/signature"
   private implicit val format = Signature.format
+  private implicit val multiple_format = SignatureMultiple.format
   private implicit val creation_format = SignatureCreation.format
+  private implicit val multiple_creation_format = SignatureMultipleCreation.format
 
 }
 
@@ -31,12 +33,20 @@ class SignatureClient(val ws: WSClient, val credentials: Option[ApiCredential] =
     ws.post[Signature](s"$endPoint", timeout, Json.toJson(signature_creation))
   }
 
+  def signMultiple(signature_multiple_creation: SignatureMultipleCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, SignatureMultiple]] = {
+    ws.post[SignatureMultiple](s"$endPoint/multiple", timeout, Json.toJson(signature_multiple_creation))
+  }
+
   def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Signature]] = {
     ws.get[Signature](s"$endPoint/$id", timeout)
   }
 
   def byIds(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Signature]]] = {
     ws.get[List[Signature]](s"$endPoint", timeout, List("ids" -> ids.mkString(",")))
+  }
+
+  def multipleById(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, SignatureMultiple]] = {
+    ws.get[SignatureMultiple](s"$endPoint/multiple/$id", timeout)
   }
 
   def search(
