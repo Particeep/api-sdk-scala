@@ -8,8 +8,6 @@ import play.api.libs.json.{ Json, JsObject }
 case class ScoringEvaluation(
   id:            String                = "",
   created_at:    Option[ZonedDateTime] = None,
-  created_by:    Option[String]        = None,
-  deleted_at:    Option[ZonedDateTime] = None,
   score:         Option[Long]          = None,
   metric_id:     String,
   source_params: JsObject,

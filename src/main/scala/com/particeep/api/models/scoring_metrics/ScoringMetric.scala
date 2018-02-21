@@ -8,8 +8,6 @@ import com.particeep.api.core.Formatter
 case class ScoringMetric(
   id:             String                = "",
   created_at:     Option[ZonedDateTime] = None,
-  created_by:     Option[String]        = None,
-  deleted_at:     Option[ZonedDateTime] = None,
   type_signature: TypeSignature,
   formula_name:   Option[String]        = None,
   formula_code:   String,
@@ -20,5 +18,7 @@ case class ScoringMetric(
 
 object ScoringMetric {
   implicit val date_format = Formatter.ZonedDateTimeWrites
+  implicit val type_signature_reads = TypeSignature.typeSignatureReads
+  implicit val type_signature_writes = TypeSignature.typeSignatureWrites
   val format = Json.format[ScoringMetric]
 }
