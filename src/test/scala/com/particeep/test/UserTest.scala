@@ -90,7 +90,7 @@ class UserTest extends FlatSpec with Matchers {
   "the api client" should "load user by id with helper and overload credentials with custom header" in {
 
     val user_id = "bf5788e8-9756-4d18-8b0f-100d7fba17a2"
-    val ws = new ApiClient("http://local.particeep.com:9100", "1", Some(ConfigTest.credential)) with UserCapability {
+    val ws = new ApiClient("https://test-api.particeep.com", "1", Some(ConfigTest.credential)) with UserCapability {
       override def parse[A](response: WSResponse)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
         val msg = response
           .allHeaders
