@@ -5,6 +5,7 @@ import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.fundraise.loan._
 import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
+import com.particeep.api.models.user.User
 import com.particeep.api.utils.LangUtils
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
@@ -28,6 +29,7 @@ object FundraiseLoanClient {
   private implicit val running_edition_format = FundraiseLoanRunningEdition.format
   private implicit val repayment_info_format = RepaymentInfo.format
   private implicit val repayment_with_date_format = RepaymentWithDate.format
+  private implicit val repayment_with_date_and_user_format = RepaymentWithDate.repayment_with_date_and_user_format
   private implicit val repayment_info_vector_format = RepaymentInfoVector.format
   private implicit val scheduled_payment_format = ScheduledPayment.format
   private implicit val lend_format = Lend.format
@@ -38,7 +40,6 @@ object FundraiseLoanClient {
 }
 
 class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
-  implicit val repayment_detail_format = RepaymentDetail.format
 
   import FundraiseLoanClient._
 
@@ -109,8 +110,8 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     ws.post[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/info/borrower", timeout, Json.toJson(""))
   }
 
-  def getBorrowerRepaymentScheduleDetail(id: String, payment_month: Int, payment_year: Int, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentDetail]]] = {
-    ws.get[List[RepaymentDetail]](s"$endPoint/fundraise/$id/detail/borrower/$payment_month/$payment_year", timeout)
+  def getBorrowerRepaymentScheduleDetail(id: String, payment_month: Int, payment_year: Int, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[(RepaymentWithDate, User)]]] = {
+    ws.get[List[(RepaymentWithDate, User)]](s"$endPoint/fundraise/$id/detail/borrower/$payment_month/$payment_year", timeout)
   }
 
   def generateRepaymentSchedule(
