@@ -22,6 +22,7 @@ object WalletClient {
   private implicit val cash_in_format = CashIn.format
   private implicit val cash_out_format = CashOut.format
   private implicit val transaction_format = TransactionWallet.format
+  private implicit val transaction_data_format = TransactionWalletData.format
   private implicit val transfer_format = WalletTransfer.format
   private implicit val bank_account_format = BankAccount.format
   private implicit val bank_account_creation_format = BankAccountCreation.format
@@ -65,8 +66,8 @@ class WalletClient(val ws: WSClient, val credentials: Option[ApiCredential] = No
     ws.get[PaginatedSequence[TransactionWallet]](s"$endPoint/$id/transactions", timeout, LangUtils.productToQueryString(criteria))
   }
 
-  def search(criteria: TransactionWalletSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionWallet]]] = {
-    ws.get[PaginatedSequence[TransactionWallet]](s"$endPoint/transactions/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
+  def search(criteria: TransactionWalletSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionWalletData]]] = {
+    ws.get[PaginatedSequence[TransactionWalletData]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
   def addBankAccount(id: String, bank_account_creation: BankAccountCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, BankAccount]] = {
