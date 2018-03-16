@@ -106,11 +106,23 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     ws.post[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/info/user/$user_id", timeout, Json.toJson(""))
   }
 
+  def getTransactionRepaymentSchedule(id: String, transaction_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
+    ws.get[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/repayment/transaction/$transaction_id", timeout)
+  }
+
   def getBorrowerRepaymentSchedule(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
     ws.post[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/info/borrower", timeout, Json.toJson(""))
   }
 
-  def getBorrowerRepaymentScheduleDetail(id: String, payment_month: Int, payment_year: Int, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[(RepaymentWithDate, User)]]] = {
+  def getBorrowerRepaymentScheduleDetail(
+    id:            String,
+    payment_month: Int,
+    payment_year:  Int,
+    timeout:       Long   = -1
+  )(
+    implicit
+    exec: ExecutionContext
+  ): Future[Either[ErrorResult, List[(RepaymentWithDate, User)]]] = {
     ws.get[List[(RepaymentWithDate, User)]](s"$endPoint/fundraise/$id/detail/borrower/$payment_month/$payment_year", timeout)
   }
 
