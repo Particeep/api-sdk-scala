@@ -66,7 +66,14 @@ class WalletClient(val ws: WSClient, val credentials: Option[ApiCredential] = No
     ws.get[PaginatedSequence[TransactionWallet]](s"$endPoint/$id/transactions", timeout, LangUtils.productToQueryString(criteria))
   }
 
-  def search(criteria: TransactionWalletSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionWalletData]]] = {
+  def search(
+    criteria:       TransactionWalletSearch,
+    table_criteria: TableSearch,
+    timeout:        Long                    = -1
+  )(
+    implicit
+    exec: ExecutionContext
+  ): Future[Either[ErrorResult, PaginatedSequence[TransactionWalletData]]] = {
     ws.get[PaginatedSequence[TransactionWalletData]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
