@@ -26,11 +26,38 @@ trait WSClient {
    * @param exec : Execution context for the request
    * @return
    */
-  def get[T](path: String, timeOut: Long, params: List[(String, String)] = List())(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]]
-  def post[T](path: String, timeOut: Long, body: JsValue, params: List[(String, String)] = List())(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]]
-  def put[T](path: String, timeOut: Long, body: JsValue)(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]]
-  def delete[T](path: String, timeOut: Long, body: JsValue = Json.toJson(""), params: List[(String, String)] = List())(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]]
-  def postFile[T](path: String, timeOut: Long, file: MultipartFormData[TemporaryFile], bodyParts: List[Part])(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]]
+  def get[T](
+    path:    String,
+    timeOut: Long,
+    params:  List[(String, String)] = List()
+  )(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]]
+
+  def post[T](
+    path:    String,
+    timeOut: Long,
+    body:    JsValue,
+    params:  List[(String, String)] = List()
+  )(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]]
+
+  def put[T](
+    path:    String,
+    timeOut: Long,
+    body:    JsValue
+  )(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]]
+
+  def delete[T](
+    path:    String,
+    timeOut: Long,
+    body:    JsValue                = Json.toJson(""),
+    params:  List[(String, String)] = List()
+  )(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]]
+
+  def postFile[T](
+    path:      String,
+    timeOut:   Long,
+    file:      MultipartFormData[TemporaryFile],
+    bodyParts: List[Part]
+  )(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]]
 }
 
 trait BaseClient {
