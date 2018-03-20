@@ -10,6 +10,7 @@ case class LoanOffer(
   term:                 Int                    = 0,
   rate:                 Double                 = 0,
   tax_rate:             Double                 = 0,
+  step:                 Int                    = 1,
   amount_min:           Int                    = 0,
   amount_max:           Option[Int]            = None,
   bond_price:           Option[Int]            = None,
