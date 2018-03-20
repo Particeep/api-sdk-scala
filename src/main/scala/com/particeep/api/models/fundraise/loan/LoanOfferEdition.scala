@@ -10,6 +10,7 @@ case class LoanOfferEdition(
   term:                 Option[Int]            = None,
   rate:                 Option[Double]         = None,
   tax_rate:             Option[Double]         = None,
+  step:                 Option[Int]            = None,
   amount_min:           Option[Int]            = None,
   amount_max:           Option[Int]            = None,
   bond_price:           Option[Int]            = None,
