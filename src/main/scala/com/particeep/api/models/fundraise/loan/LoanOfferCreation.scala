@@ -10,6 +10,7 @@ case class LoanOfferCreation(
   term:                 Int,
   rate:                 Double,
   tax_rate:             Option[Double]         = None,
+  step:                 Option[Int]            = None,
   amount_min:           Option[Int]            = None,
   amount_max:           Option[Int]            = None,
   method:               Option[CalculatorType] = None,
