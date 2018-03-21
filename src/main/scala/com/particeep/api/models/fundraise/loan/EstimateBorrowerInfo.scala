@@ -11,7 +11,7 @@ case class EstimateBorrowerInfo(
   term:                 Int,
   rate:                 Double,
   tax_rate:             Double,
-  amount_min:           Int,
+  step:                 Int,
   method:               CalculatorType,
   repayment_frequency:  Int,
   repayment_start_date: ZonedDateTime,
