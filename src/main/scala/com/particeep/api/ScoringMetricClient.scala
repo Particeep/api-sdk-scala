@@ -1,9 +1,10 @@
 package com.particeep.api
 
 import com.particeep.api.core._
-import com.particeep.api.models.ErrorResult
+import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.scoring_metrics._
-import play.api.libs.json.JsObject
+import com.particeep.api.utils.LangUtils
+import play.api.libs.json.Json
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -18,6 +19,7 @@ trait ScoringMetricsCapability {
 object ScoringMetricClient {
   private val endPoint: String = "/scoring-metrics"
   private implicit val scoring_evaluation_format = ScoringEvaluation.format
+  private implicit val scoring_evaluation_creation_format = ScoringEvaluationCreation.format
   private implicit val scoring_metric_format = ScoringMetric.format
 }
 
@@ -25,19 +27,38 @@ class ScoringMetricClient(val ws: WSClient, val credentials: Option[ApiCredentia
 
   import ScoringMetricClient._
 
-  def runScoringEvaluation(
-    input_from_form: JsObject,
-    metric_id:       String,
-    timeout:         Long     = -1
+  def runEvaluation(
+    metric_id:   String,
+    se_creation: ScoringEvaluationCreation,
+    timeout:     Long                      = -1
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, ScoringEvaluation]] = {
-    ws.post[ScoringEvaluation](s"$endPoint/evals", timeout, input_from_form, List(("metric_id", metric_id)))
+    ws.post[ScoringEvaluation](s"$endPoint/$metric_id/evals", timeout, Json.toJson(se_creation))
   }
 
-  def listMetrics(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[ScoringMetric]]] = {
-    ws.get[Seq[ScoringMetric]](s"$endPoint/metrics/", timeout)
+  def searchMetrics(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[ScoringMetric]]] = {
+    ws.get[Seq[ScoringMetric]](s"$endPoint/search/", timeout)
   }
 
-  def byId(metric_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ScoringMetric]] = {
-    ws.get[ScoringMetric](s"$endPoint/metrics/$metric_id", timeout)
+  def metricsById(metric_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ScoringMetric]] = {
+    ws.get[ScoringMetric](s"$endPoint/$metric_id", timeout)
+  }
+
+  def searchEvaluations(
+    criteria:       ScoringEvaluationSearch,
+    table_criteria: TableSearch,
+    timeout:        Long                    = -1
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[ScoringEvaluation]]] = {
+    val xres = ws.get[PaginatedSequence[ScoringEvaluation]](
+      s"$endPoint/evals/search",
+      timeout,
+      LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria)
+    )
+
+    println("XRES:" + xres)
+    xres
+  }
+
+  def evaluationsById(eval_id: String, metric_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ScoringEvaluation]] = {
+    ws.get[ScoringEvaluation](s"$endPoint/$metric_id/evals/$eval_id", timeout)
   }
 }
