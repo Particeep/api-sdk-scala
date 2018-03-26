@@ -48,14 +48,11 @@ class ScoringMetricClient(val ws: WSClient, val credentials: Option[ApiCredentia
     table_criteria: TableSearch,
     timeout:        Long                    = -1
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[ScoringEvaluation]]] = {
-    val xres = ws.get[PaginatedSequence[ScoringEvaluation]](
+    ws.get[PaginatedSequence[ScoringEvaluation]](
       s"$endPoint/evals/search",
       timeout,
       LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria)
     )
-
-    println("XRES:" + xres)
-    xres
   }
 
   def evaluationsById(eval_id: String, metric_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ScoringEvaluation]] = {
