@@ -8,7 +8,7 @@ import com.particeep.api.core.Formatter
 case class ScoringMetric(
   id:             String                = "",
   created_at:     Option[ZonedDateTime] = None,
-  type_signature: TypeSignature,
+  type_signature: Option[TypeSignature] = None,
   formula_name:   Option[String]        = None,
   formula_code:   String,
   code_checksum:  String,
