@@ -2,7 +2,7 @@ name := """api-sdk-scala"""
 
 version := "1.0.0"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.11"
 
 resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 
@@ -34,13 +34,11 @@ scalacOptions ++= Seq(
 // ~~~~~~~~~~~~~~~~~
 //Scalariform config
 
-import com.typesafe.sbt.SbtScalariform
-import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 
-scalariformSettings
+import scalariform.formatter.preferences._
 
-ScalariformKeys.preferences := ScalariformKeys.preferences.value
-  .setPreference(scalariform.formatter.preferences.AlignSingleLineCaseStatements, true)
-  .setPreference(scalariform.formatter.preferences.AlignParameters, true)
-  .setPreference(scalariform.formatter.preferences.DoubleIndentClassDeclaration, true)
-  .setPreference(scalariform.formatter.preferences.PreserveDanglingCloseParenthesis, true)
+scalariformPreferences := scalariformPreferences.value
+    .setPreference(AlignSingleLineCaseStatements, true)
+    .setPreference(AlignParameters, true)
+    .setPreference(DoubleIndentClassDeclaration, true)
+    .setPreference(DanglingCloseParenthesis, Preserve)

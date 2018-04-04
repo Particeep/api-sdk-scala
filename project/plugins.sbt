@@ -8,13 +8,13 @@ resolvers += Classpaths.sbtPluginReleases
 
 // code plugins
 
-addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0" excludeAll(
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0" excludeAll(
   ExclusionRule(organization = "com.danieltrinh")))
 
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.3.5")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.1")
 
 // scala lint tool : https://github.com/puffnfresh/wartremover
-addSbtPlugin("org.brianmckenna" % "sbt-wartremover" % "0.13")
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.2.1")
 
 // wait for next release
-addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.6.0")
+addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.2")
