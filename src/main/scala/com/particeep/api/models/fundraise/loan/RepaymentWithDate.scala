@@ -7,13 +7,18 @@ import com.particeep.api.models.user.User
 import play.api.libs.json._
 
 case class Repayment(
-  capital:                Int,
-  interest:               Int,
-  taxes:                  Int,
-  amount:                 Int,
-  capital_remains_to_pay: Int,
-  fees:                   Int,
-  is_paid:                Boolean
+  capital:                        Int,
+  capital_offline:                Option[Int] = None,
+  interest:                       Int,
+  interest_offline:               Option[Int] = None,
+  taxes:                          Int,
+  amount:                         Int,
+  amount_offline:                 Option[Int] = None,
+  capital_remains_to_pay:         Int,
+  capital_remains_to_pay_offline: Option[Int] = None,
+  fees:                           Int,
+  fees_offline:                   Option[Int] = None,
+  is_paid:                        Boolean
 )
 
 case class RepaymentWithDate(
