@@ -31,6 +31,7 @@ object FundraiseLoanClient {
   private implicit val repayment_with_date_format = RepaymentWithDate.format
   private implicit val repayment_with_date_and_user_format = RepaymentWithDate.repayment_with_date_and_user_format
   private implicit val repayment_info_vector_format = RepaymentInfoVector.format
+  private implicit val loan_repayment_schedule_format = LoanRepaymentSchedule.format
   private implicit val scheduled_payment_format = ScheduledPayment.format
   private implicit val lend_format = Lend.format
   private implicit val transaction_format = Transaction.format
@@ -124,6 +125,18 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     exec: ExecutionContext
   ): Future[Either[ErrorResult, List[(RepaymentWithDate, User)]]] = {
     ws.get[List[(RepaymentWithDate, User)]](s"$endPoint/fundraise/$id/detail/borrower/$payment_month/$payment_year", timeout)
+  }
+
+  def payOfflineBorrowerRepaymentSchedule(
+    id:            String,
+    payment_month: Int,
+    payment_year:  Int,
+    timeout:       Long   = -1
+  )(
+    implicit
+    exec: ExecutionContext
+  ): Future[Either[ErrorResult, Seq[LoanRepaymentSchedule]]] = {
+    ws.post[Seq[LoanRepaymentSchedule]](s"$endPoint/fundraise/$id/pay-offline/borrower/$payment_month/$payment_year", timeout, Json.toJson(""))
   }
 
   def generateRepaymentSchedule(
