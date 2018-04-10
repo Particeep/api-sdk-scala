@@ -8,8 +8,6 @@ import play.api.libs.json.{ JsObject, Json }
 case class LoanRepaymentSchedule(
   id:                     String,
   created_at:             ZonedDateTime,
-  deleted_at:             Option[ZonedDateTime] = None,
-  created_by:             Option[String]        = None,
   user_id:                String,
   enterprise_id:          String,
   fundraise_id:           String,
