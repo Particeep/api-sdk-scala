@@ -8,6 +8,7 @@ case class QuestionCreation(
   label:         Option[String]       = None,
   question_type: Option[QuestionType] = None,
   required:      Option[Boolean]      = None,
+  description:   Option[String]       = None,
   pattern:       Option[String]       = None,
   index:         Option[Int]          = None
 )
