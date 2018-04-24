@@ -137,7 +137,7 @@ class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
   }
 
   def search(
-              criteria:       Form,
+              criteria:       FormsSearch,
               table_criteria: TableSearch,
               timeout:        Long            = -1
             )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Form]]] = {
