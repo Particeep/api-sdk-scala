@@ -8,6 +8,7 @@ case class QuestionEdition(
   possibility_id_dep: Option[String]       = None,
   question_type:      Option[QuestionType],
   required:           Option[Boolean],
+  pattern:            Option[String]       = None,
   index:              Option[Int]
 )
 

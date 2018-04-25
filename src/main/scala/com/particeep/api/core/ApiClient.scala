@@ -14,7 +14,12 @@ import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Random
 import scala.util.control.NonFatal
 
-case class ApiCredential(apiKey: String, apiSecret: String)
+case class ApiCredential(apiKey: String, apiSecret: String, http_headers: Option[Seq[(String, String)]] = None) {
+  def withHeader(name: String, value: String): ApiCredential = {
+    val new_value = (name, value) :: this.http_headers.map(_.toList).getOrElse(List())
+    this.copy(http_headers = Some(new_value))
+  }
+}
 
 trait WSClient {
   def cleanup(): Unit
@@ -90,12 +95,15 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
 
   private[this] def url(path: String, timeOut: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): WSRequest = {
     val req = WS.clientUrl(s"$baseUrl/v$version$path")
-    secure(req, credentials, timeOut)
+    secure(req, credentials, timeOut).withHeaders(credentials.http_headers.getOrElse(List()): _*)
   }
 
   private[this] def urlFileUpload(path: String, client: AsyncHttpClient, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): AsyncHttpClient#BoundRequestBuilder = {
     val postBuilder = client.preparePost(s"$baseUrl/v$version$path")
-    secure(postBuilder, credentials, timeOut)
+    val url = secure(postBuilder, credentials, timeOut)
+    credentials.http_headers.map(_.foldLeft(url) { (acc, elem) =>
+      acc.addHeader(elem._1, elem._2)
+    }).getOrElse(url)
   }
 
   def get[T](path: String, timeOut: Long, params: List[(String, String)] = List())(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
