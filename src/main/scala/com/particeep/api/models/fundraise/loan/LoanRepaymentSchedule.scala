@@ -20,9 +20,9 @@ case class LoanRepaymentSchedule(
   transaction_id:         String,
   is_paid:                Boolean,
   is_offline:             Boolean,
-  transaction_wallet_ids: Option[String]        = None,
-  tag:                    Option[String]        = None,
-  custom:                 Option[JsObject]      = None
+  transaction_wallet_ids: Option[String]   = None,
+  tag:                    Option[String]   = None,
+  custom:                 Option[JsObject] = None
 )
 
 object LoanRepaymentSchedule {
