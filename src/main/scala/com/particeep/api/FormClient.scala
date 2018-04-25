@@ -1,18 +1,19 @@
 package com.particeep.api
 
 import com.particeep.api.core._
-import com.particeep.api.models.ErrorResult
+import com.particeep.api.models.{ErrorResult, PaginatedSequence, TableSearch}
 import com.particeep.api.models.form.creation._
-import com.particeep.api.models.form.edition.{ FormEdition, PossibilityEdition, QuestionEdition, SectionEdition }
+import com.particeep.api.models.form.edition.{FormEdition, PossibilityEdition, QuestionEdition, SectionEdition}
 import com.particeep.api.models.form.edition_deep.FormEditionDeep
 import com.particeep.api.models.form.get._
 import com.particeep.api.models.form.get_deep._
 import com.particeep.api.models.imports.ImportResult
+import com.particeep.api.utils.LangUtils
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
 import play.api.mvc.MultipartFormData
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait FormCapability {
   self: WSClient =>
@@ -133,5 +134,13 @@ class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   def importAnswersFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[Seq[Answer]]]] = {
     ws.postFile[ImportResult[Seq[Answer]]](s"$endPoint_import/form/answer", timeout, csv, List())
+  }
+
+  def search(
+              criteria:       FormsSearch,
+              table_criteria: TableSearch,
+              timeout:        Long            = -1
+            )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Form]]] = {
+    ws.get[PaginatedSequence[Form]](s"$endPoint/form/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 }

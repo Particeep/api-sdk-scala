@@ -10,6 +10,8 @@ case class FormDeep(
   created_at:      Option[ZonedDateTime] = None,
   name:            Option[String]        = None,
   description:     Option[String]        = None,
+  target_id:       Option[String]        = None,
+  target_type:     Option[String]        = None,
   tag:             Option[String]        = None,
   last_updated_at: Option[ZonedDateTime] = None,
   sections:        Seq[SectionDeep]      = Seq()

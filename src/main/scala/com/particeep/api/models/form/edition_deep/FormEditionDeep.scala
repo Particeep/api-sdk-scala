@@ -5,6 +5,8 @@ import play.api.libs.json.Json
 case class FormEditionDeep(
   name:        Option[String],
   description: Option[String],
+  target_id:   Option[String],
+  target_type: Option[String],
   tag:         Option[String],
   sections:    Option[Seq[SectionEditionDeep]]
 )
