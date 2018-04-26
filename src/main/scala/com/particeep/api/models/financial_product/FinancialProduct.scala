@@ -20,6 +20,8 @@ case class FinancialProduct(
   doc_to_sign_url:   Option[String]        = None,
   external_link:     Option[String]        = None,
   enable_for_sales:  Boolean               = false,
+  recipient_id:      Option[String]        = None,
+  recipient_type:    Option[String]        = None,
   percentage:        Option[Int]           = None,
   tag:               Option[String]        = None,
   custom:            Option[JsObject]      = None
