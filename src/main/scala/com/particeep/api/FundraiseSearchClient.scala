@@ -27,16 +27,16 @@ class FundraiseSearchClient(val ws: WSClient, val credentials: Option[ApiCredent
   def search(
     criteria:       FundraiseSearch,
     table_criteria: TableSearch,
-    timeout:        Long            = -1
+    timeout:        Long            = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseData]]] = {
     ws.get[PaginatedSequence[FundraiseData]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
-  def byIds(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FundraiseData]]] = {
+  def byIds(ids: List[String], timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FundraiseData]]] = {
     ws.get[List[FundraiseData]](s"$endPoint/byIds", timeout, List("ids" -> ids.mkString(",")))
   }
 
-  def nbProjectsByActivityDomain(categories: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[NbProjectsByCategory]]] = {
+  def nbProjectsByActivityDomain(categories: List[String], timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[NbProjectsByCategory]]] = {
     ws.get[List[NbProjectsByCategory]](s"$endPoint/info/categories", timeout, List("categories" -> categories.mkString(",")))
   }
 }
