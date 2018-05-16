@@ -8,8 +8,8 @@ trait WithCredentials {
 
 trait WithWS {
   def ws: WSClient
-  val defaultTimeOut: Long = ws.defaultTimeOut
-  val defaultImportTimeOut: Long = ws.defaultImportTimeOut
+  val defaultTimeOutInSeconds: Long = ws.defaultTimeOutInSeconds
+  val defaultImportTimeOutInSeconds: Long = ws.defaultImportTimeOutInSeconds
 }
 
 trait EntityClient {

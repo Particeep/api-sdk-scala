@@ -29,19 +29,19 @@ class PartnerClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
 
   import PartnerClient._
 
-  def createDefaultPartnerFees(user_id: String, partner_fees_creation: PartnerFeesCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
+  def createDefaultPartnerFees(user_id: String, partner_fees_creation: PartnerFeesCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
     ws.put[PartnerFees](s"$endPoint/fees/$user_id/default", timeout, Json.toJson(partner_fees_creation))
   }
 
-  def getDefaultPartnerFeesByUserId(user_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
+  def getDefaultPartnerFeesByUserId(user_id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
     ws.get[PartnerFees](s"$endPoint/fees/$user_id/default", timeout)
   }
 
-  def updateDefaultPartnerFees(user_id: String, partner_fees_edition: PartnerFeesEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
+  def updateDefaultPartnerFees(user_id: String, partner_fees_edition: PartnerFeesEdition, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
     ws.post[PartnerFees](s"$endPoint/fees/$user_id/default", timeout, Json.toJson(partner_fees_edition))
   }
 
-  def deleteDefaultPartnerFees(user_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
+  def deleteDefaultPartnerFees(user_id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
     ws.delete[PartnerFees](s"$endPoint/fees/$user_id/default", timeout)
   }
 
@@ -50,14 +50,14 @@ class PartnerClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
     target_id:                       String,
     target_type:                     String,
     partner_fees_on_target_creation: PartnerFeesOnTargetCreation,
-    timeout:                         Long                        = defaultTimeOut
+    timeout:                         Long                        = defaultTimeOutInSeconds
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
     ws.put[PartnerFeesOnTarget](
       s"$endPoint/fees/$user_id/$target_id/$target_type", timeout, Json.toJson(partner_fees_on_target_creation)
     )
   }
 
-  def getPartnerFees(user_id: String, target_id: String, target_type: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
+  def getPartnerFees(user_id: String, target_id: String, target_type: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
     ws.get[PartnerFeesOnTarget](s"$endPoint/fees/$user_id/$target_id/$target_type", timeout)
   }
 
@@ -66,14 +66,14 @@ class PartnerClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
     target_id:                      String,
     target_type:                    String,
     partner_fees_on_target_edition: PartnerFeesOnTargetEdition,
-    timeout:                        Long                       = defaultTimeOut
+    timeout:                        Long                       = defaultTimeOutInSeconds
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
     ws.post[PartnerFeesOnTarget](
       s"$endPoint/fees/$user_id/$target_id/$target_type", timeout, Json.toJson(partner_fees_on_target_edition)
     )
   }
 
-  def deletePartnerFees(user_id: String, target_id: String, target_type: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
+  def deletePartnerFees(user_id: String, target_id: String, target_type: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
     ws.delete[PartnerFeesOnTarget](s"$endPoint/fees/$user_id/$target_id/$target_type", timeout)
   }
 }

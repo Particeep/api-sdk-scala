@@ -32,42 +32,42 @@ class PaymentClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
 
   import PaymentClient._
 
-  def payment(transaction_id: String, payment_cb_creation: PaymentCbCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
+  def payment(transaction_id: String, payment_cb_creation: PaymentCbCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
     ws.post[PayResult](s"$endPoint/$transaction_id", timeout, Json.toJson(payment_cb_creation))
   }
 
-  def offlinePayment(transaction_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
+  def offlinePayment(transaction_id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
     ws.post[PayResult](s"$endPoint/offline/$transaction_id", timeout, Json.toJson(""))
   }
 
-  def creditCardPayment(transaction_id: String, payment_cb_creation: PaymentCbCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
+  def creditCardPayment(transaction_id: String, payment_cb_creation: PaymentCbCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
     ws.post[PayResult](s"$endPoint/credit-card/$transaction_id", timeout, Json.toJson(payment_cb_creation))
   }
 
-  def directCashIn(transaction_id: String, payment_cb_creation: PaymentCbCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
+  def directCashIn(transaction_id: String, payment_cb_creation: PaymentCbCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
     ws.post[PayResult](s"$endPoint/cash-in/direct/$transaction_id", timeout, Json.toJson(payment_cb_creation))
   }
 
-  def walletPayment(transaction_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
+  def walletPayment(transaction_id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PayResult]] = {
     ws.post[PayResult](s"$endPoint/wallet/$transaction_id", timeout, Json.toJson(""))
   }
 
-  def refund(transaction_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
+  def refund(transaction_id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
     ws.post[Transaction](s"$endPoint/refund/$transaction_id", timeout, Json.toJson(""))
   }
 
-  def addScheduledPayment(scheduled_payment_creations: List[ScheduledPaymentCreation], timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
+  def addScheduledPayment(scheduled_payment_creations: List[ScheduledPaymentCreation], timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
     ws.post[List[ScheduledPayment]](s"$endPoint/schedule/add", timeout, Json.toJson(scheduled_payment_creations))
   }
 
-  def scheduledPaymentByIds(ids: List[String], timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
+  def scheduledPaymentByIds(ids: List[String], timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
     ws.get[List[ScheduledPayment]](s"$endPoint/schedule", timeout, List("ids" -> ids.mkString(",")))
   }
 
   def searchScheduledPayments(
     criteria:       ScheduledPaymentSearch,
     table_criteria: TableSearch,
-    timeout:        Long                   = defaultTimeOut
+    timeout:        Long                   = defaultTimeOutInSeconds
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[ScheduledPayment]]] = {
     ws.get[PaginatedSequence[ScheduledPayment]](
       s"$endPoint/schedule/search",
@@ -76,7 +76,7 @@ class PaymentClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
     )
   }
 
-  def cancelScheduledPayment(ids: List[String], timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
+  def cancelScheduledPayment(ids: List[String], timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
     ws.get[List[ScheduledPayment]](s"$endPoint/schedule/cancel", timeout, List("ids" -> ids.mkString(",")))
   }
 }

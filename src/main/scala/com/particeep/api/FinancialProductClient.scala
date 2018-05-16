@@ -28,39 +28,39 @@ class FinancialProductClient(val ws: WSClient, val credentials: Option[ApiCreden
 
   import FinancialProductClient._
 
-  def byId(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FinancialProduct]] = {
+  def byId(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FinancialProduct]] = {
     ws.get[FinancialProduct](s"$endPoint/$id", timeout)
   }
 
-  def create(financial_product_creation: FinancialProductCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FinancialProduct]] = {
+  def create(financial_product_creation: FinancialProductCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FinancialProduct]] = {
     ws.put[FinancialProduct](s"$endPoint", timeout, Json.toJson(financial_product_creation))
   }
 
-  def update(id: String, financial_product_edition: FinancialProductEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FinancialProduct]] = {
+  def update(id: String, financial_product_edition: FinancialProductEdition, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FinancialProduct]] = {
     ws.post[FinancialProduct](s"$endPoint/$id", timeout, Json.toJson(financial_product_edition))
   }
 
-  def search(criteria: FinancialProductSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FinancialProduct]]] = {
+  def search(criteria: FinancialProductSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FinancialProduct]]] = {
     ws.get[PaginatedSequence[FinancialProduct]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
-  def delete(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FinancialProduct]] = {
+  def delete(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FinancialProduct]] = {
     ws.delete[FinancialProduct](s"$endPoint/$id", timeout)
   }
 
-  def getComposition(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FinancialProduct]]] = {
+  def getComposition(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FinancialProduct]]] = {
     ws.get[List[FinancialProduct]](s"$endPoint/$id/composition", timeout)
   }
 
   def addToComposition(
     id:                                      String,
     financial_product_composition_creations: List[FinancialProductCompositionCreation],
-    timeout:                                 Long                                      = defaultTimeOut
+    timeout:                                 Long                                      = defaultTimeOutInSeconds
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FinancialProduct]]] = {
     ws.post[List[FinancialProduct]](s"$endPoint/$id/composition", timeout, Json.toJson(financial_product_composition_creations))
   }
 
-  def removeFromComposition(id: String, ids: Seq[String], timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FinancialProduct]]] = {
+  def removeFromComposition(id: String, ids: Seq[String], timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FinancialProduct]]] = {
     ws.delete[List[FinancialProduct]](s"$endPoint/$id/composition", timeout, Json.toJson(""), List("ids" -> ids.mkString(",")))
   }
 

@@ -26,19 +26,19 @@ class WebHookClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
 
   import WebHookClient._
 
-  def all(timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[WebHook]]] = {
+  def all(timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[WebHook]]] = {
     ws.get[List[WebHook]](s"$endPoint/all", timeout)
   }
 
-  def create(webhook_creation: WebHookSimple, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, WebHook]] = {
+  def create(webhook_creation: WebHookSimple, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, WebHook]] = {
     ws.put[WebHook](s"$endPoint", timeout, Json.toJson(webhook_creation))
   }
 
-  def edition(id: String, webhook_edition: WebHookSimple, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, WebHook]] = {
+  def edition(id: String, webhook_edition: WebHookSimple, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, WebHook]] = {
     ws.post[WebHook](s"$endPoint/$id", timeout, Json.toJson(webhook_edition))
   }
 
-  def delete(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, WebHook]] = {
+  def delete(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, WebHook]] = {
     ws.delete[WebHook](s"$endPoint/$id", timeout)
   }
 }
