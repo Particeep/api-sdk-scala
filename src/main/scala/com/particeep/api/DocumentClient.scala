@@ -37,7 +37,7 @@ class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
     owner_id:          String,
     file:              MultipartFormData[TemporaryFile],
     document_creation: DocumentCreation,
-    timeout:           Long                             = -1
+    timeout:           Long                             = defaultTimeOutInSeconds
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
     val bodyParts = List(
       new StringPart("target_id", document_creation.target_id.getOrElse("")),
@@ -51,23 +51,23 @@ class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
     ws.postFile[Document](s"$endPoint/$owner_id/upload", timeout, file, bodyParts)
   }
 
-  def createDir(owner_id: String, document_creation: DocumentCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
+  def createDir(owner_id: String, document_creation: DocumentCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
     ws.post[Document](s"$endPoint/$owner_id/dir", timeout, Json.toJson(document_creation))
   }
 
-  def download(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Stream[Byte]]] = {
+  def download(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Stream[Byte]]] = {
     ws.get[Stream[Byte]](s"$endPoint/download/$id", timeout)
   }
 
-  def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
+  def byId(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
     ws.get[Document](s"$endPoint/$id", timeout)
   }
 
-  def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Document]]] = {
+  def byIds(ids: Seq[String], timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Document]]] = {
     ws.get[List[Document]](s"$endPoint", timeout, List("ids" -> ids.mkString(",")))
   }
 
-  def update(id: String, document_edition: DocumentEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
+  def update(id: String, document_edition: DocumentEdition, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
     ws.post[Document](s"$endPoint/$id", timeout, Json.toJson(document_edition))
   }
 
@@ -75,7 +75,7 @@ class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
     path:        String,
     target_id:   Option[String],
     target_type: Option[String],
-    timeout:     Long           = -1
+    timeout:     Long           = defaultTimeOutInSeconds
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FolderOrFile]]] = {
     val params: List[(String, String)] = List(("path", path)) ++
       target_id.map(x => List(("target_id", x))).getOrElse(List()) ++
@@ -84,11 +84,11 @@ class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
     ws.get[List[FolderOrFile]](s"$endPoint/dir", timeout, params)
   }
 
-  def search(criteria: DocumentSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Document]]] = {
+  def search(criteria: DocumentSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Document]]] = {
     ws.get[PaginatedSequence[Document]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
-  def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
+  def delete(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
     ws.delete[Document](s"$endPoint/$id", timeout)
   }
 }

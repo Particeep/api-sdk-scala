@@ -24,7 +24,7 @@ class InfoClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   import InfoClient._
 
-  def info(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Info]] = {
+  def info(timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Info]] = {
     ws.get[Info](endPoint, timeout)
   }
 }

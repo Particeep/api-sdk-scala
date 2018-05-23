@@ -31,36 +31,36 @@ class KpiClient(val ws: WSClient, val credentials: Option[ApiCredential] = None)
 
   import KpiClient._
 
-  def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Kpi]] = {
+  def byId(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Kpi]] = {
     ws.get[Kpi](s"$endPoint/$id", timeout)
   }
 
-  def create(kpi_creation: KpiCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Kpi]] = {
+  def create(kpi_creation: KpiCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Kpi]] = {
     ws.put[Kpi](s"$endPoint", timeout, Json.toJson(kpi_creation))
   }
 
-  def addValues(kpi_id: String, kpi_values: KpiValueCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Kpi]] = {
+  def addValues(kpi_id: String, kpi_values: KpiValueCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Kpi]] = {
     ws.put[Kpi](s"$endPoint/$kpi_id/values", timeout, Json.toJson(kpi_values))
   }
 
-  def updateValues(kpi_value_update: KpiValueUpdate, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, KpiValue]] = {
+  def updateValues(kpi_value_update: KpiValueUpdate, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, KpiValue]] = {
     ws.post[KpiValue](s"$endPoint/values", timeout, Json.toJson(kpi_value_update))
   }
 
-  def deleteValues(kpi_id: String, ids_value: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Kpi]] = {
+  def deleteValues(kpi_id: String, ids_value: Seq[String], timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Kpi]] = {
     val valueToDelete = DeleteKpiValues(ids_value.mkString(","))
     ws.delete[Kpi](s"$endPoint/$kpi_id/values", timeout, Json.toJson(""), LangUtils.productToQueryString(valueToDelete))
   }
 
-  def search(criteria: KpiSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Kpi]]] = {
+  def search(criteria: KpiSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Kpi]]] = {
     ws.get[PaginatedSequence[Kpi]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
-  def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Kpi]] = {
+  def delete(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Kpi]] = {
     ws.delete[Kpi](s"$endPoint/$id", timeout)
   }
 
-  def update(id: String, kpi_edition: KpiUpdate, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Kpi]] = {
+  def update(id: String, kpi_edition: KpiUpdate, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Kpi]] = {
     ws.post[Kpi](s"$endPoint/$id", timeout, Json.toJson(kpi_edition))
   }
 }
