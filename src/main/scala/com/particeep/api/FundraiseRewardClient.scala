@@ -43,67 +43,67 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
 
   import FundraiseRewardClient._
 
-  def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
+  def byId(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
     ws.get[FundraiseReward](s"$endPoint/fundraise/$id", timeout)
   }
 
-  def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FundraiseReward]]] = {
+  def byIds(ids: Seq[String], timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FundraiseReward]]] = {
     ws.get[List[FundraiseReward]](s"$endPoint/fundraise", timeout, List("ids" -> ids.mkString(",")))
   }
 
-  def search(criteria: FundraiseRewardSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseReward]]] = {
+  def search(criteria: FundraiseRewardSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseReward]]] = {
     ws.get[PaginatedSequence[FundraiseReward]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
-  def create(fundraise_reward_creation: FundraiseRewardCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
+  def create(fundraise_reward_creation: FundraiseRewardCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
     ws.put[FundraiseReward](s"$endPoint/fundraise", timeout, Json.toJson(fundraise_reward_creation))
   }
 
-  def update(id: String, fundraise_reward_edition: FundraiseRewardEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
+  def update(id: String, fundraise_reward_edition: FundraiseRewardEdition, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
     ws.post[FundraiseReward](s"$endPoint/fundraise/$id", timeout, Json.toJson(fundraise_reward_edition))
   }
 
-  def updateRunning(id: String, fundraise_reward_running_edition: FundraiseRewardRunningEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
+  def updateRunning(id: String, fundraise_reward_running_edition: FundraiseRewardRunningEdition, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
     ws.post[FundraiseReward](s"$endPoint/fundraise/running/$id", timeout, Json.toJson(fundraise_reward_running_edition))
   }
 
-  def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
+  def delete(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
     ws.delete[FundraiseReward](s"$endPoint/fundraise/$id", timeout)
   }
 
-  def submitToReview(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
+  def submitToReview(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
     ws.post[FundraiseReward](s"$endPoint/fundraise/$id/submit", timeout, Json.toJson(""))
   }
 
-  def reject(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
+  def reject(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
     ws.post[FundraiseReward](s"$endPoint/fundraise/$id/reject", timeout, Json.toJson(""))
   }
 
-  def launch(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
+  def launch(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
     ws.post[FundraiseReward](s"$endPoint/fundraise/$id/launch", timeout, Json.toJson(""))
   }
 
-  def close(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
+  def close(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
     ws.post[FundraiseReward](s"$endPoint/fundraise/$id/close", timeout, Json.toJson(""))
   }
 
-  def refund(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
+  def refund(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
     ws.post[FundraiseReward](s"$endPoint/fundraise/$id/refund", timeout, Json.toJson(""))
   }
 
-  def addReward(fundraise_id: String, reward_creation: RewardCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Reward]] = {
+  def addReward(fundraise_id: String, reward_creation: RewardCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Reward]] = {
     ws.put[Reward](s"$endPoint/fundraise/$fundraise_id/reward", timeout, Json.toJson(reward_creation))
   }
 
-  def updateReward(fundraise_id: String, id: String, reward_edition: RewardEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Reward]] = {
+  def updateReward(fundraise_id: String, id: String, reward_edition: RewardEdition, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Reward]] = {
     ws.post[Reward](s"$endPoint/fundraise/$fundraise_id/reward/$id", timeout, Json.toJson(reward_edition))
   }
 
-  def deleteReward(fundraise_id: String, id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Reward]] = {
+  def deleteReward(fundraise_id: String, id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Reward]] = {
     ws.delete[Reward](s"$endPoint/fundraise/$fundraise_id/reward/$id", timeout)
   }
 
-  def allRewardsByFundraise(fundraise_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Reward]]] = {
+  def allRewardsByFundraise(fundraise_id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Reward]]] = {
     ws.get[List[Reward]](s"$endPoint/fundraise/$fundraise_id/rewards", timeout)
   }
 
@@ -111,14 +111,14 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
     fundraise_id:   String,
     criteria:       TransactionSearch,
     table_criteria: TableSearch,
-    timeout:        Long              = -1
+    timeout:        Long              = defaultTimeOutInSeconds
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backer]]] = {
     ws.get[PaginatedSequence[Backer]](
       s"$endPoint/fundraise/$fundraise_id/rewards/bought", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria)
     )
   }
 
-  def quantityAllBoughtRewardsByFundraise(fundraise_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Map[String, Int]]] = {
+  def quantityAllBoughtRewardsByFundraise(fundraise_id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Map[String, Int]]] = {
     ws.get[Map[String, Int]](s"$endPoint/fundraise/$fundraise_id/rewards/bought/quantity", timeout)
   }
 
@@ -126,14 +126,14 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
     user_id:        String,
     criteria:       TransactionSearch,
     table_criteria: TableSearch,
-    timeout:        Long              = -1
+    timeout:        Long              = defaultTimeOutInSeconds
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Backing]]] = {
     ws.get[PaginatedSequence[Backing]](
       s"$endPoint/$user_id/rewards", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria)
     )
   }
 
-  def donate(fundraise_id: String, user_id: String, transaction_info: TransactionInfo, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
+  def donate(fundraise_id: String, user_id: String, transaction_info: TransactionInfo, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
     ws.put[Transaction](s"$endPoint/fundraise/$fundraise_id/donate/$user_id", timeout, Json.toJson(transaction_info))
   }
 
@@ -142,12 +142,12 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
     reward_id:        String,
     user_id:          String,
     transaction_info: TransactionInfo,
-    timeout:          Long            = -1
+    timeout:          Long            = defaultTimeOutInSeconds
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
     ws.put[Transaction](s"$endPoint/fundraise/$fundraise_id/reward/$reward_id/buy/$user_id", timeout, Json.toJson(transaction_info))
   }
 
-  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[FundraiseReward]]] = {
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = defaultImportTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[FundraiseReward]]] = {
     ws.postFile[ImportResult[FundraiseReward]](s"$endPoint_import/fundraise-reward/csv", timeout, csv, List())
   }
 }
