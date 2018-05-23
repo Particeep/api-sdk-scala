@@ -3,6 +3,7 @@ package com.particeep.api.models.financial_product
 import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
+import com.particeep.api.models.enums.Currency.Currency
 import play.api.libs.json.{ JsObject, Json }
 
 case class FinancialProduct(
@@ -13,6 +14,7 @@ case class FinancialProduct(
   description:       Option[String]        = None,
   picture_url:       Option[String]        = None,
   price_per_share:   Option[Int]           = None,
+  currency:          Option[Currency]      = None,
   num_of_shares:     Option[Long]          = None,
   num_of_shares_min: Option[Long]          = None,
   code_isin:         Option[String]        = None,
@@ -22,7 +24,6 @@ case class FinancialProduct(
   enable_for_sales:  Boolean               = false,
   recipient_id:      Option[String]        = None,
   recipient_type:    Option[String]        = None,
-  percentage:        Option[Int]           = None,
   tag:               Option[String]        = None,
   custom:            Option[JsObject]      = None
 )
