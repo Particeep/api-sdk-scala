@@ -1,5 +1,6 @@
 package com.particeep.api.models.financial_product
 
+import com.particeep.api.models.enums.Currency.Currency
 import play.api.libs.json.{ JsObject, Json }
 
 case class FinancialProductEdition(
@@ -7,6 +8,7 @@ case class FinancialProductEdition(
   description:       Option[String]   = None,
   picture_url:       Option[String]   = None,
   price_per_share:   Option[Int]      = None,
+  currency:          Option[Currency] = None,
   num_of_shares_min: Option[Long]     = None,
   code_isin:         Option[String]   = None,
   risk_level:        Option[Int]      = None,
