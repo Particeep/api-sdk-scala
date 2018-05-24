@@ -25,11 +25,11 @@ class KycClient(val ws: WSClient, val credentials: Option[ApiCredential] = None)
 
   import KycClient._
 
-  def create(kyc_creation: KycCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
+  def create(kyc_creation: KycCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
     ws.put[List[KycGroup]](s"$endPoint", timeout, Json.toJson(kyc_creation))
   }
 
-  def update(kycs_edition: KycsEdition, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
+  def update(kycs_edition: KycsEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
     ws.post[List[KycGroup]](s"$endPoint", timeout, Json.toJson(kycs_edition))
   }
 
@@ -37,7 +37,7 @@ class KycClient(val ws: WSClient, val credentials: Option[ApiCredential] = None)
     owner_id:   String,
     owner_type: String,
     owner_ip:   Option[String] = None,
-    timeout:    Long           = defaultTimeOutInSeconds
+    timeout:    Long           = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
     owner_ip.map(ip => {
       ws.post[List[KycGroup]](s"$endPoint/askValidation/owner/$owner_id/$owner_type", timeout, Json.toJson(""), List("owner_ip" -> ip))
@@ -46,7 +46,7 @@ class KycClient(val ws: WSClient, val credentials: Option[ApiCredential] = None)
     )
   }
 
-  def byOwnerIdAndType(owner_id: String, owner_type: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
+  def byOwnerIdAndType(owner_id: String, owner_type: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
     ws.get[List[KycGroup]](s"$endPoint/owner/$owner_id/$owner_type", timeout)
   }
 
@@ -54,7 +54,7 @@ class KycClient(val ws: WSClient, val credentials: Option[ApiCredential] = None)
     owner_id:   String,
     owner_type: String,
     owner_ip:   Option[String] = None,
-    timeout:    Long           = defaultTimeOutInSeconds
+    timeout:    Long           = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[KycGroup]]] = {
     owner_ip.map(ip => {
       ws.delete[List[KycGroup]](s"$endPoint/cancel/owner/$owner_id/$owner_type", timeout, Json.toJson(""), List("owner_ip" -> ip))

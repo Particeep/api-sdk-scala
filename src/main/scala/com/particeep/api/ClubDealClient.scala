@@ -28,39 +28,39 @@ class ClubDealClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
 
   import ClubDealClient._
 
-  def byId(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, DealGroup]] = {
+  def byId(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, DealGroup]] = {
     ws.get[DealGroup](s"$endPoint/$id", timeout)
   }
 
-  def create(deal_group_creation: DealGroupCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, DealGroup]] = {
+  def create(deal_group_creation: DealGroupCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, DealGroup]] = {
     ws.put[DealGroup](s"$endPoint", timeout, Json.toJson(deal_group_creation))
   }
 
-  def update(id: String, deal_group_edition: DealGroupEdition, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, DealGroup]] = {
+  def update(id: String, deal_group_edition: DealGroupEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, DealGroup]] = {
     ws.post[DealGroup](s"$endPoint/$id", timeout, Json.toJson(deal_group_edition))
   }
 
-  def delete(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, DealGroup]] = {
+  def delete(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, DealGroup]] = {
     ws.delete[DealGroup](s"$endPoint/$id", timeout)
   }
 
-  def openDeal(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, DealGroup]] = {
+  def openDeal(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, DealGroup]] = {
     ws.post[DealGroup](s"$endPoint/$id/open", timeout, Json.toJson(""))
   }
 
-  def addMembers(id: String, deal_group_members: Seq[DealGroupMemberCreation], timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[DealGroupMember]]] = {
+  def addMembers(id: String, deal_group_members: Seq[DealGroupMemberCreation], timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[DealGroupMember]]] = {
     ws.post[Seq[DealGroupMember]](s"$endPoint/$id/members", timeout, Json.toJson(deal_group_members))
   }
 
-  def removeMembers(id: String, emails: EmailList, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[DealGroupMember]]] = {
+  def removeMembers(id: String, emails: EmailList, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[DealGroupMember]]] = {
     ws.delete[Seq[DealGroupMember]](s"$endPoint/$id/members", timeout, Json.toJson(emails))
   }
 
-  def getMembers(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[DealGroupMember]]] = {
+  def getMembers(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[DealGroupMember]]] = {
     ws.get[Seq[DealGroupMember]](s"$endPoint/$id/members", timeout)
   }
 
-  def allDealWhereIsMember(email: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[DealGroup]]] = {
+  def allDealWhereIsMember(email: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[DealGroup]]] = {
     ws.get[Seq[DealGroup]](s"$endPoint/all-by-user/$email", timeout)
   }
 
