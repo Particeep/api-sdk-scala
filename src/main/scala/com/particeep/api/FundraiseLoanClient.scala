@@ -44,74 +44,74 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
 
   import FundraiseLoanClient._
 
-  def byId(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
+  def byId(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.get[FundraiseLoan](s"$endPoint/fundraise/$id", timeout)
   }
 
-  def byIds(ids: Seq[String], timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FundraiseLoan]]] = {
+  def byIds(ids: Seq[String], timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[FundraiseLoan]]] = {
     ws.get[List[FundraiseLoan]](s"$endPoint/fundraise", timeout, List("ids" -> ids.mkString(",")))
   }
 
-  def create(fundraise_loan_creation: FundraiseLoanCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
+  def create(fundraise_loan_creation: FundraiseLoanCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.put[FundraiseLoan](s"$endPoint/fundraise", timeout, Json.toJson(fundraise_loan_creation))
   }
 
-  def update(id: String, fundraise_loan_edition: FundraiseLoanEdition, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
+  def update(id: String, fundraise_loan_edition: FundraiseLoanEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.post[FundraiseLoan](s"$endPoint/fundraise/$id", timeout, Json.toJson(fundraise_loan_edition))
   }
 
-  def updateRunning(id: String, fundraise_loan_running_edition: FundraiseLoanRunningEdition, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
+  def updateRunning(id: String, fundraise_loan_running_edition: FundraiseLoanRunningEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.post[FundraiseLoan](s"$endPoint/fundraise/running/$id", timeout, Json.toJson(fundraise_loan_running_edition))
   }
 
-  def search(criteria: FundraiseLoanSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseLoan]]] = {
+  def search(criteria: FundraiseLoanSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseLoan]]] = {
     ws.get[PaginatedSequence[FundraiseLoan]](s"$endPoint/fundraises", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
-  def submit(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
+  def submit(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.post[FundraiseLoan](s"$endPoint/fundraise/$id/submit", timeout, Json.toJson(""))
   }
 
-  def reject(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
+  def reject(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.post[FundraiseLoan](s"$endPoint/fundraise/$id/reject", timeout, Json.toJson(""))
   }
 
-  def launch(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
+  def launch(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.post[FundraiseLoan](s"$endPoint/fundraise/$id/launch", timeout, Json.toJson(""))
   }
 
-  def success(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
+  def success(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.post[FundraiseLoan](s"$endPoint/fundraise/$id/close", timeout, Json.toJson(""))
   }
 
-  def refund(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
+  def refund(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.post[FundraiseLoan](s"$endPoint/fundraise/$id/refund", timeout, Json.toJson(""))
   }
 
   def getLenderRepaymentScheduleEstimation(
     id:             String,
     repayment_info: RepaymentInfo,
-    timeout:        Long          = defaultTimeOutInSeconds
+    timeout:        Long          = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
     ws.post[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/info/estimate/lender", timeout, Json.toJson(repayment_info))
   }
 
   def getBorrowerRepaymentScheduleEstimation(
     estimate_borrower_info: EstimateBorrowerInfo,
-    timeout:                Long                 = defaultTimeOutInSeconds
+    timeout:                Long                 = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
     ws.post[List[RepaymentWithDate]](s"$endPoint/fundraise/info/estimate/borrower", timeout, Json.toJson(estimate_borrower_info))
   }
 
-  def getLenderRepaymentSchedule(id: String, user_id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
+  def getLenderRepaymentSchedule(id: String, user_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
     ws.post[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/info/user/$user_id", timeout, Json.toJson(""))
   }
 
-  def getTransactionRepaymentSchedule(id: String, transaction_id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
+  def getTransactionRepaymentSchedule(id: String, transaction_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
     ws.get[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/repayment/transaction/$transaction_id", timeout)
   }
 
-  def getBorrowerRepaymentSchedule(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
+  def getBorrowerRepaymentSchedule(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
     ws.post[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/info/borrower", timeout, Json.toJson(""))
   }
 
@@ -119,7 +119,7 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     id:            String,
     payment_month: Int,
     payment_year:  Int,
-    timeout:       Long   = defaultTimeOutInSeconds
+    timeout:       Long   = defaultTimeOut
   )(
     implicit
     exec: ExecutionContext
@@ -131,7 +131,7 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     id:            String,
     payment_month: Int,
     payment_year:  Int,
-    timeout:       Long   = defaultTimeOutInSeconds
+    timeout:       Long   = defaultTimeOut
   )(
     implicit
     exec: ExecutionContext
@@ -141,17 +141,17 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
 
   def generateRepaymentSchedule(
     id:      String,
-    timeout: Long   = defaultTimeOutInSeconds
+    timeout: Long   = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
     ws.post[List[ScheduledPayment]](s"$endPoint/fundraise/$id/schedule/define", timeout, Json.toJson(""))
   }
 
   def generateCustomRepaymentSchedule(id: String, repayment_info_vector: RepaymentInfoVector,
-                                      timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
+                                      timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
     ws.post[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/schedule/update", timeout, Json.toJson(repayment_info_vector))
   }
 
-  def cancelRemainingPayments(id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
+  def cancelRemainingPayments(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
     ws.post[List[ScheduledPayment]](s"$endPoint/fundraise/$id/schedule/cancel-all", timeout, Json.toJson(""))
   }
 
@@ -159,7 +159,7 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     id:             String,
     criteria:       TransactionSearch,
     table_criteria: TableSearch,
-    timeout:        Long              = defaultTimeOutInSeconds
+    timeout:        Long              = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Lend]]] = {
     ws.get[PaginatedSequence[Lend]](s"$endPoint/fundraise/$id/lends", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
@@ -168,16 +168,16 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     user_id:        String,
     criteria:       TransactionSearch,
     table_criteria: TableSearch,
-    timeout:        Long              = defaultTimeOutInSeconds
+    timeout:        Long              = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Transaction]]] = {
     ws.get[PaginatedSequence[Transaction]](s"$endPoint/fundraise/lends/user/$user_id", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
-  def lend(id: String, lend_creation: LendCreation, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
+  def lend(id: String, lend_creation: LendCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
     ws.post[Transaction](s"$endPoint/fundraise/$id/lend", timeout, Json.toJson(lend_creation))
   }
 
-  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = defaultImportTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[FundraiseLoan]]] = {
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = defaultImportTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[FundraiseLoan]]] = {
     ws.postFile[ImportResult[FundraiseLoan]](s"$endPoint_import/fundraise-loan/csv", timeout, csv, List())
   }
 }

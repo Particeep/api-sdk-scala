@@ -22,8 +22,8 @@ case class ApiCredential(apiKey: String, apiSecret: String, http_headers: Option
 }
 
 trait WSClient {
-  val defaultTimeOutInSeconds: Long
-  val defaultImportTimeOutInSeconds: Long
+  val defaultTimeOut: Long
+  val defaultImportTimeOut: Long
 
   def cleanup(): Unit
   def credentials(): Option[ApiCredential]
@@ -96,8 +96,8 @@ trait BaseClient {
  */
 class ApiClient(val baseUrl: String, val version: String, val credentials: Option[ApiCredential] = None) extends WSClient with BaseClient with WithSecurtiy with ResponseParser {
 
-  val defaultTimeOutInSeconds: Long = 10
-  val defaultImportTimeOutInSeconds: Long = -1
+  val defaultTimeOut: Long = 10000
+  val defaultImportTimeOut: Long = -1
 
   private[this] def url(path: String, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): WSRequest = {
     val req = WS.clientUrl(s"$baseUrl/v$version$path")

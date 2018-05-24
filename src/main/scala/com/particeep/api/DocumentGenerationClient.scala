@@ -27,11 +27,11 @@ class DocumentGenerationClient(val ws: WSClient, val credentials: Option[ApiCred
 
   import DocumentGenerationClient._
 
-  def generation(document_generation: DocumentGeneration, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Stream[Byte]]] = {
+  def generation(document_generation: DocumentGeneration, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Stream[Byte]]] = {
     ws.post[Stream[Byte]](s"$endPoint", timeout, Json.toJson(document_generation))
   }
 
-  def generationAndUpload(document_generation: DocumentGenerationAndUpload, owner_id: String, timeout: Long = defaultTimeOutInSeconds)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
+  def generationAndUpload(document_generation: DocumentGenerationAndUpload, owner_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
     ws.post[Document](s"$endPoint/upload/$owner_id", timeout, Json.toJson(document_generation))
   }
 }
