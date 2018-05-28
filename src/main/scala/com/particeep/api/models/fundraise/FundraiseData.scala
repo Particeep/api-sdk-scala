@@ -21,6 +21,7 @@ case class FundraiseData(
   status:            Option[String]        = None,
   amount_target:     Option[Long]          = None,
   amount_engaged:    Option[Long]          = None,
+  amount_target_max: Option[Long]          = None,
   transaction_count: Option[Int]           = None,
   tag:               Option[String]        = None,
   fundraise_tag:     Option[String]        = None,
