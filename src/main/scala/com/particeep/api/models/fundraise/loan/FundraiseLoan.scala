@@ -5,7 +5,8 @@ import java.time.ZonedDateTime
 import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.Currency.{ Currency, EUR }
 import com.particeep.api.models.enums.FundraiseStatus.{ FundraiseStatus, INIT }
-import play.api.libs.json.{ JsObject, Json }
+import org.cvogt.play.json.Jsonx
+import play.api.libs.json.JsObject
 
 case class FundraiseLoan(
   id:                  String                = "",
@@ -23,6 +24,7 @@ case class FundraiseLoan(
   start_at:            Option[ZonedDateTime] = None,
   end_at:              Option[ZonedDateTime] = None,
   amount_target:       Long                  = 0,
+  amount_target_max:   Option[Long]          = None,
   currency:            Currency              = EUR,
   status:              FundraiseStatus       = INIT,
   score:               Option[String]        = None,
@@ -35,5 +37,5 @@ case class FundraiseLoan(
 object FundraiseLoan {
   implicit val date_format = Formatter.ZonedDateTimeWrites
   implicit lazy val loan_offer_format = LoanOffer.format
-  val format = Json.format[FundraiseLoan]
+  val format = Jsonx.formatCaseClass[FundraiseLoan]
 }
