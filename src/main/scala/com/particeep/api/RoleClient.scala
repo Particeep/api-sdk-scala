@@ -26,19 +26,19 @@ class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   import RoleClient._
 
-  def all(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[String]]] = {
+  def all(timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[String]]] = {
     ws.get[List[String]](s"$endPoint/all", timeout)
   }
 
-  def allByUser(user_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
+  def allByUser(user_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
     ws.get[Roles](s"$endPoint/all_by_user/$user_id", timeout)
   }
 
-  def add(user_id: String, role: String, role_creation: RoleCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
+  def add(user_id: String, role: String, role_creation: RoleCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
     ws.put[Roles](s"$endPoint/$user_id/add/${role.toLowerCase}", timeout, Json.toJson(role_creation))
   }
 
-  def addRoles(roles_creation: List[RolesCreation], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Roles]]] = {
+  def addRoles(roles_creation: List[RolesCreation], timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Roles]]] = {
     ws.put[List[Roles]](s"$endPoint", timeout, Json.toJson(roles_creation))
   }
 
@@ -48,7 +48,7 @@ class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
     role:        String,
     target_id:   Option[String] = None,
     target_type: Option[String] = None,
-    timeout:     Long           = -1
+    timeout:     Long           = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, Roles]] = {
     ws.delete[Roles](
       s"$endPoint/$user_id/remove/${role.toLowerCase}",
@@ -58,11 +58,11 @@ class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
     )
   }
 
-  def hasRole(user_id: String, role: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Boolean]] = {
+  def hasRole(user_id: String, role: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Boolean]] = {
     allByUser(user_id).map(result => result.right.map(roles => roles.roles.map(_.role_name).contains(role)))
   }
 
-  def search(criteria: RoleSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Roles]]] = {
+  def search(criteria: RoleSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Roles]]] = {
     ws.get[PaginatedSequence[Roles]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 }

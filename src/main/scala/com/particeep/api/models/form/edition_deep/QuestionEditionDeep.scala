@@ -7,10 +7,12 @@ import play.api.libs.json.Json
 case class QuestionEditionDeep(
   id:                 Option[String],
   label:              Option[String],
+  description:        Option[String]                                   = None,
   possibility_id_dep: Option[String]                                   = None,
   question_type:      Option[QuestionType],
   required:           Option[Boolean],
   index:              Option[Int],
+  pattern:            Option[String]                                   = None,
   possibilities:      Option[Seq[edition_deep.PossibilityEditionDeep]]
 )
 

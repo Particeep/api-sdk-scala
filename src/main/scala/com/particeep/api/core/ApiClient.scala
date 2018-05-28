@@ -14,9 +14,17 @@ import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Random
 import scala.util.control.NonFatal
 
-case class ApiCredential(apiKey: String, apiSecret: String)
+case class ApiCredential(apiKey: String, apiSecret: String, http_headers: Option[Seq[(String, String)]] = None) {
+  def withHeader(name: String, value: String): ApiCredential = {
+    val new_value = (name, value) :: this.http_headers.map(_.toList).getOrElse(List())
+    this.copy(http_headers = Some(new_value))
+  }
+}
 
 trait WSClient {
+  val defaultTimeOut: Long
+  val defaultImportTimeOut: Long
+
   def cleanup(): Unit
   def credentials(): Option[ApiCredential]
 
@@ -88,18 +96,24 @@ trait BaseClient {
  */
 class ApiClient(val baseUrl: String, val version: String, val credentials: Option[ApiCredential] = None) extends WSClient with BaseClient with WithSecurtiy with ResponseParser {
 
-  private[this] def url(path: String, timeOut: Long = -1)(implicit exec: ExecutionContext, credentials: ApiCredential): WSRequest = {
+  val defaultTimeOut: Long = 10000
+  val defaultImportTimeOut: Long = -1
+
+  private[this] def url(path: String, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): WSRequest = {
     val req = WS.clientUrl(s"$baseUrl/v$version$path")
-    secure(req, credentials, timeOut)
+    secure(req, credentials, timeOut).withHeaders(credentials.http_headers.getOrElse(List()): _*)
   }
 
   private[this] def urlFileUpload(path: String, client: AsyncHttpClient, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): AsyncHttpClient#BoundRequestBuilder = {
     val postBuilder = client.preparePost(s"$baseUrl/v$version$path")
-    secure(postBuilder, credentials, timeOut)
+    val url = secure(postBuilder, credentials, timeOut)
+    credentials.http_headers.map(_.foldLeft(url) { (acc, elem) =>
+      acc.addHeader(elem._1, elem._2)
+    }).getOrElse(url)
   }
 
   def get[T](path: String, timeOut: Long, params: List[(String, String)] = List())(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
-    url(path).withQueryString(params: _*).get().map(parse[T](_)).recover {
+    url(path, timeOut).withQueryString(params: _*).get().map(parse[T](_)).recover {
       case NonFatal(e) => handle_error(e, "GET", path)
     }
   }
@@ -110,13 +124,13 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
     body:    JsValue,
     params:  List[(String, String)] = List()
   )(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
-    url(path).withQueryString(params: _*).post(body).map(parse[T](_)).recover {
+    url(path, timeOut).withQueryString(params: _*).post(body).map(parse[T](_)).recover {
       case NonFatal(e) => handle_error(e, "POST", path)
     }
   }
 
   def put[T](path: String, timeOut: Long, body: JsValue)(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
-    url(path).put(body).map(parse[T](_)).recover {
+    url(path, timeOut).put(body).map(parse[T](_)).recover {
       case NonFatal(e) => handle_error(e, "PUT", path)
     }
   }
@@ -127,7 +141,7 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
     body:    JsValue                = Json.toJson(""),
     params:  List[(String, String)] = List()
   )(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
-    url(path).withQueryString(params: _*).withMethod("DELETE").withBody(body).execute().map(parse[T](_)).recover {
+    url(path, timeOut).withQueryString(params: _*).withMethod("DELETE").withBody(body).execute().map(parse[T](_)).recover {
       case NonFatal(e) => handle_error(e, "DELETE", path)
     }
   }

@@ -22,6 +22,7 @@ object SignatureClient {
   private implicit val multiple_format = SignatureMultiple.format
   private implicit val creation_format = SignatureCreation.format
   private implicit val multiple_creation_format = SignatureMultipleCreation.format
+  private implicit val signature_data_format = SignatureData.format
 
 }
 
@@ -29,43 +30,43 @@ class SignatureClient(val ws: WSClient, val credentials: Option[ApiCredential] =
 
   import SignatureClient._
 
-  def sign(signature_creation: SignatureCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Signature]] = {
+  def sign(signature_creation: SignatureCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Signature]] = {
     ws.post[Signature](s"$endPoint", timeout, Json.toJson(signature_creation))
   }
 
-  def signMultiple(signature_multiple_creation: SignatureMultipleCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, SignatureMultiple]] = {
+  def signMultiple(signature_multiple_creation: SignatureMultipleCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, SignatureMultiple]] = {
     ws.post[SignatureMultiple](s"$endPoint/multiple", timeout, Json.toJson(signature_multiple_creation))
   }
 
-  def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Signature]] = {
+  def byId(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Signature]] = {
     ws.get[Signature](s"$endPoint/$id", timeout)
   }
 
-  def byIds(ids: List[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Signature]]] = {
+  def byIds(ids: List[String], timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[Signature]]] = {
     ws.get[List[Signature]](s"$endPoint", timeout, List("ids" -> ids.mkString(",")))
   }
 
-  def multipleById(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, SignatureMultiple]] = {
+  def multipleById(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, SignatureMultiple]] = {
     ws.get[SignatureMultiple](s"$endPoint/multiple/$id", timeout)
   }
 
   def search(
     criteria:       SignatureSearch,
     table_criteria: TableSearch,
-    timeout:        Long            = -1
-  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Signature]]] = {
-    ws.get[PaginatedSequence[Signature]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
+    timeout:        Long            = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[SignatureData]]] = {
+    ws.get[PaginatedSequence[SignatureData]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
-  def getFile(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Stream[Byte]]] = {
+  def getFile(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Stream[Byte]]] = {
     ws.get[Stream[Byte]](s"$endPoint/file/$id", timeout)
   }
 
-  def getStatus(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, String]] = {
+  def getStatus(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, String]] = {
     ws.get[String](s"$endPoint/status/$id", timeout)
   }
 
-  def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Signature]] = {
+  def delete(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Signature]] = {
     ws.delete[Signature](s"$endPoint/$id", timeout)
   }
 }

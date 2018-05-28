@@ -30,23 +30,23 @@ class ScoringMetricClient(val ws: WSClient, val credentials: Option[ApiCredentia
   def runEvaluation(
     metric_id:   String,
     se_creation: ScoringEvaluationCreation,
-    timeout:     Long                      = -1
+    timeout:     Long                      = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, ScoringEvaluation]] = {
     ws.post[ScoringEvaluation](s"$endPoint/$metric_id/evals", timeout, Json.toJson(se_creation))
   }
 
-  def searchMetrics(timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[ScoringMetric]]] = {
+  def searchMetrics(timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[ScoringMetric]]] = {
     ws.get[Seq[ScoringMetric]](s"$endPoint/search/", timeout)
   }
 
-  def metricsById(metric_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ScoringMetric]] = {
+  def metricsById(metric_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ScoringMetric]] = {
     ws.get[ScoringMetric](s"$endPoint/$metric_id", timeout)
   }
 
   def searchEvaluations(
     criteria:       ScoringEvaluationSearch,
     table_criteria: TableSearch,
-    timeout:        Long                    = -1
+    timeout:        Long                    = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[ScoringEvaluation]]] = {
     ws.get[PaginatedSequence[ScoringEvaluation]](
       s"$endPoint/evals/search",
@@ -55,7 +55,7 @@ class ScoringMetricClient(val ws: WSClient, val credentials: Option[ApiCredentia
     )
   }
 
-  def evaluationsById(eval_id: String, metric_id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ScoringEvaluation]] = {
+  def evaluationsById(eval_id: String, metric_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ScoringEvaluation]] = {
     ws.get[ScoringEvaluation](s"$endPoint/$metric_id/evals/$eval_id", timeout)
   }
 }

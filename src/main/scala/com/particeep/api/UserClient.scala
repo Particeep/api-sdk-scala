@@ -36,55 +36,55 @@ class UserClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
 
   import UserClient._
 
-  def byId(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+  def byId(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
     ws.get[User](s"$endPoint/$id", timeout)
   }
 
-  def byIds(ids: Seq[String], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[User]]] = {
+  def byIds(ids: Seq[String], timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[User]]] = {
     ws.get[List[User]](s"$endPoint", timeout, List("ids" -> ids.mkString(",")))
   }
 
-  def byEmail(email: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+  def byEmail(email: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
     ws.get[User](s"$endPoint/email/$email", timeout)
   }
 
-  def searchByName(name: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[User]]] = {
+  def searchByName(name: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[User]]] = {
     ws.get[List[User]](s"$endPoint/name/$name", timeout)
   }
 
-  def search(criteria: UserSearch, table_criteria: TableSearch, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[UserData]]] = {
+  def search(criteria: UserSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[UserData]]] = {
     ws.get[PaginatedSequence[UserData]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
-  def create(user_creation: UserCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+  def create(user_creation: UserCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
     ws.put[User](s"$endPoint", timeout, Json.toJson(user_creation))
   }
 
-  def update(id: String, user_edition: UserEdition, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+  def update(id: String, user_edition: UserEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
     ws.post[User](s"$endPoint/$id", timeout, Json.toJson(user_edition))
   }
 
-  def authenticate(email: String, password: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+  def authenticate(email: String, password: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
     ws.post[User](s"$endPoint/authenticate", timeout, Json.toJson(Map("email" -> email, "password" -> password)))
   }
 
-  def getOrCreate(user_creation: UserCreation, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+  def getOrCreate(user_creation: UserCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
     ws.post[User](s"$endPoint/getOrCreate", timeout, Json.toJson(user_creation))
   }
 
-  def changePassword(id: String, old_password: Option[String], new_password: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+  def changePassword(id: String, old_password: Option[String], new_password: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
     ws.post[User](s"$endPoint/$id/changePassword", timeout, Json.toJson(ChangePassword(old_password, new_password)))
   }
 
-  def verifyAccount(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+  def verifyAccount(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
     ws.post[User](s"$endPoint/verify/$id", timeout, Json.toJson(""))
   }
 
-  def delete(id: String, timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
+  def delete(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, User]] = {
     ws.delete[User](s"$endPoint/$id", timeout)
   }
 
-  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = -1)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[User]]] = {
+  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = defaultImportTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[User]]] = {
     ws.postFile[ImportResult[User]](s"$endPoint_import/user/csv", timeout, csv, List())
   }
 
