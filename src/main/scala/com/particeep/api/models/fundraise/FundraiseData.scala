@@ -11,6 +11,7 @@ case class FundraiseData(
   created_at:        Option[ZonedDateTime] = None,
   enterprise_id:     Option[String]        = None,
   manager_id:        Option[String]        = None,
+  manager_email:     Option[String]        = None,
   fundraise_id:      Option[String]        = None,
   fundraise_type:    Option[String]        = None,
   currency:          Option[Currency]      = None,
