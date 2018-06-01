@@ -3,7 +3,7 @@ package com.particeep.api.models.news
 import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 
 case class News(
   id:          String                = "",
@@ -17,7 +17,8 @@ case class News(
   img_url:     Option[String]        = None,
   content_url: Option[String]        = None,
   is_report:   Option[Boolean]       = None,
-  tag:         Option[String]        = None
+  tag:         Option[String]        = None,
+  custom:      Option[JsObject]      = None
 )
 
 object News {

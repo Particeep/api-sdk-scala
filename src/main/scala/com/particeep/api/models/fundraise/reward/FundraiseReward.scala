@@ -5,7 +5,7 @@ import java.time.ZonedDateTime
 import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.Currency.{ Currency, EUR }
 import com.particeep.api.models.enums.FundraiseStatus.{ FundraiseStatus, INIT }
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 
 /**
  * Created by Noe on 26/01/2017.
@@ -25,6 +25,7 @@ case class FundraiseReward(
   currency:            Currency              = EUR,
   status:              FundraiseStatus       = INIT,
   tag:                 Option[String]        = None,
+  custom:              Option[JsObject]      = None,
   private_group_id:    Option[String]        = None
 )
 

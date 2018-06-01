@@ -6,6 +6,7 @@ import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.Currency.{ Currency, EUR }
 import com.particeep.api.models.enums.FundraiseStatus.{ FundraiseStatus, INIT }
 import org.cvogt.play.json.Jsonx
+import play.api.libs.json.JsObject
 
 case class FundraiseEquity(
   id:                  String                = "",
@@ -28,6 +29,7 @@ case class FundraiseEquity(
   status:              FundraiseStatus       = INIT,
   score:               Option[String]        = None,
   tag:                 Option[String]        = None,
+  custom:              Option[JsObject]      = None,
   restricted_to_group: Option[String]        = None,
   private_group_id:    Option[String]        = None,
   offer:               EquityOffer           = EquityOffer()

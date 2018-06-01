@@ -4,7 +4,7 @@ import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.Currency.Currency
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 
 case class FundraiseEquityEdition(
   recipient_id:        Option[String]        = None,
@@ -23,6 +23,7 @@ case class FundraiseEquityEdition(
   currency:            Option[Currency]      = None,
   score:               Option[String]        = None,
   tag:                 Option[String]        = None,
+  custom:              Option[JsObject]      = None,
   restricted_to_group: Option[String]        = None,
   offer:               Option[EquityOffer]   = None
 )
