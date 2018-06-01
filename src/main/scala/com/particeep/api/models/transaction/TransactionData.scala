@@ -6,6 +6,7 @@ import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.Currency.Currency
 import com.particeep.api.models.enums.PaymentMethod.PaymentMethod
 import org.cvogt.play.json.Jsonx
+import play.api.libs.json.JsObject
 
 /**
  * Created by Noe on 30/06/2017.
@@ -34,7 +35,8 @@ case class TransactionData(
   targeting_roles:       Option[String]        = None,
   partner_flat_fees:     Option[Int]           = None,
   partner_variable_fees: Option[Double]        = None,
-  tag:                   Option[String]        = None
+  tag:                   Option[String]        = None,
+  custom:                Option[JsObject]      = None
 )
 
 object TransactionData {

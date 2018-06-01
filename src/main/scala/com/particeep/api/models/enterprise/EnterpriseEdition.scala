@@ -4,7 +4,7 @@ import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
 import com.particeep.api.models.Address
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 
 case class EnterpriseEdition(
   name:              Option[String]        = None,
@@ -20,6 +20,7 @@ case class EnterpriseEdition(
   video_url:         Option[String]        = None,
   status:            Option[String]        = None,
   tag:               Option[String]        = None,
+  custom:            Option[JsObject]      = None,
   website_url:       Option[String]        = None,
   address:           Option[Address]       = None
 )

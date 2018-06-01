@@ -3,7 +3,7 @@ package com.particeep.api.models.fundraise.equity
 import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 
 /**
  * Created by Noe on 16/05/2017.
@@ -18,7 +18,8 @@ case class FundraiseEquityRunningEdition(
   disclaimer_payment:  Option[String]        = None,
   end_at:              Option[ZonedDateTime] = None,
   score:               Option[String]        = None,
-  tag:                 Option[String]        = None
+  tag:                 Option[String]        = None,
+  custom:              Option[JsObject]      = None
 )
 
 object FundraiseEquityRunningEdition {
