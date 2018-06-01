@@ -6,7 +6,7 @@ import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.Currency.{ Currency, EUR }
 import com.particeep.api.models.enums.PaymentMethod.PaymentMethod
 import com.particeep.api.models.enums.TransactionStatus.{ PENDING, TransactionStatus }
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 
 case class Transaction(
   id:              String                = "",
@@ -26,7 +26,8 @@ case class Transaction(
   payment_method:  Option[PaymentMethod] = None,
   handled_offline: Option[Boolean]       = None,
   comment:         Option[String]        = None,
-  tag:             Option[String]        = None
+  tag:             Option[String]        = None,
+  custom:          Option[JsObject]      = None
 )
 
 object Transaction {

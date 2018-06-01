@@ -4,7 +4,7 @@ import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.SignatureStatus.SignatureStatus
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 
 case class Signature(
   id:            String                  = "",
@@ -19,7 +19,9 @@ case class Signature(
   lastName:      String,
   email:         String,
   phone:         String,
-  signedFileUrl: Option[String]          = None
+  signedFileUrl: Option[String]          = None,
+  tag:           Option[String]          = None,
+  custom:        Option[JsObject]        = None
 )
 
 object Signature {
