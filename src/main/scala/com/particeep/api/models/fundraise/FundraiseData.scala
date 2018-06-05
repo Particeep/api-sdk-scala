@@ -5,12 +5,14 @@ import java.time.ZonedDateTime
 import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.Currency.Currency
 import org.cvogt.play.json.Jsonx
+import play.api.libs.json.JsObject
 
 case class FundraiseData(
   id:                String                = "",
   created_at:        Option[ZonedDateTime] = None,
   enterprise_id:     Option[String]        = None,
   manager_id:        Option[String]        = None,
+  manager_email:     Option[String]        = None,
   fundraise_id:      Option[String]        = None,
   fundraise_type:    Option[String]        = None,
   currency:          Option[Currency]      = None,
@@ -24,6 +26,7 @@ case class FundraiseData(
   amount_target_max: Option[Long]          = None,
   transaction_count: Option[Int]           = None,
   tag:               Option[String]        = None,
+  custom:            Option[JsObject]      = None,
   fundraise_tag:     Option[String]        = None,
   description_short: Option[String]        = None,
   logo_url:          Option[String]        = None,

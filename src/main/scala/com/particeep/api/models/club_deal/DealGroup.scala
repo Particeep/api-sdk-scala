@@ -3,7 +3,7 @@ package com.particeep.api.models.club_deal
 import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 
 /**
  * Created by Noe on 04/07/2017.
@@ -15,7 +15,8 @@ case class DealGroup(
   target_id:   String                = "",
   target_type: String                = "",
   open:        Boolean               = false,
-  tag:         Option[String]        = None
+  tag:         Option[String]        = None,
+  custom:      Option[JsObject]      = None
 )
 
 object DealGroup {
