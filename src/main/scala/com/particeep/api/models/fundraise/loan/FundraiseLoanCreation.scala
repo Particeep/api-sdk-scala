@@ -20,6 +20,7 @@ case class FundraiseLoanCreation(
   start_at:            Option[ZonedDateTime] = None,
   end_at:              Option[ZonedDateTime] = None,
   amount_target:       Long,
+  amount_target_max:   Option[Long]          = None,
   currency:            Currency,
   score:               Option[String]        = None,
   tag:                 Option[String]        = None,
