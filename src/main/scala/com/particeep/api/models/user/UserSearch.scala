@@ -3,6 +3,8 @@ package com.particeep.api.models.user
 import java.time.ZonedDateTime
 
 case class UserSearch(
+  created_after:   Option[ZonedDateTime] = None,
+  created_before:  Option[ZonedDateTime] = None,
   gender:          Option[String]        = None,
   first_name:      Option[String]        = None,
   last_name:       Option[String]        = None,
