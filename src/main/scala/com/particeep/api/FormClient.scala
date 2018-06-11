@@ -141,6 +141,6 @@ class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
     table_criteria: TableSearch,
     timeout:        Long        = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Form]]] = {
-    ws.get[PaginatedSequence[Form]](s"$endPoint/form/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
+    ws.get[PaginatedSequence[Form]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 }
