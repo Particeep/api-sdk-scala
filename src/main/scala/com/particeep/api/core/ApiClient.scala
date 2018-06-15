@@ -183,7 +183,7 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
     timeOut: Long,
     params:  List[(String, String)] = List()
   )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Enumerator[Array[Byte]]]] = {
-    url(path, timeOut).withQueryString(params: _*).withQueryString(params: _*).withMethod("GET").stream().map(r => Right(r._2)).recover {
+    url(path, timeOut).withQueryString(params: _*).withMethod("GET").stream().map(r => Right(r._2)).recover {
       case NonFatal(e) => handle_error[Enumerator[Array[Byte]]](e, "GET", path)
     }
   }
