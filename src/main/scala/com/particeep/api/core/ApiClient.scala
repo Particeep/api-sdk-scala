@@ -7,6 +7,7 @@ import play.api.libs.Files.TemporaryFile
 import play.api.libs.ws._
 import play.api.libs.ws.ning._
 import play.api.Play.current
+import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.{ Format, JsValue, Json }
 import play.api.mvc.MultipartFormData
 
@@ -66,6 +67,19 @@ trait WSClient {
     file:      MultipartFormData[TemporaryFile],
     bodyParts: List[Part]
   )(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]]
+
+  def getStream(
+    path:    String,
+    timeOut: Long,
+    params:  List[(String, String)] = List()
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Enumerator[Array[Byte]]]]
+
+  def postStream(
+    path:    String,
+    timeOut: Long,
+    body:    JsValue,
+    params:  List[(String, String)] = List()
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Enumerator[Array[Byte]]]]
 }
 
 trait BaseClient {
@@ -161,6 +175,27 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
     bodyParts.map(builder.addBodyPart(_))
     Future { client.executeRequest(builder.build()).get }.map(parse[T](_)).recover {
       case NonFatal(e) => handle_error(e, "DELETE", path)
+    }
+  }
+
+  def getStream(
+    path:    String,
+    timeOut: Long,
+    params:  List[(String, String)] = List()
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Enumerator[Array[Byte]]]] = {
+    url(path, timeOut).withQueryString(params: _*).withMethod("GET").stream().map(r => Right(r._2)).recover {
+      case NonFatal(e) => handle_error[Enumerator[Array[Byte]]](e, "GET", path)
+    }
+  }
+
+  def postStream(
+    path:    String,
+    timeOut: Long,
+    body:    JsValue,
+    params:  List[(String, String)] = List()
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Enumerator[Array[Byte]]]] = {
+    url(path, timeOut).withQueryString(params: _*).withMethod("POST").withBody(body).stream().map(r => Right(r._2)).recover {
+      case NonFatal(e) => handle_error[Enumerator[Array[Byte]]](e, "POST", path)
     }
   }
 
