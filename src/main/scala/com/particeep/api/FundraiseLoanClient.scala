@@ -29,9 +29,9 @@ object FundraiseLoanClient {
   private implicit val running_edition_format = FundraiseLoanRunningEdition.format
   private implicit val repayment_info_format = RepaymentInfo.format
   private implicit val repayment_with_date_format = RepaymentWithDate.format
-  private implicit val repayment_with_date_and_user_format = RepaymentWithDate.repayment_with_date_and_user_format
   private implicit val repayment_info_vector_format = RepaymentInfoVector.format
   private implicit val loan_repayment_schedule_format = LoanRepaymentSchedule.format
+  private implicit val loan_repayment_schedule_and_user_format = LoanRepaymentSchedule.loan_repayment_schedule_and_user_format
   private implicit val scheduled_payment_format = ScheduledPayment.format
   private implicit val lend_format = Lend.format
   private implicit val transaction_format = Transaction.format
@@ -107,8 +107,8 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     ws.post[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/info/user/$user_id", timeout, Json.toJson(""))
   }
 
-  def getTransactionRepaymentSchedule(id: String, transaction_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
-    ws.get[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/repayment/transaction/$transaction_id", timeout)
+  def getTransactionRepaymentSchedule(id: String, transaction_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[LoanRepaymentSchedule]]] = {
+    ws.get[List[LoanRepaymentSchedule]](s"$endPoint/fundraise/$id/repayment/transaction/$transaction_id", timeout)
   }
 
   def getBorrowerRepaymentSchedule(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
@@ -117,18 +117,20 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
 
   def getBorrowerRepaymentScheduleDetail(
     id:            String,
+    payment_day:   Int,
     payment_month: Int,
     payment_year:  Int,
     timeout:       Long   = defaultTimeOut
   )(
     implicit
     exec: ExecutionContext
-  ): Future[Either[ErrorResult, List[(RepaymentWithDate, User)]]] = {
-    ws.get[List[(RepaymentWithDate, User)]](s"$endPoint/fundraise/$id/detail/borrower/$payment_month/$payment_year", timeout)
+  ): Future[Either[ErrorResult, List[(LoanRepaymentSchedule, User)]]] = {
+    ws.get[List[(LoanRepaymentSchedule, User)]](s"$endPoint/fundraise/$id/detail/borrower/$payment_day/$payment_month/$payment_year", timeout)
   }
 
   def payOfflineBorrowerRepaymentSchedule(
     id:            String,
+    payment_day:   Int,
     payment_month: Int,
     payment_year:  Int,
     timeout:       Long   = defaultTimeOut
@@ -136,7 +138,7 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     implicit
     exec: ExecutionContext
   ): Future[Either[ErrorResult, Seq[LoanRepaymentSchedule]]] = {
-    ws.post[Seq[LoanRepaymentSchedule]](s"$endPoint/fundraise/$id/pay-offline/borrower/$payment_month/$payment_year", timeout, Json.toJson(""))
+    ws.post[Seq[LoanRepaymentSchedule]](s"$endPoint/fundraise/$id/pay-offline/borrower/$payment_day/$payment_month/$payment_year", timeout, Json.toJson(""))
   }
 
   def generateRepaymentSchedule(
@@ -147,8 +149,8 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
   }
 
   def generateCustomRepaymentSchedule(id: String, repayment_info_vector: RepaymentInfoVector,
-                                      timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[RepaymentWithDate]]] = {
-    ws.post[List[RepaymentWithDate]](s"$endPoint/fundraise/$id/schedule/update", timeout, Json.toJson(repayment_info_vector))
+                                      timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
+    ws.post[List[ScheduledPayment]](s"$endPoint/fundraise/$id/schedule/update", timeout, Json.toJson(repayment_info_vector))
   }
 
   def cancelRemainingPayments(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
