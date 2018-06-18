@@ -17,7 +17,8 @@ case class Repayment(
   capital_remains_to_pay_offline: Option[Int] = None,
   fees:                           Int,
   fees_offline:                   Option[Int] = None,
-  is_paid:                        Boolean
+  is_paid:                        Boolean,
+  is_paid_offline:                Boolean
 )
 
 case class RepaymentWithDate(
