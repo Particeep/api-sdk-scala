@@ -4,7 +4,7 @@ import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.CalculatorType.CalculatorType
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 
 case class LoanOffer(
   term:                 Int                    = 0,
@@ -17,7 +17,8 @@ case class LoanOffer(
   method:               Option[CalculatorType] = None,
   repayment_frequency:  Option[Int]            = None,
   repayment_start_date: Option[ZonedDateTime]  = None,
-  deferred_period:      Option[Int]            = None
+  deferred_period:      Option[Int]            = None,
+  custom_schedule:      Option[JsObject]       = None
 )
 
 object LoanOffer {
