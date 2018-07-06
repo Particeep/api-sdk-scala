@@ -3,8 +3,8 @@ package com.particeep.api.models.user
 import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
-import org.cvogt.play.json.Jsonx
-import play.api.libs.json.{ JsObject, Json }
+import ai.x.play.json.Jsonx
+import play.api.libs.json.JsObject
 
 /**
  * Created by Noe on 18/05/2017.

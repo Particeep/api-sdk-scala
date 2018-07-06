@@ -1,10 +1,11 @@
 package com.particeep.api
 
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
 import com.particeep.api.core._
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.signature._
 import com.particeep.api.utils.LangUtils
-import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -59,7 +60,7 @@ class SignatureClient(val ws: WSClient, val credentials: Option[ApiCredential] =
     ws.get[PaginatedSequence[SignatureData]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
-  def getFile(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enumerator[Array[Byte]]]] = {
+  def getFile(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Source[ByteString, _]]] = {
     ws.getStream(s"$endPoint/file/$id", timeout)
   }
 

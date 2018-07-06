@@ -1,10 +1,11 @@
 package com.particeep.api
 
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
 import com.particeep.api.core._
 import com.particeep.api.models.ErrorResult
 import com.particeep.api.models.document.Document
 import com.particeep.api.models.document_generation.{ DocumentGeneration, DocumentGenerationAndUpload }
-import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -28,7 +29,7 @@ class DocumentGenerationClient(val ws: WSClient, val credentials: Option[ApiCred
 
   import DocumentGenerationClient._
 
-  def generation(document_generation: DocumentGeneration, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enumerator[Array[Byte]]]] = {
+  def generation(document_generation: DocumentGeneration, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Source[ByteString, _]]] = {
     ws.postStream(s"$endPoint", timeout, Json.toJson(document_generation))
   }
 
