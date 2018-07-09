@@ -12,7 +12,6 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-ahc-ws-standalone"          % "2.0.0-M2"        withSources() exclude("com.ning", "async-http-client"),
   "com.typesafe.play" %% "play-ws-standalone-json"         % "2.0.0-M2"        withSources(),
   "com.ning"          %  "async-http-client"               % "1.9.40"          withSources(),
-  "com.github.driox"  %% "sorus"                           % "1.0.0"           withSources(),
   "org.slf4j"         %  "slf4j-api"                       % "1.7.21"          withSources(),
   "ai.x"              %% "play-json-extensions"            % "0.10.0"          withSources()
 )
