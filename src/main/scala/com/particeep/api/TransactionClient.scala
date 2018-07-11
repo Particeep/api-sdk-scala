@@ -44,11 +44,19 @@ class TransactionClient(val ws: WSClient, val credentials: Option[ApiCredential]
     ws.put[Transaction](s"$endPoint", timeout, Json.toJson(transaction_creation))
   }
 
-  def update(id: String, transaction_edition: TransactionEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
+  def update(
+    id:                  String,
+    transaction_edition: TransactionEdition,
+    timeout:             Long               = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, Transaction]] = {
     ws.post[Transaction](s"$endPoint/$id", timeout, Json.toJson(transaction_edition))
   }
 
-  def search(criteria: TransactionSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionData]]] = {
+  def search(
+    criteria:       TransactionSearch,
+    table_criteria: TableSearch,
+    timeout:        Long              = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[TransactionData]]] = {
     ws.get[PaginatedSequence[TransactionData]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 

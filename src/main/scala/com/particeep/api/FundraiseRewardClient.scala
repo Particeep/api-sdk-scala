@@ -51,7 +51,11 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.get[List[FundraiseReward]](s"$endPoint/fundraise", timeout, List("ids" -> ids.mkString(",")))
   }
 
-  def search(criteria: FundraiseRewardSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseReward]]] = {
+  def search(
+    criteria:       FundraiseRewardSearch,
+    table_criteria: TableSearch,
+    timeout:        Long                  = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseReward]]] = {
     ws.get[PaginatedSequence[FundraiseReward]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
@@ -63,7 +67,11 @@ class FundraiseRewardClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.post[FundraiseReward](s"$endPoint/fundraise/$id", timeout, Json.toJson(fundraise_reward_edition))
   }
 
-  def updateRunning(id: String, fundraise_reward_running_edition: FundraiseRewardRunningEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
+  def updateRunning(
+    id:                               String,
+    fundraise_reward_running_edition: FundraiseRewardRunningEdition,
+    timeout:                          Long                          = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseReward]] = {
     ws.post[FundraiseReward](s"$endPoint/fundraise/running/$id", timeout, Json.toJson(fundraise_reward_running_edition))
   }
 

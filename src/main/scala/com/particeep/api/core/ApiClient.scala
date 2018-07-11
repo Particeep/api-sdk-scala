@@ -95,7 +95,9 @@ trait BaseClient {
   //    val config = new NingAsyncHttpClientConfigBuilder(DefaultWSClientConfig()).build
   //    val builder = new AsyncHttpClientConfig.Builder(config)
   //    val client = new NingWSClient(builder.build)
-  protected implicit val sslClient = ApiClient.defaultSslClient
+  protected implicit val system: ActorSystem
+  protected implicit val materializer: ActorMaterializer
+  protected implicit val sslClient = ApiClient.defaultSslClient(system, materializer)
 
   def cleanup() = {
     sslClient.close()
@@ -113,10 +115,12 @@ trait BaseClient {
  *
  * val result:Future[Either[JsError, Info]] = ws.user.byId("some_id")
  */
-class ApiClient(val baseUrl: String, val version: String, val credentials: Option[ApiCredential] = None) extends WSClient with BaseClient with WithSecurtiy with ResponseParser {
+class ApiClient(val baseUrl: String, val version: String, val credentials: Option[ApiCredential] = None)(implicit s: ActorSystem, m: ActorMaterializer) extends WSClient with BaseClient with WithSecurtiy with ResponseParser {
 
   val defaultTimeOut: Long = 10000
   val defaultImportTimeOut: Long = 72000000
+  implicit val system = s
+  implicit val materializer = m
 
   private[this] def url(path: String, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): StandaloneWSRequest = {
     val req = sslClient.url(s"$baseUrl/v$version$path")
@@ -214,7 +218,5 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
 
 object ApiClient {
 
-  private[this] implicit val system = ActorSystem()
-  private[this] implicit val materializer = ActorMaterializer()
-  val defaultSslClient = StandaloneAhcWSClient()
+  def defaultSslClient(implicit s: ActorSystem, m: ActorMaterializer) = StandaloneAhcWSClient()
 }

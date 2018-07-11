@@ -85,7 +85,11 @@ class WalletClient(val ws: WSClient, val credentials: Option[ApiCredential] = No
     ws.get[Seq[BankAccount]](s"$endPoint/$id/bankaccount", timeout)
   }
 
-  def cashinBankAccount(id: String, cash_in_bank_account_creation: CashInBankAccountCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, CashInBankAccount]] = {
+  def cashinBankAccount(
+    id:                            String,
+    cash_in_bank_account_creation: CashInBankAccountCreation,
+    timeout:                       Long                      = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, CashInBankAccount]] = {
     ws.post[CashInBankAccount](s"$endPoint/$id/cashin/bankAccount", timeout, Json.toJson(cash_in_bank_account_creation))
   }
 }

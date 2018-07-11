@@ -54,11 +54,19 @@ class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.post[FundraiseEquity](s"$endPoint/fundraise/$id", timeout, Json.toJson(fundraise_equity_edition))
   }
 
-  def updateRunning(id: String, fundraise_equity_running_edition: FundraiseEquityRunningEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseEquity]] = {
+  def updateRunning(
+    id:                               String,
+    fundraise_equity_running_edition: FundraiseEquityRunningEdition,
+    timeout:                          Long                          = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseEquity]] = {
     ws.post[FundraiseEquity](s"$endPoint/fundraise/running/$id", timeout, Json.toJson(fundraise_equity_running_edition))
   }
 
-  def search(criteria: FundraiseEquitySearch, table_criteria: TableSearch, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseEquity]]] = {
+  def search(
+    criteria:       FundraiseEquitySearch,
+    table_criteria: TableSearch,
+    timeout:        Long                  = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseEquity]]] = {
     ws.get[PaginatedSequence[FundraiseEquity]](s"$endPoint/fundraises", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 

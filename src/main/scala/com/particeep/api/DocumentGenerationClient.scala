@@ -34,7 +34,11 @@ class DocumentGenerationClient(val ws: WSClient, val credentials: Option[ApiCred
     ws.postStream(s"$endPoint", timeout, Json.toJson(document_generation))
   }
 
-  def generationAndUpload(document_generation: DocumentGenerationAndUpload, owner_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
+  def generationAndUpload(
+    document_generation: DocumentGenerationAndUpload,
+    owner_id:            String,
+    timeout:             Long                        = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
     ws.post[Document](s"$endPoint/upload/$owner_id", timeout, Json.toJson(document_generation))
   }
 }

@@ -29,7 +29,11 @@ class PartnerClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
 
   import PartnerClient._
 
-  def createDefaultPartnerFees(user_id: String, partner_fees_creation: PartnerFeesCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
+  def createDefaultPartnerFees(
+    user_id:               String,
+    partner_fees_creation: PartnerFeesCreation,
+    timeout:               Long                = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFees]] = {
     ws.put[PartnerFees](s"$endPoint/fees/$user_id/default", timeout, Json.toJson(partner_fees_creation))
   }
 
