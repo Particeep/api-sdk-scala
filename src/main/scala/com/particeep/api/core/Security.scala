@@ -12,7 +12,7 @@ import scala.language.postfixOps
 
 trait WithSecurtiy {
 
-  protected def secure(req: StandaloneWSRequest, apiCredential: ApiCredential, timeOut: Long)(implicit exec: ExecutionContext) = {
+  protected def secure(req: StandaloneWSRequest, apiCredential: ApiCredential, timeOut: Long)(implicit exec: ExecutionContext): StandaloneWSRequest = {
     val today = buildDateHeader()
     req
       .withRequestTimeout(timeOut millis)

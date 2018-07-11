@@ -2,6 +2,7 @@ package com.particeep.api.core
 
 import java.io.File
 
+import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
@@ -76,14 +77,14 @@ trait WSClient {
     path:    String,
     timeOut: Long,
     params:  List[(String, String)] = List()
-  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Source[ByteString, _]]]
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Source[ByteString, NotUsed]]]
 
   def postStream(
     path:    String,
     timeOut: Long,
     body:    JsValue,
     params:  List[(String, String)] = List()
-  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Source[ByteString, _]]]
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Source[ByteString, NotUsed]]]
 }
 
 trait BaseClient {
@@ -115,7 +116,7 @@ trait BaseClient {
 class ApiClient(val baseUrl: String, val version: String, val credentials: Option[ApiCredential] = None) extends WSClient with BaseClient with WithSecurtiy with ResponseParser {
 
   val defaultTimeOut: Long = 10000
-  val defaultImportTimeOut: Long = -1
+  val defaultImportTimeOut: Long = 72000000
 
   private[this] def url(path: String, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): StandaloneWSRequest = {
     val req = sslClient.url(s"$baseUrl/v$version$path")
@@ -186,9 +187,9 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
     path:    String,
     timeOut: Long,
     params:  List[(String, String)] = List()
-  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Source[ByteString, _]]] = {
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Source[ByteString, NotUsed]]] = {
     parseStream(url(path, timeOut).withQueryStringParameters(params: _*).withMethod("GET")).recover {
-      case NonFatal(e) => handle_error[Source[ByteString, _]](e, "GET", path)
+      case NonFatal(e) => handle_error[Source[ByteString, NotUsed]](e, "GET", path)
     }
   }
 
@@ -197,9 +198,9 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
     timeOut: Long,
     body:    JsValue,
     params:  List[(String, String)] = List()
-  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Source[ByteString, _]]] = {
+  )(implicit exec: ExecutionContext, credentials: ApiCredential): Future[Either[ErrorResult, Source[ByteString, NotUsed]]] = {
     parseStream(url(path, timeOut).withQueryStringParameters(params: _*).withMethod("POST").withBody(body)).recover {
-      case NonFatal(e) => handle_error[Source[ByteString, _]](e, "POST", path)
+      case NonFatal(e) => handle_error[Source[ByteString, NotUsed]](e, "POST", path)
     }
   }
 
@@ -215,5 +216,5 @@ object ApiClient {
 
   private[this] implicit val system = ActorSystem()
   private[this] implicit val materializer = ActorMaterializer()
-  lazy val defaultSslClient = StandaloneAhcWSClient()
+  val defaultSslClient = StandaloneAhcWSClient()
 }

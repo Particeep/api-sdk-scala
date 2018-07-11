@@ -1,5 +1,6 @@
 package com.particeep.api
 
+import akka.NotUsed
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import com.particeep.api.core._
@@ -29,7 +30,7 @@ class DocumentGenerationClient(val ws: WSClient, val credentials: Option[ApiCred
 
   import DocumentGenerationClient._
 
-  def generation(document_generation: DocumentGeneration, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Source[ByteString, _]]] = {
+  def generation(document_generation: DocumentGeneration, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Source[ByteString, NotUsed]]] = {
     ws.postStream(s"$endPoint", timeout, Json.toJson(document_generation))
   }
 

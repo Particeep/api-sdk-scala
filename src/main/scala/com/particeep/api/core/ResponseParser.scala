@@ -1,5 +1,6 @@
 package com.particeep.api.core
 
+import akka.NotUsed
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import com.ning.http.client.Response
@@ -29,13 +30,13 @@ trait ResponseParser {
     parse(json, response.getStatusCode)(json_reads)
   }
 
-  def parseStream(request: StandaloneWSRequest)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Source[ByteString, _]]] = {
+  def parseStream(request: StandaloneWSRequest)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Source[ByteString, NotUsed]]] = {
     val response = request.execute()
     response.map { r =>
       try {
         Future.successful(Left(validateStandardError(r.body[JsValue]).get))
       } catch {
-        case NonFatal(ex) => request.stream().map(r => Right(r.bodyAsSource))
+        case NonFatal(ex) => request.stream().map(r => Right(r.bodyAsSource.mapMaterializedValue(mat => NotUsed)))
       }
     }.flatMap(identity)
   }
