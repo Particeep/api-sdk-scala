@@ -1,13 +1,13 @@
 package com.particeep.api
 
+import java.io.File
+
 import com.particeep.api.core._
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.enterprise._
 import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.utils.LangUtils
-import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -79,7 +79,7 @@ class EnterpriseClient(val ws: WSClient, val credentials: Option[ApiCredential] 
     ws.get[Seq[NbEnterprisesByActivityDomain]](s"$endPoint/info/activity/domain", timeout)
   }
 
-  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = defaultImportTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[Enterprise]]] = {
-    ws.postFile[ImportResult[Enterprise]](s"$endPoint_import/enterprise/csv", timeout, csv, List())
+  def importFromCsv(csv: File, timeout: Long = defaultImportTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[Enterprise]]] = {
+    ws.postFile[ImportResult[Enterprise]](s"$endPoint_import/enterprise/csv", timeout, csv, "text/csv", List())
   }
 }

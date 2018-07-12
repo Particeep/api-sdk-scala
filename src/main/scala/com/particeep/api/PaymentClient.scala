@@ -56,7 +56,10 @@ class PaymentClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
     ws.post[Transaction](s"$endPoint/refund/$transaction_id", timeout, Json.toJson(""))
   }
 
-  def addScheduledPayment(scheduled_payment_creations: List[ScheduledPaymentCreation], timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
+  def addScheduledPayment(
+    scheduled_payment_creations: List[ScheduledPaymentCreation],
+    timeout:                     Long                           = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ScheduledPayment]]] = {
     ws.post[List[ScheduledPayment]](s"$endPoint/schedule/add", timeout, Json.toJson(scheduled_payment_creations))
   }
 

@@ -6,7 +6,7 @@ import com.particeep.api.core.Formatter
 import com.particeep.api.models.enums.Currency.Currency
 import com.particeep.api.models.enums.TransactionWalletOperation.TransactionWalletOperation
 import com.particeep.api.models.enums.TransactionWalletStatus.TransactionWalletStatus
-import org.cvogt.play.json.Jsonx
+import ai.x.play.json.Jsonx
 
 case class TransactionWalletData(
   id:                 String,

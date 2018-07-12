@@ -1,5 +1,7 @@
 package com.particeep.api
 
+import java.io.File
+
 import com.particeep.api.core._
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.form.creation._
@@ -9,9 +11,7 @@ import com.particeep.api.models.form.get._
 import com.particeep.api.models.form.get_deep._
 import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.utils.LangUtils
-import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -132,8 +132,8 @@ class FormClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
     ws.put[Seq[Answer]](s"$endPoint/tagged-answer/$user_id", timeout, Json.toJson(tagged_answer_creation))
   }
 
-  def importAnswersFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = defaultImportTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[Seq[Answer]]]] = {
-    ws.postFile[ImportResult[Seq[Answer]]](s"$endPoint_import/form/answer", timeout, csv, List())
+  def importAnswersFromCsv(csv: File, timeout: Long = defaultImportTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[Seq[Answer]]]] = {
+    ws.postFile[ImportResult[Seq[Answer]]](s"$endPoint_import/form/answer", timeout, csv, "text/csv", List())
   }
 
   def search(

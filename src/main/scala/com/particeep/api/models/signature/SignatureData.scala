@@ -3,7 +3,7 @@ package com.particeep.api.models.signature
 import java.time.ZonedDateTime
 
 import com.particeep.api.core.Formatter
-import org.cvogt.play.json.Jsonx
+import ai.x.play.json.Jsonx
 import play.api.libs.json.JsObject
 
 case class SignatureData(
