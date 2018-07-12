@@ -2,6 +2,9 @@ package com.particeep.test
 
 import java.time.{ ZoneOffset, ZonedDateTime }
 
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
+
 import scala.language.postfixOps
 import com.particeep.api.core.ApiClient
 import com.particeep.api.core.Formatter
@@ -17,6 +20,9 @@ import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class ParticeepTest extends FlatSpec with Matchers {
+
+  private[this] implicit val actor_system = ActorSystem("internal-client")
+  private[this] implicit val actor_materializer = ActorMaterializer()
 
   "the api client" should "load info" in {
 
