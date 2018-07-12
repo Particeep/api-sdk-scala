@@ -1,10 +1,12 @@
 package com.particeep.api
 
+import akka.NotUsed
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
 import com.particeep.api.core._
 import com.particeep.api.models.ErrorResult
 import com.particeep.api.models.document.Document
 import com.particeep.api.models.document_generation.{ DocumentGeneration, DocumentGenerationAndUpload }
-import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -28,11 +30,15 @@ class DocumentGenerationClient(val ws: WSClient, val credentials: Option[ApiCred
 
   import DocumentGenerationClient._
 
-  def generation(document_generation: DocumentGeneration, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enumerator[Array[Byte]]]] = {
+  def generation(document_generation: DocumentGeneration, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Source[ByteString, NotUsed]]] = {
     ws.postStream(s"$endPoint", timeout, Json.toJson(document_generation))
   }
 
-  def generationAndUpload(document_generation: DocumentGenerationAndUpload, owner_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
+  def generationAndUpload(
+    document_generation: DocumentGenerationAndUpload,
+    owner_id:            String,
+    timeout:             Long                        = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
     ws.post[Document](s"$endPoint/upload/$owner_id", timeout, Json.toJson(document_generation))
   }
 }

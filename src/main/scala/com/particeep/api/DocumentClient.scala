@@ -1,14 +1,15 @@
 package com.particeep.api
 
+import java.io.File
+
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
 import com.ning.http.client.multipart.StringPart
 import com.particeep.api.core._
 import com.particeep.api.models.document._
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.utils.LangUtils
-import play.api.libs.Files.TemporaryFile
-import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
-import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -36,9 +37,10 @@ class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
 
   def upload(
     owner_id:          String,
-    file:              MultipartFormData[TemporaryFile],
+    file:              File,
+    content_type:      String,
     document_creation: DocumentCreation,
-    timeout:           Long                             = defaultTimeOut
+    timeout:           Long             = defaultTimeOut
   )(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
     val bodyParts = List(
       new StringPart("target_id", document_creation.target_id.getOrElse("")),
@@ -49,14 +51,14 @@ class DocumentClient(val ws: WSClient, val credentials: Option[ApiCredential] = 
       new StringPart("locked", document_creation.locked.getOrElse(false).toString),
       new StringPart("override_existing_file", document_creation.override_existing_file.getOrElse(false).toString)
     )
-    ws.postFile[Document](s"$endPoint/$owner_id/upload", timeout, file, bodyParts)
+    ws.postFile[Document](s"$endPoint/$owner_id/upload", timeout, file, content_type, bodyParts)
   }
 
   def createDir(owner_id: String, document_creation: DocumentCreation, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Document]] = {
     ws.post[Document](s"$endPoint/$owner_id/dir", timeout, Json.toJson(document_creation))
   }
 
-  def download(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Enumerator[Array[Byte]]]] = {
+  def download(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Source[ByteString, _]]] = {
     ws.getStream(s"$endPoint/download/$id", timeout)
   }
 

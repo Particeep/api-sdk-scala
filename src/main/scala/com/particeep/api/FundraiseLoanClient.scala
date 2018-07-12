@@ -1,5 +1,7 @@
 package com.particeep.api
 
+import java.io.File
+
 import com.particeep.api.core._
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.fundraise.loan._
@@ -7,9 +9,7 @@ import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.models.user.User
 import com.particeep.api.utils.LangUtils
-import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -60,11 +60,19 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     ws.post[FundraiseLoan](s"$endPoint/fundraise/$id", timeout, Json.toJson(fundraise_loan_edition))
   }
 
-  def updateRunning(id: String, fundraise_loan_running_edition: FundraiseLoanRunningEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
+  def updateRunning(
+    id:                             String,
+    fundraise_loan_running_edition: FundraiseLoanRunningEdition,
+    timeout:                        Long                        = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
     ws.post[FundraiseLoan](s"$endPoint/fundraise/running/$id", timeout, Json.toJson(fundraise_loan_running_edition))
   }
 
-  def search(criteria: FundraiseLoanSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseLoan]]] = {
+  def search(
+    criteria:       FundraiseLoanSearch,
+    table_criteria: TableSearch,
+    timeout:        Long                = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseLoan]]] = {
     ws.get[PaginatedSequence[FundraiseLoan]](s"$endPoint/fundraises", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
@@ -179,7 +187,7 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     ws.post[Transaction](s"$endPoint/fundraise/$id/lend", timeout, Json.toJson(lend_creation))
   }
 
-  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = defaultImportTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[FundraiseLoan]]] = {
-    ws.postFile[ImportResult[FundraiseLoan]](s"$endPoint_import/fundraise-loan/csv", timeout, csv, List())
+  def importFromCsv(csv: File, timeout: Long = defaultImportTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[FundraiseLoan]]] = {
+    ws.postFile[ImportResult[FundraiseLoan]](s"$endPoint_import/fundraise-loan/csv", timeout, csv, "text/csv", List())
   }
 }

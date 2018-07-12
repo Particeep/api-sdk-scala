@@ -1,5 +1,7 @@
 package com.particeep.api
 
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
 import com.particeep.api.core.{ ApiClient, ApiCredential, WSClient }
 
 /**
@@ -31,7 +33,7 @@ object ParticeepApi {
     self: WSClient =>
   }
 
-  def test(api_key: String, api_secret: String) = {
+  def test(api_key: String, api_secret: String)(implicit s: ActorSystem, m: ActorMaterializer) = {
     new ApiClient(
       "https://test-api.particeep.com",
       last_version,
@@ -39,7 +41,7 @@ object ParticeepApi {
     ) with AllCapability
   }
 
-  def prod(api_key: String, api_secret: String) = {
+  def prod(api_key: String, api_secret: String)(implicit s: ActorSystem, m: ActorMaterializer) = {
     new ApiClient(
       "https://api.particeep.com",
       last_version,

@@ -1,5 +1,7 @@
 package com.particeep.api
 
+import java.io.File
+
 import com.particeep.api.core._
 import com.particeep.api.models.enums.FundraiseStatus.FundraiseStatus
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
@@ -7,9 +9,7 @@ import com.particeep.api.models.fundraise.equity._
 import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
-import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
-import play.api.mvc.MultipartFormData
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -54,11 +54,19 @@ class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.post[FundraiseEquity](s"$endPoint/fundraise/$id", timeout, Json.toJson(fundraise_equity_edition))
   }
 
-  def updateRunning(id: String, fundraise_equity_running_edition: FundraiseEquityRunningEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseEquity]] = {
+  def updateRunning(
+    id:                               String,
+    fundraise_equity_running_edition: FundraiseEquityRunningEdition,
+    timeout:                          Long                          = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseEquity]] = {
     ws.post[FundraiseEquity](s"$endPoint/fundraise/running/$id", timeout, Json.toJson(fundraise_equity_running_edition))
   }
 
-  def search(criteria: FundraiseEquitySearch, table_criteria: TableSearch, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseEquity]]] = {
+  def search(
+    criteria:       FundraiseEquitySearch,
+    table_criteria: TableSearch,
+    timeout:        Long                  = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseEquity]]] = {
     ws.get[PaginatedSequence[FundraiseEquity]](s"$endPoint/fundraises", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
@@ -92,7 +100,7 @@ class FundraiseEquityClient(val ws: WSClient, val credentials: Option[ApiCredent
     ws.post[Transaction](s"$endPoint/fundraise/$id/invest", timeout, Json.toJson(investment_creation))
   }
 
-  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = defaultImportTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[FundraiseEquity]]] = {
-    ws.postFile[ImportResult[FundraiseEquity]](s"$endPoint_import/fundraise-equity/csv", timeout, csv, List())
+  def importFromCsv(csv: File, timeout: Long = defaultImportTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[FundraiseEquity]]] = {
+    ws.postFile[ImportResult[FundraiseEquity]](s"$endPoint_import/fundraise-equity/csv", timeout, csv, "text/csv", List())
   }
 }

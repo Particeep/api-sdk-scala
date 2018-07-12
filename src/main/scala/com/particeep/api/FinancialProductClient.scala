@@ -40,7 +40,11 @@ class FinancialProductClient(val ws: WSClient, val credentials: Option[ApiCreden
     ws.post[FinancialProduct](s"$endPoint/$id", timeout, Json.toJson(financial_product_edition))
   }
 
-  def search(criteria: FinancialProductSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FinancialProduct]]] = {
+  def search(
+    criteria:       FinancialProductSearch,
+    table_criteria: TableSearch,
+    timeout:        Long                   = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FinancialProduct]]] = {
     ws.get[PaginatedSequence[FinancialProduct]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 

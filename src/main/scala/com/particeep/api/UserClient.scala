@@ -1,5 +1,7 @@
 package com.particeep.api
 
+import java.io.File
+
 import play.api.libs.json._
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -7,8 +9,6 @@ import com.particeep.api.models._
 import com.particeep.api.models.imports.ImportResult
 import com.particeep.api.utils.LangUtils
 import com.particeep.api.models.user._
-import play.api.libs.Files.TemporaryFile
-import play.api.mvc.MultipartFormData
 import com.particeep.api.core._
 
 trait UserCapability {
@@ -84,8 +84,8 @@ class UserClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
     ws.delete[User](s"$endPoint/$id", timeout)
   }
 
-  def importFromCsv(csv: MultipartFormData[TemporaryFile], timeout: Long = defaultImportTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[User]]] = {
-    ws.postFile[ImportResult[User]](s"$endPoint_import/user/csv", timeout, csv, List())
+  def importFromCsv(csv: File, timeout: Long = defaultImportTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ImportResult[User]]] = {
+    ws.postFile[ImportResult[User]](s"$endPoint_import/user/csv", timeout, csv, "text/csv", List())
   }
 
 }
