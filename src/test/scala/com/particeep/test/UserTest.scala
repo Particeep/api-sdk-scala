@@ -1,20 +1,26 @@
 package com.particeep.test
 
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
+
 import scala.language.postfixOps
 import com.particeep.api.models.user.User
-import com.particeep.api.core.{ ApiClient }
+import com.particeep.api.core.ApiClient
 import com.particeep.api.models._
 import com.particeep.api.UserCapability
 import com.particeep.api.ParticeepApi
 import org.scalatest._
-import play.api.libs.json.{ Reads }
-import play.api.libs.ws.WSResponse
+import play.api.libs.json.Reads
+import play.api.libs.ws.StandaloneWSResponse
 
 import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class UserTest extends FlatSpec with Matchers {
+
+  private[this] implicit val actor_system = ActorSystem("internal-client")
+  private[this] implicit val actor_materializer = ActorMaterializer()
 
   "the api client" should "load user by id with correct date format" in {
 
@@ -91,9 +97,9 @@ class UserTest extends FlatSpec with Matchers {
 
     val user_id = "bf5788e8-9756-4d18-8b0f-100d7fba17a2"
     val ws = new ApiClient("https://test-api.particeep.com", "1", Some(ConfigTest.credential)) with UserCapability {
-      override def parse[A](response: WSResponse)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
+      override def parse[A](response: StandaloneWSResponse)(implicit json_reads: Reads[A]): Either[ErrorResult, A] = {
         val msg = response
-          .allHeaders
+          .headers
           .filterKeys(k => k == "Info-End-User")
           .headOption
           .map(v => s"${v._1} -> ${v._2}")
