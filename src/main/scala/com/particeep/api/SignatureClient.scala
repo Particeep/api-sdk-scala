@@ -60,6 +60,14 @@ class SignatureClient(val ws: WSClient, val credentials: Option[ApiCredential] =
     ws.get[PaginatedSequence[SignatureData]](s"$endPoint/search", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
 
+  def searchMultiple(
+    criteria:       SignatureSearch,
+    table_criteria: TableSearch,
+    timeout:        Long            = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[SignatureMultiple]]] = {
+    ws.get[PaginatedSequence[SignatureMultiple]](s"$endPoint/search/multiple", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
+  }
+
   def getFile(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Source[ByteString, _]]] = {
     ws.getStream(s"$endPoint/file/$id", timeout)
   }
