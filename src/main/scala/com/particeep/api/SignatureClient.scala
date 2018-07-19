@@ -25,6 +25,7 @@ object SignatureClient {
   private implicit val creation_format = SignatureCreation.format
   private implicit val multiple_creation_format = SignatureMultipleCreation.format
   private implicit val signature_data_format = SignatureData.format
+  private implicit val signature_multiple_data_format = SignatureDataMultiple.format
 
 }
 
@@ -48,8 +49,8 @@ class SignatureClient(val ws: WSClient, val credentials: Option[ApiCredential] =
     ws.get[List[Signature]](s"$endPoint", timeout, List("ids" -> ids.mkString(",")))
   }
 
-  def multipleById(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, SignatureMultiple]] = {
-    ws.get[SignatureMultiple](s"$endPoint/multiple/$id", timeout)
+  def multipleById(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, SignatureDataMultiple]] = {
+    ws.get[SignatureDataMultiple](s"$endPoint/multiple/$id", timeout)
   }
 
   def search(
