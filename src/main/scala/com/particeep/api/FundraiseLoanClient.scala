@@ -64,6 +64,10 @@ class FundraiseLoanClient(val ws: WSClient, val credentials: Option[ApiCredentia
     ws.post[FundraiseLoan](s"$endPoint/fundraise/running/$id", timeout, Json.toJson(fundraise_loan_running_edition))
   }
 
+  def delete(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, FundraiseLoan]] = {
+    ws.delete[FundraiseLoan](s"$endPoint/fundraise/$id", timeout)
+  }
+
   def search(criteria: FundraiseLoanSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[FundraiseLoan]]] = {
     ws.get[PaginatedSequence[FundraiseLoan]](s"$endPoint/fundraises", timeout, LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria))
   }
