@@ -4,12 +4,12 @@ import java.io.File
 
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import com.ning.http.client.multipart.StringPart
 import com.particeep.api.core._
 import com.particeep.api.models.document._
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
+import play.shaded.ahc.org.asynchttpclient.request.body.multipart.StringPart
 
 import scala.concurrent.{ ExecutionContext, Future }
 

@@ -3,7 +3,6 @@ package com.particeep.api.core
 import akka.NotUsed
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import com.ning.http.client.Response
 import org.slf4j.LoggerFactory
 import play.api.libs.json._
 
@@ -14,6 +13,7 @@ import play.api.libs.ws.{ StandaloneWSRequest, StandaloneWSResponse }
 
 import scala.concurrent.{ ExecutionContext, Future }
 import play.api.libs.ws.JsonBodyReadables._
+import play.shaded.ahc.org.asynchttpclient.Response
 
 trait ResponseParser {
 
