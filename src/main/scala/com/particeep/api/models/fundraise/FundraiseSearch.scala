@@ -2,12 +2,14 @@ package com.particeep.api.models.fundraise
 
 import java.time.ZonedDateTime
 
+import ai.x.play.json.Jsonx
 import com.particeep.api.core.Formatter
-import play.api.libs.json.Json
 
 case class FundraiseSearch(
-  start_at:                  Option[ZonedDateTime] = None,
-  end_at:                    Option[ZonedDateTime] = None,
+  created_before:            Option[ZonedDateTime] = None,
+  created_after:             Option[ZonedDateTime] = None,
+  end_before:                Option[ZonedDateTime] = None,
+  end_after:                 Option[ZonedDateTime] = None,
   enterprise_id:             Option[String]        = None,
   manager_id:                Option[String]        = None,
   manager_email:             Option[String]        = None,
@@ -31,5 +33,5 @@ case class FundraiseSearch(
 
 object FundraiseSearch {
   implicit val date_format = Formatter.ZonedDateTimeWrites
-  val format = Json.format[FundraiseSearch]
+  val format = Jsonx.formatCaseClass[FundraiseSearch]
 }
