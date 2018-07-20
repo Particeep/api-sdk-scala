@@ -7,13 +7,13 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import com.ning.http.client.multipart.{ FilePart, Part }
-import com.ning.http.client.AsyncHttpClient
 import com.particeep.api.models.{ Error, ErrorResult, Errors }
 import play.api.libs.ws._
 import play.api.libs.json.{ Format, JsValue, Json }
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
 import play.api.libs.ws.JsonBodyWritables._
+import play.shaded.ahc.org.asynchttpclient.request.body.multipart.{ FilePart, Part }
+import play.shaded.ahc.org.asynchttpclient.{ BoundRequestBuilder, DefaultAsyncHttpClient }
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Random
@@ -127,7 +127,7 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
     secure(req, credentials, timeOut).addHttpHeaders(credentials.http_headers.getOrElse(List()): _*)
   }
 
-  private[this] def urlFileUpload(path: String, client: AsyncHttpClient, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): AsyncHttpClient#BoundRequestBuilder = {
+  private[this] def urlFileUpload(path: String, client: DefaultAsyncHttpClient, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): BoundRequestBuilder = {
     val postBuilder = client.preparePost(s"$baseUrl/v$version$path")
     val url = secure(postBuilder, credentials, timeOut)
     credentials.http_headers.map(_.foldLeft(url) { (acc, elem) =>
@@ -176,7 +176,7 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
     content_type: String,
     bodyParts:    List[Part]
   )(implicit exec: ExecutionContext, credentials: ApiCredential, f: Format[T]): Future[Either[ErrorResult, T]] = {
-    val client = sslClient.underlying[AsyncHttpClient]
+    val client = sslClient.underlying[DefaultAsyncHttpClient]
     val postBuilder = urlFileUpload(path, client, timeout)
     val builder = postBuilder.addBodyPart(
       new FilePart("document", file, content_type)
