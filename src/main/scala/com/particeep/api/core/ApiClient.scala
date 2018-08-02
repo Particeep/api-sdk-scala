@@ -4,7 +4,7 @@ import java.io.File
 
 import akka.NotUsed
 import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
+import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import com.particeep.api.models.{ Error, ErrorResult, Errors }
@@ -96,7 +96,7 @@ trait BaseClient {
   //    val builder = new AsyncHttpClientConfig.Builder(config)
   //    val client = new NingWSClient(builder.build)
   protected implicit val system: ActorSystem
-  protected implicit val materializer: ActorMaterializer
+  protected implicit val materializer: Materializer
   protected implicit val sslClient = ApiClient.defaultSslClient(system, materializer)
 
   def cleanup() = {
@@ -115,12 +115,18 @@ trait BaseClient {
  *
  * val result:Future[Either[JsError, Info]] = ws.user.byId("some_id")
  */
-class ApiClient(val baseUrl: String, val version: String, val credentials: Option[ApiCredential] = None)(implicit s: ActorSystem, m: ActorMaterializer) extends WSClient with BaseClient with WithSecurtiy with ResponseParser {
+class ApiClient(
+    val baseUrl:     String,
+    val version:     String,
+    val credentials: Option[ApiCredential] = None
+)(implicit
+  s: ActorSystem,
+  m: Materializer) extends WSClient with BaseClient with WithSecurtiy with ResponseParser {
 
-  val defaultTimeOut: Long = 10000
-  val defaultImportTimeOut: Long = 72000000
-  implicit val system = s
-  implicit val materializer = m
+  private[this] val defaultTimeOut: Long = 10000
+  private[this] val defaultImportTimeOut: Long = 72000000
+  private[this] implicit val system = s
+  private[this] implicit val materializer = m
 
   private[this] def url(path: String, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): StandaloneWSRequest = {
     val req = sslClient.url(s"$baseUrl/v$version$path")
@@ -218,5 +224,5 @@ class ApiClient(val baseUrl: String, val version: String, val credentials: Optio
 
 object ApiClient {
 
-  def defaultSslClient(implicit s: ActorSystem, m: ActorMaterializer) = StandaloneAhcWSClient()
+  def defaultSslClient(implicit s: ActorSystem, m: Materializer) = StandaloneAhcWSClient()
 }
