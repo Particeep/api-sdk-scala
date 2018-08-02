@@ -120,13 +120,11 @@ class ApiClient(
     val version:     String,
     val credentials: Option[ApiCredential] = None
 )(implicit
-  s: ActorSystem,
-  m: Materializer) extends WSClient with BaseClient with WithSecurtiy with ResponseParser {
+  val system: ActorSystem,
+  val materializer: Materializer) extends WSClient with BaseClient with WithSecurtiy with ResponseParser {
 
-  private[this] val defaultTimeOut: Long = 10000
-  private[this] val defaultImportTimeOut: Long = 72000000
-  private[this] implicit val system = s
-  private[this] implicit val materializer = m
+  val defaultTimeOut: Long = 10000
+  val defaultImportTimeOut: Long = 72000000
 
   private[this] def url(path: String, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): StandaloneWSRequest = {
     val req = sslClient.url(s"$baseUrl/v$version$path")
