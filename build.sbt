@@ -1,8 +1,8 @@
 name := """api-sdk-scala"""
 
-version := "2.0.8"
+version := "2.0.10"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.11"
 
 resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 
