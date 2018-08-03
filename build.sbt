@@ -1,6 +1,6 @@
 name := """api-sdk-scala"""
 
-version := "2.0.8"
+version := "2.0.10"
 
 scalaVersion := "2.11.8"
 
