@@ -18,6 +18,7 @@ object ParticeepApi {
       with DocumentCapability
       with DocumentGenerationCapability
       with EnterpriseCapability
+      with FinancialProductCapability
       with FormCapability
       with FundraiseEquityCapability
       with FundraiseLoanCapability
