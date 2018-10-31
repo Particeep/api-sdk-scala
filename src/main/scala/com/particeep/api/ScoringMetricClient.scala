@@ -35,8 +35,16 @@ class ScoringMetricClient(val ws: WSClient, val credentials: Option[ApiCredentia
     ws.post[ScoringEvaluation](s"$endPoint/$metric_id/evals", timeout, Json.toJson(se_creation))
   }
 
-  def searchMetrics(timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Seq[ScoringMetric]]] = {
-    ws.get[Seq[ScoringMetric]](s"$endPoint/search/", timeout)
+  def searchMetrics(
+    criteria:       ScoringMetricSearch,
+    table_criteria: TableSearch,
+    timeout:        Long                = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[ScoringMetric]]] = {
+    ws.get[PaginatedSequence[ScoringMetric]](
+      s"$endPoint/search/",
+      timeout,
+      LangUtils.productToQueryString(criteria) ++ LangUtils.productToQueryString(table_criteria)
+    )
   }
 
   def metricsById(metric_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, ScoringMetric]] = {
