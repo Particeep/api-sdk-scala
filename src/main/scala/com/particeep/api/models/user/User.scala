@@ -37,6 +37,5 @@ case class User(
 
 object User {
   implicit val date_format = Formatter.ZonedDateTimeWrites
-
   val format = Jsonx.formatCaseClass[User]
 }
