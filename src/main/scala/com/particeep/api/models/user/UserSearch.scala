@@ -10,6 +10,7 @@ case class UserSearch(
   last_name:       Option[String]        = None,
   birthday:        Option[ZonedDateTime] = None,
   birth_place:     Option[String]        = None,
+  birth_country:   Option[String]        = None,
   phone:           Option[String]        = None,
   nationality:     Option[String]        = None,
   sector:          Option[String]        = None,
