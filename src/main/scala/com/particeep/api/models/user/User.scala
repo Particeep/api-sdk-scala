@@ -6,7 +6,8 @@ import com.particeep.api.core.Formatter
 import com.particeep.api.models.Address
 import com.particeep.api.models.enums.Gender.Gender
 import com.particeep.api.models.enums.InvestorType.InvestorType
-import play.api.libs.json.{ JsObject, Json }
+import ai.x.play.json.Jsonx
+import play.api.libs.json._
 
 case class User(
   id:                       String                = "",
@@ -18,6 +19,7 @@ case class User(
   avatar_url:               Option[String]        = None,
   birthday:                 Option[ZonedDateTime] = None,
   birth_place:              Option[String]        = None,
+  birth_country:            Option[String]        = None,
   phone:                    Option[String]        = None,
   nationality:              Option[String]        = None,
   bio:                      Option[String]        = None,
@@ -35,5 +37,5 @@ case class User(
 
 object User {
   implicit val date_format = Formatter.ZonedDateTimeWrites
-  val format = Json.format[User]
+  val format = Jsonx.formatCaseClass[User]
 }
