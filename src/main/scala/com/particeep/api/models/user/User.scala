@@ -30,7 +30,7 @@ case class User(
   allow_mail_notifications: Option[Boolean]       = None,
   does_pay_taxes:           Option[Boolean]       = None,
   has_been_claimed:         Option[Boolean]       = None,
-  address:                  Option[Address]       = None,
+  addresses:                Seq[Address]          = Seq(),
   tag:                      Option[String]        = None,
   custom:                   Option[JsObject]      = None
 )

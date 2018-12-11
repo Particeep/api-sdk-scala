@@ -30,7 +30,6 @@ case class UserData(
   does_pay_taxes:           Option[Boolean]       = None,
   has_been_claimed:         Option[Boolean]       = Some(true),
   city:                     Option[String]        = None,
-  address_id:               Option[String]        = None,
   wallet_id:                Option[String]        = None,
   wallet_updated_at:        Option[ZonedDateTime] = None,
   wallet_type:              Option[String]        = None,
