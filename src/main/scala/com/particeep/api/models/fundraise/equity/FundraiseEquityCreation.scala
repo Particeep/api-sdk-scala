@@ -26,6 +26,7 @@ case class FundraiseEquityCreation(
   tag:                 Option[String]        = None,
   custom:              Option[JsObject]      = None,
   restricted_to_group: Option[String]        = None,
+  required_pro:        Option[Boolean]       = None,
   offer:               Option[EquityOffer]   = None
 )
 

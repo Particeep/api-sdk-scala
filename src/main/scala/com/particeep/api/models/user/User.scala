@@ -31,6 +31,7 @@ case class User(
   does_pay_taxes:           Option[Boolean]       = None,
   has_been_claimed:         Option[Boolean]       = None,
   address:                  Option[Address]       = None,
+  is_pro:                   Option[Boolean]       = None,
   tag:                      Option[String]        = None,
   custom:                   Option[JsObject]      = None
 )

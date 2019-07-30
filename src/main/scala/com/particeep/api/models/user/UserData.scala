@@ -38,6 +38,7 @@ case class UserData(
   roles:                    Option[String]        = None,
   targeting_roles:          Option[String]        = None,
   investor_score:           Option[Long]          = None,
+  is_pro:                   Option[Boolean]       = None,
   tag:                      Option[String]        = None,
   custom:                   Option[JsObject]      = None
 )

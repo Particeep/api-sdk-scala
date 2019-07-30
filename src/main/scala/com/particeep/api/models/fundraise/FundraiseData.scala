@@ -34,7 +34,8 @@ case class FundraiseData(
   score:             Option[String]        = None,
   visible:           Option[Boolean]       = None,
   private_group_id:  Option[String]        = None,
-  targeting_roles:   Option[String]        = None
+  targeting_roles:   Option[String]        = None,
+  required_pro:      Option[Boolean]       = None
 )
 
 object FundraiseData {
