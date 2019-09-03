@@ -7,21 +7,22 @@ import com.particeep.api.models.enums.SignatureStatus.SignatureStatus
 import play.api.libs.json.{ JsObject, Json }
 
 case class Signature(
-  id:            String                  = "",
-  created_at:    Option[ZonedDateTime]   = None,
-  language:      String,
-  fileUrl:       String,
-  fileToSignUrl: Option[String]          = None,
-  fileName:      String,
-  status:        Option[SignatureStatus] = None,
-  external_id:   Option[String]          = None,
-  firstName:     String,
-  lastName:      String,
-  email:         String,
-  phone:         String,
-  signedFileUrl: Option[String]          = None,
-  tag:           Option[String]          = None,
-  custom:        Option[JsObject]        = None
+  id:             String                  = "",
+  created_at:     Option[ZonedDateTime]   = None,
+  language:       String,
+  fileUrl:        String,
+  fileToSignUrl:  Option[String]          = None,
+  fileName:       String,
+  status:         Option[SignatureStatus] = None,
+  external_id:    Option[String]          = None,
+  firstName:      String,
+  lastName:       String,
+  email:          String,
+  phone:          String,
+  signedFileUrl:  Option[String]          = None,
+  signature_type: Option[String]          = None,
+  tag:            Option[String]          = None,
+  custom:         Option[JsObject]        = None
 )
 
 object Signature {
