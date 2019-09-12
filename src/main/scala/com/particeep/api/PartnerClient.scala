@@ -23,6 +23,9 @@ object PartnerClient {
   private implicit val partner_fees_on_target_format = PartnerFeesOnTarget.format
   private implicit val partner_fees_on_target_creation_format = PartnerFeesOnTargetCreation.format
   private implicit val partner_fees_on_target_edition_format = PartnerFeesOnTargetEdition.format
+  private implicit val partner_company_format = PartnerCompany.format
+  private implicit val partner_company_creation_format = PartnerCompanyCreation.format
+  private implicit val partner_company_edition_format = PartnerCompanyEdition.format
 }
 
 class PartnerClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
@@ -79,5 +82,25 @@ class PartnerClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
 
   def deletePartnerFees(user_id: String, target_id: String, target_type: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerFeesOnTarget]] = {
     ws.delete[PartnerFeesOnTarget](s"$endPoint/fees/$user_id/$target_id/$target_type", timeout)
+  }
+
+  def createPartnerCompany(
+    user_id:                  String,
+    partner_company_creation: PartnerCompanyCreation,
+    timeout:                  Long                   = defaultTimeOut
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerCompany]] = {
+    ws.put[PartnerCompany](s"$endPoint/company/$user_id", timeout, Json.toJson(partner_company_creation))
+  }
+
+  def getPartnerCompanyByUserId(user_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerCompany]] = {
+    ws.get[PartnerCompany](s"$endPoint/company/$user_id", timeout)
+  }
+
+  def updatePartnerCompany(user_id: String, partner_company_edition: PartnerCompanyEdition, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerCompany]] = {
+    ws.post[PartnerCompany](s"$endPoint/company/$user_id", timeout, Json.toJson(partner_company_edition))
+  }
+
+  def deletePartnerCompany(user_id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PartnerCompany]] = {
+    ws.delete[PartnerCompany](s"$endPoint/company/$user_id", timeout)
   }
 }
