@@ -28,7 +28,7 @@ case class UserCreation(
   viadeo_url:               Option[String]        = None,
   allow_mail_notifications: Option[Boolean]       = None,
   does_pay_taxes:           Option[Boolean]       = None,
-  address:                  Option[Address]       = None,
+  addresses:                Option[Seq[Address]]  = None,
   tag:                      Option[String]        = None,
   custom:                   Option[JsObject]      = None
 )
