@@ -14,31 +14,31 @@ object ParticeepApi {
   private[this] val last_version = "1"
 
   trait AllCapability
-      extends ClubDealCapability
-      with DocumentCapability
-      with DocumentGenerationCapability
-      with EnterpriseCapability
-      with FinancialProductCapability
-      with FormCapability
-      with FundraiseEquityCapability
-      with FundraiseLoanCapability
-      with FundraiseRewardCapability
-      with FundraiseSearchCapability
-      with InfoCapability
-      with KpiCapability
-      with KycCapability
-      with NewsCapability
-      with PartnerCapability
-      with PaymentCapability
-      with RoleCapability
-      with ScoringMetricsCapability
-      with SignatureCapability
-      with TransactionCapability
-      with UserCapability
-      with WalletCapability
-      with WalletSepaCapability
-      with WebHookCapability
-      with PhoneMessagingCapability {
+    extends ClubDealCapability
+    with DocumentCapability
+    with DocumentGenerationCapability
+    with EnterpriseCapability
+    with FinancialProductCapability
+    with FormCapability
+    with FundraiseEquityCapability
+    with FundraiseLoanCapability
+    with FundraiseRewardCapability
+    with FundraiseSearchCapability
+    with InfoCapability
+    with KpiCapability
+    with KycCapability
+    with NewsCapability
+    with PartnerCapability
+    with PaymentCapability
+    with RoleCapability
+    with ScoringMetricsCapability
+    with SignatureCapability
+    with TransactionCapability
+    with UserCapability
+    with WalletCapability
+    with WalletSepaCapability
+    with WebHookCapability
+    with PhoneMessagingCapability {
     self: WSClient =>
   }
 

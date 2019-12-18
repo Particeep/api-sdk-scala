@@ -6,13 +6,12 @@ import java.time.{ ZoneOffset, ZonedDateTime }
 import play.api.libs.ws._
 import play.shaded.ahc.org.asynchttpclient.BoundRequestBuilder
 
-import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-trait WithSecurtiy {
+trait WithSecurity {
 
-  protected def secure(req: StandaloneWSRequest, apiCredential: ApiCredential, timeOut: Long)(implicit exec: ExecutionContext): StandaloneWSRequest = {
+  protected def secure(req: StandaloneWSRequest, apiCredential: ApiCredential, timeOut: Long): StandaloneWSRequest = {
     val today = buildDateHeader()
     req
       .withRequestTimeout(timeOut millis)
@@ -22,7 +21,7 @@ trait WithSecurtiy {
       )
   }
 
-  protected def secure(req: BoundRequestBuilder, apiCredential: ApiCredential, timeOut: Long)(implicit exec: ExecutionContext) = {
+  protected def secure(req: BoundRequestBuilder, apiCredential: ApiCredential, timeOut: Long) = {
     val today = buildDateHeader()
     req
       .setRequestTimeout(timeOut.toInt)

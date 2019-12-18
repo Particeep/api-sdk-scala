@@ -8,8 +8,8 @@ import play.api.libs.json.Json
  */
 
 case class Backing(
-  transaction: Transaction,
-  reward:      Option[Reward]
+    transaction: Transaction,
+    reward:      Option[Reward]
 )
 
 object Backing {

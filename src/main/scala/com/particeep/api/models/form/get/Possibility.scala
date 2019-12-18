@@ -6,12 +6,12 @@ import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class Possibility(
-  id:          String                = "",
-  created_at:  Option[ZonedDateTime] = None,
-  question_id: String                = "",
-  label:       Option[String]        = None,
-  index:       Option[Int]           = None,
-  weight:      Option[Int]           = None
+    id:          String                = "",
+    created_at:  Option[ZonedDateTime] = None,
+    question_id: String                = "",
+    label:       Option[String]        = None,
+    index:       Option[Int]           = None,
+    weight:      Option[Int]           = None
 )
 
 object Possibility {

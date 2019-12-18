@@ -6,11 +6,11 @@ import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class ManagerLink(
-  id:         Option[String]        = None,
-  created_at: Option[ZonedDateTime] = None,
-  manager_id: String                = "",
-  name:       Option[String]        = None,
-  tag:        Option[String]        = None
+    id:         Option[String]        = None,
+    created_at: Option[ZonedDateTime] = None,
+    manager_id: String                = "",
+    name:       Option[String]        = None,
+    tag:        Option[String]        = None
 )
 
 object ManagerLink {

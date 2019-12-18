@@ -1,12 +1,11 @@
-package com.particeep.api.models.fundraise.equity
+package com.particeep.api.models.transaction
 
-import com.particeep.api.models.transaction.Transaction
 import com.particeep.api.models.user.User
 import play.api.libs.json.Json
 
 case class Investment(
-  user:        Option[User],
-  transaction: Transaction
+    user:        Option[User],
+    transaction: Transaction
 )
 
 object Investment {

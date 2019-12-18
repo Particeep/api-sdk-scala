@@ -6,10 +6,10 @@ import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class WebHook(
-  id:         String                = "",
-  created_at: Option[ZonedDateTime] = None,
-  name:       String                = "",
-  url:        String                = ""
+    id:         String                = "",
+    created_at: Option[ZonedDateTime] = None,
+    name:       String                = "",
+    url:        String                = ""
 )
 
 object WebHook {

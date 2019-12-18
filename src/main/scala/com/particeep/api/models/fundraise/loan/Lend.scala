@@ -5,8 +5,8 @@ import com.particeep.api.models.user.User
 import play.api.libs.json.Json
 
 case class Lend(
-  transaction: Transaction,
-  user:        Option[User]
+    transaction: Transaction,
+    user:        Option[User]
 )
 
 object Lend {
