@@ -3,8 +3,8 @@ package com.particeep.api.models.webhook
 import play.api.libs.json.Json
 
 case class WebHookSimple(
-  name: String,
-  url:  String
+    name: String,
+    url:  String
 )
 
 object WebHookSimple {

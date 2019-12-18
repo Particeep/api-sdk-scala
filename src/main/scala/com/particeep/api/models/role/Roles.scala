@@ -3,8 +3,8 @@ package com.particeep.api.models.role
 import play.api.libs.json.Json
 
 case class Roles(
-  user_id: String     = "",
-  roles:   List[Role] = List()
+    user_id: String     = "",
+    roles:   List[Role] = List()
 )
 
 object Roles {
