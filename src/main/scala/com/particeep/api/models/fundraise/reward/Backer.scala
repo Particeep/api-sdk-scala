@@ -9,9 +9,9 @@ import play.api.libs.json.Json
  */
 
 case class Backer(
-  transaction: Transaction,
-  user:        User,
-  reward:      Option[Reward]
+    transaction: Transaction,
+    user:        User,
+    reward:      Option[Reward]
 )
 
 object Backer {

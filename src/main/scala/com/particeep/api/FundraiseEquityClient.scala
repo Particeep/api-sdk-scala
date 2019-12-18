@@ -7,7 +7,7 @@ import com.particeep.api.models.enums.FundraiseStatus.FundraiseStatus
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
 import com.particeep.api.models.fundraise.equity._
 import com.particeep.api.models.imports.ImportResult
-import com.particeep.api.models.transaction.{ Transaction, TransactionSearch }
+import com.particeep.api.models.transaction.{ Investment, Transaction, TransactionSearch }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.Json
 

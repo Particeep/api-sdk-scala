@@ -6,10 +6,10 @@ import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class FundraiseEquitySearch(
-  start_date:     Option[ZonedDateTime] = None,
-  end_date:       Option[ZonedDateTime] = None,
-  status:         Option[String]        = None,
-  enterprise_ids: Option[String]        = None
+    start_date:     Option[ZonedDateTime] = None,
+    end_date:       Option[ZonedDateTime] = None,
+    status:         Option[String]        = None,
+    enterprise_ids: Option[String]        = None
 )
 
 object FundraiseEquitySearch {
