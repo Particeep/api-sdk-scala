@@ -6,11 +6,11 @@ import play.api.libs.json._
  * Created by Noe on 10/04/2017.
  */
 case class ImportResult[T](
-  lineTreated:   Int                  = 0,
-  nbCreated:     Int                  = 0,
-  nbFail:        Int                  = 0,
-  lineWithError: List[LineError]      = List(),
-  lineOnSuccess: List[LineSuccess[T]] = List()
+    lineTreated:   Int                  = 0,
+    nbCreated:     Int                  = 0,
+    nbFail:        Int                  = 0,
+    lineWithError: List[LineError]      = List(),
+    lineOnSuccess: List[LineSuccess[T]] = List()
 )
 
 object ImportResult {

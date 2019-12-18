@@ -4,8 +4,8 @@ import com.particeep.api.models.PaginatedSequence
 import play.api.libs.json.Json
 
 case class NewsPrevAndNext(
-  prev: PaginatedSequence[News],
-  next: PaginatedSequence[News]
+    prev: PaginatedSequence[News],
+    next: PaginatedSequence[News]
 )
 
 object NewsPrevAndNext {
