@@ -5,9 +5,9 @@ import play.api.libs.json.Json
 import com.particeep.api.core.Formatter
 
 case class KpiValueUpdate(
-  id:    String,
-  date:  ZonedDateTime,
-  value: Double
+    id:    String,
+    date:  ZonedDateTime,
+    value: Double
 )
 
 object KpiValueUpdate {
