@@ -2,21 +2,18 @@ name := """api-sdk-scala"""
 
 version := "2.0.10"
 
-scalaVersion := "2.11.11"
+scalaVersion := "2.13.8"
 
 resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 
 // Change this to another test framework if you prefer
 libraryDependencies ++= Seq(
-  "org.scalatest"     %% "scalatest"                       % "2.2.4"  % "test" withSources(),
-  "com.typesafe.play" %% "play-ahc-ws-standalone"          % "2.0.0-M2"        withSources() exclude("com.ning", "async-http-client"),
-  "com.typesafe.play" %% "play-ws-standalone-json"         % "2.0.0-M2"        withSources(),
+  "org.scalatest"     %% "scalatest"                       % "3.1.0"  % "test" withSources(),
+  "com.typesafe.play" %% "play-ahc-ws-standalone"          % "2.2.0-M1"        withSources() exclude("com.ning", "async-http-client"),
+  "com.typesafe.play" %% "play-ws-standalone-json"         % "2.2.0-M1"        withSources(),
   "org.slf4j"         %  "slf4j-api"                       % "1.7.21"          withSources(),
-  "ai.x"              %% "play-json-extensions"            % "0.10.0"          withSources()
+  "ai.x"              %% "play-json-extensions"            % "0.42.0"          withSources()
 )
-
-// Uncomment to use Akka
-//libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.11"
 
 // sbt and compiler option
 scalacOptions ++= Seq(
@@ -26,20 +23,16 @@ scalacOptions ++= Seq(
     "-Xfatal-warnings",
     "-Xlint",
     "-Ywarn-dead-code",
-    "-Ywarn-unused",
-    "-Ywarn-unused-import"
+    "-Ywarn-unused"
 )
 
 // ~~~~~~~~~~~~~~~~~
 //Scalariform config
 
-import com.typesafe.sbt.SbtScalariform
-import com.typesafe.sbt.SbtScalariform.ScalariformKeys
+import scalariform.formatter.preferences._
 
-scalariformSettings
-
-ScalariformKeys.preferences := ScalariformKeys.preferences.value
-  .setPreference(scalariform.formatter.preferences.AlignSingleLineCaseStatements, true)
-  .setPreference(scalariform.formatter.preferences.AlignParameters, true)
-  .setPreference(scalariform.formatter.preferences.DoubleIndentClassDeclaration, true)
-  .setPreference(scalariform.formatter.preferences.PreserveDanglingCloseParenthesis, true)
+scalariformPreferences := scalariformPreferences.value
+  .setPreference(AlignSingleLineCaseStatements, true)
+  .setPreference(AlignParameters, true)
+  .setPreference(DoubleIndentConstructorArguments, true)
+  .setPreference(DanglingCloseParenthesis, Preserve)

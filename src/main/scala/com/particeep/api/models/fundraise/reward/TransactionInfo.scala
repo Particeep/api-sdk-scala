@@ -10,9 +10,9 @@ import play.api.libs.json.Json
  */
 
 case class TransactionInfo(
-  amount:     Int                   = 0,
-  comment:    Option[String]        = None,
-  created_at: Option[ZonedDateTime]
+    amount:     Int                   = 0,
+    comment:    Option[String]        = None,
+    created_at: Option[ZonedDateTime]
 )
 
 object TransactionInfo {

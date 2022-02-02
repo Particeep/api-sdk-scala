@@ -31,7 +31,7 @@ trait WSClient {
   val defaultImportTimeOut: Long
 
   def cleanup(): Unit
-  def credentials(): Option[ApiCredential]
+  def credentials: Option[ApiCredential]
 
   /**
    * @param path : relative path for the request
@@ -95,9 +95,8 @@ trait BaseClient {
   //    val config = new NingAsyncHttpClientConfigBuilder(DefaultWSClientConfig()).build
   //    val builder = new AsyncHttpClientConfig.Builder(config)
   //    val client = new NingWSClient(builder.build)
-  protected implicit val system: ActorSystem
   protected implicit val materializer: Materializer
-  protected implicit val sslClient = ApiClient.defaultSslClient(system, materializer)
+  protected implicit val sslClient = ApiClient.defaultSslClient(materializer)
 
   def cleanup() = {
     sslClient.close()
@@ -120,18 +119,18 @@ class ApiClient(
     val version:     String,
     val credentials: Option[ApiCredential] = None
 )(implicit
-  val system: ActorSystem,
-  val materializer: Materializer) extends WSClient with BaseClient with WithSecurtiy with ResponseParser {
+    val system: ActorSystem,
+  val materializer: Materializer) extends WSClient with BaseClient with WithSecurity with ResponseParser {
 
   val defaultTimeOut: Long = 10000
   val defaultImportTimeOut: Long = 72000000
 
-  private[this] def url(path: String, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): StandaloneWSRequest = {
+  private[this] def url(path: String, timeOut: Long)(implicit credentials: ApiCredential): StandaloneWSRequest = {
     val req = sslClient.url(s"$baseUrl/v$version$path")
     secure(req, credentials, timeOut).addHttpHeaders(credentials.http_headers.getOrElse(List()): _*)
   }
 
-  private[this] def urlFileUpload(path: String, client: DefaultAsyncHttpClient, timeOut: Long)(implicit exec: ExecutionContext, credentials: ApiCredential): BoundRequestBuilder = {
+  private[this] def urlFileUpload(path: String, client: DefaultAsyncHttpClient, timeOut: Long)(implicit credentials: ApiCredential): BoundRequestBuilder = {
     val postBuilder = client.preparePost(s"$baseUrl/v$version$path")
     val url = secure(postBuilder, credentials, timeOut)
     credentials.http_headers.map(_.foldLeft(url) { (acc, elem) =>
@@ -222,5 +221,5 @@ class ApiClient(
 
 object ApiClient {
 
-  def defaultSslClient(implicit s: ActorSystem, m: Materializer) = StandaloneAhcWSClient()
+  def defaultSslClient(implicit m: Materializer) = StandaloneAhcWSClient()
 }

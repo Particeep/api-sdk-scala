@@ -6,8 +6,8 @@ import play.api.libs.json._
  * Created by Noe on 10/04/2017.
  */
 case class LineSuccess[T](
-  line:    Int,
-  success: T
+    line:    Int,
+    success: T
 )
 
 object LineSuccess {
