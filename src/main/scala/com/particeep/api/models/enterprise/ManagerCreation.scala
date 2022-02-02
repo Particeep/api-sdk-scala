@@ -6,9 +6,9 @@ import play.api.libs.json.Json
  * Created by Noe on 10/03/2017.
  */
 case class ManagerCreation(
-  new_manager_id: String,
-  name:           Option[String],
-  tag:            Option[String]
+    new_manager_id: String,
+    name:           Option[String],
+    tag:            Option[String]
 )
 
 object ManagerCreation {
