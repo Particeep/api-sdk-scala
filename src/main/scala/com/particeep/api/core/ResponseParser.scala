@@ -6,7 +6,6 @@ import akka.util.ByteString
 import org.slf4j.LoggerFactory
 import play.api.libs.json._
 
-import scala.compat.Platform
 import scala.util.control.NonFatal
 import com.particeep.api.models._
 import play.api.libs.ws.{ StandaloneWSRequest, StandaloneWSResponse }
@@ -36,7 +35,7 @@ trait ResponseParser {
       try {
         Future.successful(Left(validateStandardError(r.body[JsValue]).get))
       } catch {
-        case NonFatal(ex) => request.stream().map(r => Right(r.bodyAsSource.mapMaterializedValue(mat => NotUsed)))
+        case NonFatal(_) => request.stream().map(r => Right(r.bodyAsSource.mapMaterializedValue(_ => NotUsed)))
       }
     }.flatMap(identity)
   }
@@ -72,7 +71,7 @@ trait ResponseParser {
       case Right(success) => Right(success)
       case Left(json_err) => {
         val err = Error(
-          technicalCode = json_err.errors.mkString(Platform.EOL),
+          technicalCode = json_err.errors.mkString(System.lineSeparator),
           message = "unknown json error"
         )
         Left(Errors(true, List(err)))
@@ -84,7 +83,7 @@ trait ResponseParser {
     val err = Error(
       technicalCode = ex.toString(),
       message = ex.getMessage,
-      stack = Some(ex.getStackTrace().mkString("", Platform.EOL, Platform.EOL))
+      stack = Some(ex.getStackTrace().mkString("", System.lineSeparator, System.lineSeparator))
     )
     Errors(
       hasError = true,
