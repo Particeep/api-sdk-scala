@@ -6,12 +6,12 @@ import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class Section(
-  id:          String                = "",
-  created_at:  Option[ZonedDateTime] = None,
-  form_id:     String                = "",
-  name:        Option[String]        = None,
-  description: Option[String]        = None,
-  index:       Option[Int]           = None
+    id:          String                = "",
+    created_at:  Option[ZonedDateTime] = None,
+    form_id:     String                = "",
+    name:        Option[String]        = None,
+    description: Option[String]        = None,
+    index:       Option[Int]           = None
 )
 
 object Section {

@@ -7,8 +7,8 @@ import play.api.libs.functional.syntax._
  * Created by Noe on 17/02/2017.
  */
 case class FolderOrFile(
-  document:  Document,
-  documents: Option[Seq[FolderOrFile]]
+    document:  Document,
+    documents: Option[Seq[FolderOrFile]]
 )
 
 object FolderOrFile {

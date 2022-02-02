@@ -9,16 +9,16 @@ import com.particeep.api.models.enums.WalletType.{ NATURAL, WalletType }
 import play.api.libs.json.Json
 
 case class Wallet(
-  id:           String                = "",
-  created_at:   Option[ZonedDateTime] = None,
-  update_at:    Option[ZonedDateTime] = None,
-  owner_id:     String                = "",
-  owner_type:   String                = "",
-  wallet_type:  WalletType            = NATURAL,
-  status:       Option[WalletStatus]  = None,
-  currency:     Option[Currency]      = None,
-  company_name: Option[String]        = None,
-  amount:       Int                   = 0
+    id:           String                = "",
+    created_at:   Option[ZonedDateTime] = None,
+    update_at:    Option[ZonedDateTime] = None,
+    owner_id:     String                = "",
+    owner_type:   String                = "",
+    wallet_type:  WalletType            = NATURAL,
+    status:       Option[WalletStatus]  = None,
+    currency:     Option[Currency]      = None,
+    company_name: Option[String]        = None,
+    amount:       Int                   = 0
 )
 
 object Wallet {

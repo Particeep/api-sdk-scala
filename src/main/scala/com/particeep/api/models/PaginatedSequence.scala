@@ -5,8 +5,8 @@ import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
 
 case class PaginatedSequence[T](
-  total_size: Int     = 0,
-  data:       List[T] = List()
+    total_size: Int     = 0,
+    data:       List[T] = List()
 )
 
 object PaginatedSequence {

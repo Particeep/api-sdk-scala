@@ -6,17 +6,17 @@ import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class ScheduledPaymentSearch(
-  start_payment_date: Option[ZonedDateTime] = None,
-  end_payment_date:   Option[ZonedDateTime] = None,
-  status:             Option[String]        = None,
-  issuer_id:          Option[String]        = None,
-  issuer_type:        Option[String]        = None,
-  recipient_id:       Option[String]        = None,
-  recipient_type:     Option[String]        = None,
-  parent_id:          Option[String]        = None,
-  parent_type:        Option[String]        = None,
-  dependency_id:      Option[String]        = None,
-  tag:                Option[String]        = None
+    start_payment_date: Option[ZonedDateTime] = None,
+    end_payment_date:   Option[ZonedDateTime] = None,
+    status:             Option[String]        = None,
+    issuer_id:          Option[String]        = None,
+    issuer_type:        Option[String]        = None,
+    recipient_id:       Option[String]        = None,
+    recipient_type:     Option[String]        = None,
+    parent_id:          Option[String]        = None,
+    parent_type:        Option[String]        = None,
+    dependency_id:      Option[String]        = None,
+    tag:                Option[String]        = None
 )
 
 object ScheduledPaymentSearch {
