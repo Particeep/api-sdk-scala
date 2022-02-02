@@ -9,10 +9,10 @@ import play.api.libs.json.Json
  * Created by Noe on 27/01/2017.
  */
 case class FundraiseRewardSearch(
-  start_date:     Option[ZonedDateTime] = None,
-  end_date:       Option[ZonedDateTime] = None,
-  status:         Option[String]        = None,
-  enterprise_ids: Option[String]        = None
+    start_date:     Option[ZonedDateTime] = None,
+    end_date:       Option[ZonedDateTime] = None,
+    status:         Option[String]        = None,
+    enterprise_ids: Option[String]        = None
 )
 
 object FundraiseRewardSearch {

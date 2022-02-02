@@ -10,19 +10,19 @@ import play.api.libs.json.{ JsObject, Json }
  * Created by Noe on 26/01/2017.
  */
 case class FundraiseRewardCreation(
-  name:                String,
-  description_short:   Option[String]        = None,
-  description_long:    Option[String]        = None,
-  description_offline: Option[String]        = None,
-  enterprise_id:       Option[String],
-  recipient_id:        Option[String],
-  recipient_type:      Option[String],
-  start_at:            Option[ZonedDateTime] = None,
-  end_at:              Option[ZonedDateTime] = None,
-  amount_target:       Long,
-  currency:            Option[Currency]      = None,
-  tag:                 Option[String]        = None,
-  custom:              Option[JsObject]      = None
+    name:                String,
+    description_short:   Option[String]        = None,
+    description_long:    Option[String]        = None,
+    description_offline: Option[String]        = None,
+    enterprise_id:       Option[String],
+    recipient_id:        Option[String],
+    recipient_type:      Option[String],
+    start_at:            Option[ZonedDateTime] = None,
+    end_at:              Option[ZonedDateTime] = None,
+    amount_target:       Long,
+    currency:            Option[Currency]      = None,
+    tag:                 Option[String]        = None,
+    custom:              Option[JsObject]      = None
 )
 
 object FundraiseRewardCreation {
