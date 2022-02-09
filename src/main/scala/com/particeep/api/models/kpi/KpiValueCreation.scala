@@ -5,10 +5,10 @@ import play.api.libs.json.Json
 import com.particeep.api.core.Formatter
 
 case class KpiValueCreation(
-  date:    ZonedDateTime,
-  value:   Double,
-  comment: Option[String] = None,
-  tag:     Option[String] = None
+    date:    ZonedDateTime,
+    value:   Double,
+    comment: Option[String] = None,
+    tag:     Option[String] = None
 )
 
 object KpiValueCreation {

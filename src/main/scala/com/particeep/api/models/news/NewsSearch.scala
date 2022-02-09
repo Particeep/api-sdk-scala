@@ -6,15 +6,15 @@ import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class NewsSearch(
-  target_id:      Option[String]        = None,
-  target_type:    Option[String]        = None,
-  author_id:      Option[String]        = None,
-  title:          Option[String]        = None,
-  message:        Option[String]        = None,
-  is_report:      Option[Boolean]       = None,
-  tag:            Option[String]        = None,
-  publish_before: Option[ZonedDateTime] = None,
-  publish_after:  Option[ZonedDateTime] = None
+    target_id:      Option[String]        = None,
+    target_type:    Option[String]        = None,
+    author_id:      Option[String]        = None,
+    title:          Option[String]        = None,
+    message:        Option[String]        = None,
+    is_report:      Option[Boolean]       = None,
+    tag:            Option[String]        = None,
+    publish_before: Option[ZonedDateTime] = None,
+    publish_after:  Option[ZonedDateTime] = None
 )
 
 object NewsSearch {

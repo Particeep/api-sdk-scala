@@ -59,7 +59,7 @@ class RoleClient(val ws: WSClient, val credentials: Option[ApiCredential] = None
   }
 
   def hasRole(user_id: String, role: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Boolean]] = {
-    allByUser(user_id).map(result => result.right.map(roles => roles.roles.map(_.role_name).contains(role)))
+    allByUser(user_id, timeout).map(result => result.map(roles => roles.roles.map(_.role_name).contains(role)))
   }
 
   def search(criteria: RoleSearch, table_criteria: TableSearch, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, PaginatedSequence[Roles]]] = {

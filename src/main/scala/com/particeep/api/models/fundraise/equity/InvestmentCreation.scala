@@ -6,9 +6,9 @@ import com.particeep.api.core.Formatter
 import play.api.libs.json.Json
 
 case class InvestmentCreation(
-  user_id:    String,
-  amount:     Int,
-  created_at: Option[ZonedDateTime]
+    user_id:    String,
+    amount:     Int,
+    created_at: Option[ZonedDateTime]
 )
 
 object InvestmentCreation {
