@@ -2,7 +2,7 @@ package com.particeep.api
 
 import com.particeep.api.core._
 import com.particeep.api.models.ErrorResult
-import com.particeep.api.models.kyc.{ KycCreation, KycGroup, KycsEdition }
+import com.particeep.api.models.kyc._
 import play.api.libs.json.Json
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -19,6 +19,8 @@ object KycClient {
   private implicit val group_format = KycGroup.format
   private implicit val creation_format = KycCreation.format
   private implicit val edition_format = KycsEdition.format
+  private implicit val kyc_ask_validation_format = KycAskValidation.format
+  private implicit val kyc_validation_format = KycValidation.format
 }
 
 class KycClient(val ws: WSClient, val credentials: Option[ApiCredential] = None) extends WithWS with WithCredentials with EntityClient {
@@ -61,5 +63,9 @@ class KycClient(val ws: WSClient, val credentials: Option[ApiCredential] = None)
     }).getOrElse(
       ws.delete[List[KycGroup]](s"$endPoint/cancel/owner/$owner_id/$owner_type", timeout, Json.toJson(""))
     )
+  }
+
+  def validate(kyc_ask_validation: KycAskValidation, timeout: Long = 50000)(implicit exec: ExecutionContext): Future[Either[ErrorResult, KycValidation]] = {
+    ws.post[KycValidation](s"$endPoint/document/validate", timeout, Json.toJson(kyc_ask_validation))
   }
 }
