@@ -2,7 +2,7 @@ package com.particeep.api
 
 import com.particeep.api.core.{ ApiCredential, EntityClient, WSClient, WithCredentials, WithWS }
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
-import com.particeep.api.models.control.{ Control, ControlBlockUpdate, ControlCreation, ControlUpdate, ControlView, ControlViewSearchCriteria, EventControl }
+import com.particeep.api.models.control.{ ControlBlockUpdate, ControlCreation, ControlUpdate, ControlView, ControlViewSearchCriteria, EventControl }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.{ JsNull, Json }
 
@@ -26,16 +26,12 @@ class ControlClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
 
   import ControlClient._
 
-  def byId(id: String, entity_type: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Control]] = {
-    ws.get[Control](s"$endPoint/$entity_type/$id", timeout)
-  }
-
   def byIds(ids: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[ControlView]]] = {
     ws.get[List[ControlView]](s"$endPoint/", timeout, List("ids" -> ids))
   }
 
-  def audit(id: String, entity_type: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, EventControl]] = {
-    ws.get[EventControl](s"$endPoint/$entity_type/$id/audit", timeout)
+  def audit(id: String, entity_type: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, List[EventControl]]] = {
+    ws.get[List[EventControl]](s"$endPoint/$entity_type/$id/audit", timeout)
   }
 
   def create(user_id: String, timeout: Long = defaultTimeOut, control_creation: ControlCreation)(implicit exec: ExecutionContext): Future[Either[ErrorResult, EventControl]] = {
