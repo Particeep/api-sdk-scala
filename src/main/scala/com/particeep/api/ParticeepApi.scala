@@ -38,7 +38,8 @@ object ParticeepApi {
     with WalletCapability
     with WalletSepaCapability
     with WebHookCapability
-    with PhoneMessagingCapability {
+    with PhoneMessagingCapability
+    with ControlCapability {
     self: WSClient =>
   }
 
