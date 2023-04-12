@@ -2,7 +2,7 @@ package com.particeep.api
 
 import com.particeep.api.core.{ ApiCredential, EntityClient, WSClient, WithCredentials, WithWS }
 import com.particeep.api.models.{ ErrorResult, PaginatedSequence, TableSearch }
-import com.particeep.api.models.control.{ ControlBlockUpdate, ControlCreation, ControlUpdate, ControlView, ControlViewSearchCriteria, EventControl }
+import com.particeep.api.models.control.{ Control, ControlBlockUpdate, ControlCreation, ControlUpdate, ControlView, ControlViewSearchCriteria, EventControl }
 import com.particeep.api.utils.LangUtils
 import play.api.libs.json.{ JsNull, Json }
 
@@ -34,12 +34,12 @@ class ControlClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
     ws.get[List[EventControl]](s"$endPoint/$entity_type/$id/audit", timeout)
   }
 
-  def create(user_id: String, timeout: Long = defaultTimeOut, control_creation: ControlCreation)(implicit exec: ExecutionContext): Future[Either[ErrorResult, EventControl]] = {
-    ws.put[EventControl](s"$endPoint/assign_to/$user_id", timeout, Json.toJson(control_creation))
+  def create(user_id: String, timeout: Long = defaultTimeOut, control_creation: ControlCreation)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Control]] = {
+    ws.put[Control](s"$endPoint/assign_to/$user_id", timeout, Json.toJson(control_creation))
   }
 
-  def update(id: String, timeout: Long = defaultTimeOut, control_update: ControlUpdate)(implicit exec: ExecutionContext): Future[Either[ErrorResult, EventControl]] = {
-    ws.post[EventControl](s"$endPoint/$id", timeout, Json.toJson(control_update))
+  def update(id: String, timeout: Long = defaultTimeOut, control_update: ControlUpdate)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Control]] = {
+    ws.post[Control](s"$endPoint/$id", timeout, Json.toJson(control_update))
   }
 
   def updateBlock(
@@ -47,12 +47,12 @@ class ControlClient(val ws: WSClient, val credentials: Option[ApiCredential] = N
     block_id:             String,
     timeout:              Long               = defaultTimeOut,
     control_block_update: ControlBlockUpdate
-  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, EventControl]] = {
-    ws.post[EventControl](s"$endPoint/$id/block/$block_id", timeout, Json.toJson(control_block_update))
+  )(implicit exec: ExecutionContext): Future[Either[ErrorResult, Control]] = {
+    ws.post[Control](s"$endPoint/$id/block/$block_id", timeout, Json.toJson(control_block_update))
   }
 
-  def publish(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, EventControl]] = {
-    ws.post[EventControl](s"$endPoint/$id/publish", timeout, JsNull)
+  def publish(id: String, timeout: Long = defaultTimeOut)(implicit exec: ExecutionContext): Future[Either[ErrorResult, Control]] = {
+    ws.post[Control](s"$endPoint/$id/publish", timeout, JsNull)
   }
 
   def search(
