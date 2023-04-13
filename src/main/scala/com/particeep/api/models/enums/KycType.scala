@@ -5,6 +5,8 @@ object KycType {
   sealed abstract class KycType extends Enum
 
   case object ID_CARD extends KycType { val name: String = "ID_CARD" }
+  case object PASSPORT extends KycType { val name: String = "PASSPORT" }
+  case object DRIVER_LICENSE extends KycType { val name: String = "DRIVER_LICENSE" }
   case object ADDRESS_PROOF extends KycType { val name: String = "ADDRESS_PROOF" }
   case object COMPANY_STATUS extends KycType { val name: String = "COMPANY_STATUS" }
   case object RIB extends KycType { val name: String = "RIB" }
@@ -17,7 +19,7 @@ object KycType {
   case object GENERAL_MEETING extends KycType { val name: String = "GENERAL_MEETING" }
 
   object KycType extends EnumHelper[KycType] {
-    def values: Set[KycType] = Set(ID_CARD, ADDRESS_PROOF, COMPANY_STATUS, RIB, KBIS, TAX_STATUS, PRESIDENT_OF_ASSOCIATION, OFFICIAL_JOURNAL, ASSOCIATION_STATUS, SHAREHOLDER_KYCS, GENERAL_MEETING)
+    def values: Set[KycType] = Set(ID_CARD, PASSPORT, DRIVER_LICENSE, ADDRESS_PROOF, COMPANY_STATUS, RIB, KBIS, TAX_STATUS, PRESIDENT_OF_ASSOCIATION, OFFICIAL_JOURNAL, ASSOCIATION_STATUS, SHAREHOLDER_KYCS, GENERAL_MEETING)
   }
 
   def parseFromHipay(kycType: String): Option[KycType] = {
